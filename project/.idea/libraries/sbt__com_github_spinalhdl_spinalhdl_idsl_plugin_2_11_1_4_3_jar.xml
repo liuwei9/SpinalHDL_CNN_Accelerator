@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="sbt: com.github.spinalhdl:spinalhdl-idsl-plugin_2.11:1.4.3:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/com/github/spinalhdl/spinalhdl-idsl-plugin_2.11/1.4.3/spinalhdl-idsl-plugin_2.11-1.4.3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/com/github/spinalhdl/spinalhdl-idsl-plugin_2.11/1.4.3/spinalhdl-idsl-plugin_2.11-1.4.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/com/github/spinalhdl/spinalhdl-idsl-plugin_2.11/1.4.3/spinalhdl-idsl-plugin_2.11-1.4.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="sbt: net.java.dev.jna:jna:4.2.2:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/net/java/dev/jna/jna/4.2.2/jna-4.2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/net/java/dev/jna/jna/4.2.2/jna-4.2.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/net/java/dev/jna/jna/4.2.2/jna-4.2.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

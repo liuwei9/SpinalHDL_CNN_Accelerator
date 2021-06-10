@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="sbt: org.slf4j:slf4j-simple:1.7.25:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/maven.aliyun.com/nexus/content/groups/public/org/slf4j/slf4j-simple/1.7.25/slf4j-simple-1.7.25-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

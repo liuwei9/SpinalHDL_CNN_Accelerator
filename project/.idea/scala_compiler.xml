@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <profile name="sbt 1" modules="project">
+      <plugins>
+        <plugin path="C:\Users\wa\AppData\Local\Coursier\cache\v1\https\maven.aliyun.com\nexus\content\groups\public\com\github\spinalhdl\spinalhdl-idsl-plugin_2.11\1.4.2\spinalhdl-idsl-plugin_2.11-1.4.2.jar" />
+      </plugins>
+    </profile>
+  </component>
+</project>

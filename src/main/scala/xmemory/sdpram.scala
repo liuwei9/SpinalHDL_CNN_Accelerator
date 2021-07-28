@@ -139,7 +139,9 @@ class sdpram(
                 READ_DEPTH:Int,
                 MEMORY_TYPE: String = "block",
                 READ_LATENCY: Int = 2,
-                CLOCK_MODE:String="common_clock"
+                CLOCK_MODE:String="common_clock",
+                clka:ClockDomain,
+                clkb:ClockDomain
             ) extends Component {
     assert(WRITE_DEPTH*WRITE_WIDTH == READ_DEPTH*READ_WIDTH,"读写空间大小不匹配，WRITE_DEPTH*WRITE_WIDTH和READ_DEPTH*READ_WIDTH大小应相等")
     val ADDR_WIDTH_A: Int = log2Up(WRITE_DEPTH)
@@ -195,22 +197,24 @@ class sdpram(
         val ena = in Bool()
         val enb = in Bool()
         val wea = in Bits (WRITE_DATA_WIDTH_A / BYTE_WRITE_WIDTH_A bits)
-        val clka = in Bool()
-        val clkb = in Bool()
+//        val clka = in Bool()
+//        val clkb = in Bool()
 
     }
-    val clka = ClockDomain(
-        clock = io.clka,
-        config = ClockDomainConfig(
-            clockEdge = RISING
-        )
-    )
-    val clkb = ClockDomain(
-        clock = io.clkb,
-        config = ClockDomainConfig(
-            clockEdge = RISING
-        )
-    )
+//    val clka = ClockDomain(
+//        clock = io.clka,
+//        config = ClockDomainConfig(
+//            clockEdge = RISING
+//        )
+//    )
+//    val clkb = ClockDomain(
+//        clock = io.clkb,
+//        config = ClockDomainConfig(
+//            clockEdge = RISING
+//        )
+//    )
+//    clka.clock.setName("clka")
+//    clkb.clock.setName("clkb")
     val temp = xpm_memory_sdpram(ADDR_WIDTH_A, ADDR_WIDTH_B, AUTO_SLEEP_TIME, BYTE_WRITE_WIDTH_A, CASCADE_HEIGHT, CLOCKING_MODE, ECC_MODE, MEMORY_INIT_FILE,
         MEMORY_INIT_PARAM, MEMORY_OPTIMIZATION, MEMORY_PRIMITIVE, MEMORY_SIZE, MESSAGE_CONTROL, READ_DATA_WIDTH_B, READ_LATENCY_B, READ_RESET_VALUE_B,
         RST_MODE_A, RST_MODE_B, SIM_ASSERT_CHK, USE_EMBEDDED_CONSTRAINT, USE_MEM_INIT, WAKEUP_TIME, WRITE_DATA_WIDTH_A, WRITE_MODE_B, clka, clkb)(dbiterrb, io.doutb, sbiterrb, io.addra, io.addrb, io.dina, io.ena, io.enb, injectdbiterra, injectsbiterra,
@@ -221,6 +225,6 @@ class sdpram(
 
 object sdpram {
     def main(args: Array[String]): Unit = {
-        SpinalConfig(targetDirectory = "verilog/xmemory").generateVerilog(new sdpram(32, 511, 16, 1022,"block", 1,"independent_clock"))
+        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sdpram(32, 511, 16, 1022,"block", 1,"independent_clock",new ClockDomain(new Bool()),new ClockDomain(new Bool)))
     }
 }

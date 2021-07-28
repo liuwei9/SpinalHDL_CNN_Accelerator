@@ -283,6 +283,6 @@ class tdpram(
 
 object tdpram {
     def main(args: Array[String]): Unit = {
-        SpinalConfig(targetDirectory = "verilog/xmemory").generateVerilog(new tdpram(32,512,16,1024,"block",2,2))
+        SpinalConfig(targetDirectory = "verilog").generateVerilog(new tdpram(32,512,16,1024,"block",2,2))
     }
 }

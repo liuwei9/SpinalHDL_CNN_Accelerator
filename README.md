@@ -1,4 +1,5 @@
 # spinal_yolov4_tiny
 使用spinal hdl在FPGA上实现YOLO V4 tiny
-+ scala版本：2.11.12
-+ sbt：1.4.7
++ scala：2.11.12
++ sbt：1.5.5
++ spinal hdl：1.6.0

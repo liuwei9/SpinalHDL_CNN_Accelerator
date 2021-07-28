@@ -1,1 +1,6 @@
 *.jar
+.bsp
+.idea
+project
+target
+build.sbt

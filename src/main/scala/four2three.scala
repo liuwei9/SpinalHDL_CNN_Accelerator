@@ -1,0 +1,212 @@
+import spinal.core._
+import spinal.lib._
+import spinal.lib.fsm._
+import xmemory._
+
+class four2three(
+                    S_DATA_WIDTH: Int,
+                    ROW_COL_DATA_COUNT_WIDTH: Int,
+                    FEATURE_MAP_SIZE: Int
+                ) extends Component {
+    val io = new Bundle {
+        val Start = in Bool()
+        val StartRow = out Bool() setAsReg() init (False)
+        val Row_Num_After_Padding = in UInt (ROW_COL_DATA_COUNT_WIDTH bits)
+        val S_DATA = slave Stream Bits(S_DATA_WIDTH bits)
+        val M_DATA = out Bits (S_DATA_WIDTH * 3 bits)
+        val M_Ready = in Bool()
+        val M_rd_en = in Bool()
+        val M_Addr = in UInt (ROW_COL_DATA_COUNT_WIDTH bits)
+    }
+    noIoPrefix()
+
+    val four2three_fifo = new general_fifo_sync(S_DATA_WIDTH, FEATURE_MAP_SIZE)
+    four2three_fifo.io.data_in <> io.S_DATA.payload
+    four2three_fifo.io.data_in_ready <> io.S_DATA.ready
+    four2three_fifo.io.wr_en <> io.S_DATA.valid
+    val ram1 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0)
+    val ram2 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0)
+    val ram3 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0)
+    val ram4 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0)
+    val four2three_fsm = new StateMachine {
+        val IDLE = new State() with EntryPoint
+        val Judge_Fifo = new State()
+        val Read = new State()
+        val Judge_Compute = new State()
+        val Start_Compute = new State()
+
+        val End_Read = Bool()
+        val Cnt_Column = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init (0)
+        when(isActive(Read)) {
+            Cnt_Column := Cnt_Column + 1
+        } otherwise (Cnt_Column := 0)
+        when(Cnt_Column === io.Row_Num_After_Padding - 1) {
+            End_Read := True
+        } otherwise (End_Read := False)
+        val Cnt_Ram = UInt(2 bits) setAsReg() init 0
+        when(isActive(Judge_Compute)) {
+            Cnt_Ram := Cnt_Ram + 1
+        } elsewhen isActive(Start_Compute) {
+            Cnt_Ram := Cnt_Ram - 1
+        } otherwise (Cnt_Ram := Cnt_Ram)
+        val Cnt_ROW = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
+        when(isEntering(Start_Compute)) {
+            Cnt_ROW := Cnt_ROW + 1
+        } elsewhen isActive(IDLE) {
+            Cnt_ROW := 0
+        } otherwise (Cnt_ROW := Cnt_ROW)
+        val Last_Row = Bool()
+        when(Cnt_ROW === io.Row_Num_After_Padding) {
+            Last_Row := True
+        } otherwise (Last_Row := False)
+
+
+        val En_Ram = UInt(2 bits) setAsReg() init 0
+        when(isEntering(Judge_Compute)) {
+            En_Ram := En_Ram + 1
+        } otherwise (En_Ram := En_Ram)
+        switch(En_Ram) {
+            is(0) {
+                ram1.io.ena := True
+                ram2.io.ena := False
+                ram3.io.ena := False
+                ram4.io.ena := False
+            }
+            is(1) {
+                ram1.io.ena := False
+                ram2.io.ena := True
+                ram3.io.ena := False
+                ram4.io.ena := False
+            }
+            is(2) {
+                ram1.io.ena := False
+                ram2.io.ena := False
+                ram3.io.ena := True
+                ram4.io.ena := False
+            }
+            is(3) {
+                ram1.io.ena := False
+                ram2.io.ena := False
+                ram3.io.ena := False
+                ram4.io.ena := True
+            }
+            default{
+                ram1.io.ena := False
+                ram2.io.ena := False
+                ram3.io.ena := False
+                ram4.io.ena := False
+            }
+        }
+        val addrRam1 = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
+        val addrRam2 = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
+        val addrRam3 = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
+        val addrRam4 = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
+        ram1.io.addra := ram2addra(addrRam1)
+        ram1.io.dina := four2three_fifo.io.data_out
+        ram2.io.addra := ram2addra(addrRam2)
+        ram2.io.dina := four2three_fifo.io.data_out
+        ram3.io.addra := ram2addra(addrRam3)
+        ram3.io.dina := four2three_fifo.io.data_out
+        ram4.io.addra := ram2addra(addrRam4)
+        ram4.io.dina := four2three_fifo.io.data_out
+        when(isActive(Read)){
+            four2three_fifo.io.rd_en := True
+            switch(En_Ram) {
+                is(0) {
+                    ram1.io.wea := True
+                    ram2.io.wea := False
+                    ram3.io.wea := False
+                    ram4.io.wea := False
+                }
+                is(1) {
+                    ram1.io.wea := False
+                    ram2.io.wea := True
+                    ram3.io.wea := False
+                    ram4.io.wea := False
+                }
+                is(2) {
+                    ram1.io.wea := False
+                    ram2.io.wea := False
+                    ram3.io.wea := True
+                    ram4.io.wea := False
+                }
+                is(3) {
+                    ram1.io.wea := False
+                    ram2.io.wea := False
+                    ram3.io.wea := False
+                    ram4.io.wea := True
+                }
+                default {
+                    ram1.io.wea := False
+                    ram2.io.wea := False
+                    ram3.io.wea := False
+                    ram4.io.wea := False
+                }
+            }
+        } otherwise {
+            ram1.io.wea := False
+            ram2.io.wea := False
+            ram3.io.wea := False
+            ram4.io.wea := False
+            four2three_fifo.io.rd_en := False
+        }
+        when(isEntering(Start_Compute)){
+            io.StartRow := True
+        } otherwise {
+            io.StartRow := False
+        }
+        IDLE
+            .whenIsActive {
+                when(io.Start) {
+                    goto(Judge_Fifo)
+                } otherwise goto(four2three_fsm)
+            }
+        Judge_Fifo
+            .whenIsActive {
+                when(four2three_fifo.io.data_out_valid) {
+                    goto(Read)
+                } otherwise goto(Judge_Fifo)
+            }
+        Read
+            .whenIsActive {
+                when(End_Read) {
+                    goto(Judge_Compute)
+                } otherwise goto(Read)
+            }
+        Judge_Compute
+            .whenIsActive {
+                when(Cnt_Ram === 2) {
+                    goto(Start_Compute)
+                } otherwise goto(Judge_Fifo)
+            }
+        Start_Compute
+            .whenIsActive {
+                when(Last_Row) {
+                    goto(IDLE)
+                } otherwise{
+                    when(io.M_Ready){
+                        goto(Judge_Fifo)
+                    } otherwise goto(Start_Compute)
+
+                }
+            }
+    }
+    def ram2addra(addr:UInt): UInt ={
+        when(four2three_fsm.isActive(four2three_fsm.Read)){
+            addr := addr + 1
+        } otherwise{
+            addr := 0
+        }
+        addr
+    }
+
+
+
+}
+
+
+object four2three {
+    def main(args: Array[String]): Unit = {
+        SpinalVerilog(new four2three(3, 3, 1024))
+    }
+}

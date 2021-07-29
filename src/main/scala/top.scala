@@ -14,6 +14,7 @@ class top  extends Component {
         val M_Addr = in UInt (12 bits)
         val StartRow = out Bool()
     }
+    noIoPrefix()
     val image_padding = new padding(8,12,640).setDefinitionName("image_padding")
     image_padding.padding_fifo.setDefinitionName("image_padding_fifo")
     image_padding.padding_fifo.fifo.setDefinitionName("image_padding_fifo_sync")

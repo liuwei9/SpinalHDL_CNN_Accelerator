@@ -253,7 +253,10 @@ class four2three(
         Judge_Compute
             .whenIsActive {
                 when(Cnt_Ram === 2) {
-                    goto(Start_Compute)
+                    when(io.M_Ready){
+                        goto(Start_Compute)
+                    } otherwise goto(Judge_Compute)
+
                 } otherwise goto(Judge_Fifo)
             }
         Start_Compute
@@ -261,9 +264,9 @@ class four2three(
                 when(Last_Row) {
                     goto(IDLE)
                 } otherwise {
-                    when(io.M_Ready) {
+//                    when(io.M_Ready) {
                         goto(Judge_Fifo)
-                    } otherwise goto(Start_Compute)
+//                    } otherwise goto(Start_Compute)
 
                 }
             }

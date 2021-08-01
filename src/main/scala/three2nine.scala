@@ -32,7 +32,7 @@ class three2nine(
 
         val EN_ComputeRow_Read = Bool()
         val Cnt_COl = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
-        when(isActive(ComputeRow_Read) && io.S_DATA_Valid) {
+        when(isActive(ComputeRow_Read)) {
             Cnt_COl := Cnt_COl + 1
         } elsewhen isActive(ComputeRow_Read) {
             Cnt_COl := Cnt_COl
@@ -111,7 +111,7 @@ class three2nine(
             .whenIsActive {
                 when(io.Row_Compute_Sign) {
                     goto(Judge_FIFO)
-                } otherwise goto(Judge_FIFO)
+                } otherwise goto(Start_Wait)
 
             }
         Judge_FIFO

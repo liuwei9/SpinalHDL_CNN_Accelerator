@@ -7,12 +7,13 @@ class top  extends Component {
 //        val image_M_DATA = master Stream Bits(8 bits)
 //        val image_Row_Num_After_Padding = out UInt (12 bits)
 //        val image_Last = out (Reg(Bool())) init(False)
-        val M_DATA = out Bits(24 bits)
-        val M_Valid = out Bool()
+        val M_DATA = out Bits(72 bits)
+ //       val M_Valid = out Bool()
+       val M_Valid = out Bits (9 bits)
         val M_Ready = in Bool()
-        val M_rd_en = in Bool()
-        val M_Addr = in UInt (12 bits)
-        val StartRow = out Bool()
+//        val M_rd_en = in Bool()
+//        val M_Addr = in UInt (12 bits)
+//        val StartRow = out Bool()
     }
     noIoPrefix()
     val image_padding = new padding(8,12,640).setDefinitionName("image_padding")
@@ -32,12 +33,26 @@ class top  extends Component {
     image_four2three.io.S_DATA<>image_padding.io.M_DATA
     image_four2three.io.Start <> io.image_Start
     image_four2three.io.Row_Num_After_Padding <> image_padding.io.Row_Num_After_Padding
-    image_four2three.io.M_DATA <> io.M_DATA
-    image_four2three.io.M_Valid <> io.M_Valid
-    image_four2three.io.M_Ready <> io.M_Ready
-    image_four2three.io.M_Addr <> io.M_Addr
-    image_four2three.io.StartRow <> io.StartRow
-    image_four2three.io.M_rd_en <> io.M_rd_en
+//    image_four2three.io.M_DATA <> io.M_DATA
+//    image_four2three.io.M_Valid <> io.M_Valid
+//    image_four2three.io.M_Ready <> io.M_Ready
+//    image_four2three.io.M_Addr <> io.M_Addr
+//    image_four2three.io.StartRow <> io.StartRow
+//    image_four2three.io.M_rd_en <> io.M_rd_en
+
+    val image_three2nine = new three2nine(24,12)
+    image_three2nine.io.Start <> io.image_Start
+    image_three2nine.io.Row_Num_After_Padding <> image_padding.io.Row_Num_After_Padding
+    image_three2nine.io.S_DATA <> image_four2three.io.M_DATA
+    image_three2nine.io.S_DATA_Addr <> image_four2three.io.M_Addr
+    image_three2nine.io.S_Ready <> image_four2three.io.M_Ready
+    image_three2nine.io.S_DATA_Ready <> image_four2three.io.M_rd_en
+    image_three2nine.io.S_DATA_Valid <> image_four2three.io.M_Valid
+    image_three2nine.io.Row_Compute_Sign <> image_four2three.io.StartRow
+    image_three2nine.io.M_Valid <> io.M_Valid
+    image_three2nine.io.M_Data <> io.M_DATA
+    image_three2nine.io.M_Ready <> io.M_Ready
+
 }
 object top{
     def main(args: Array[String]): Unit = {

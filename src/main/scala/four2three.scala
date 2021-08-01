@@ -49,9 +49,9 @@ class four2three(
             End_Read := True
         } otherwise (End_Read := False)
         val Cnt_Ram = UInt(2 bits) setAsReg() init 0
-        when(isActive(Judge_Compute)) {
+        when(isEntering(Judge_Compute)) {
             Cnt_Ram := Cnt_Ram + 1
-        } elsewhen isActive(Start_Compute) {
+        } elsewhen isEntering(Start_Compute) {
             Cnt_Ram := Cnt_Ram - 1
         } otherwise (Cnt_Ram := Cnt_Ram)
         val Cnt_ROW = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
@@ -61,7 +61,7 @@ class four2three(
             Cnt_ROW := 0
         } otherwise (Cnt_ROW := Cnt_ROW)
         val Last_Row = Bool()
-        when(Cnt_ROW === io.Row_Num_After_Padding) {
+        when(Cnt_ROW === io.Row_Num_After_Padding - 2) {
             Last_Row := True
         } otherwise (Last_Row := False)
 
@@ -162,8 +162,8 @@ class four2three(
         }
 
         val rd_ram_cnt = UInt(3 bits) setAsReg() init (0)
-        when(rd_ram_cnt === 4) {
-            rd_ram_cnt := 1
+        when(rd_ram_cnt === 4 && io.M_Addr === io.Row_Num_After_Padding - 1) {
+            rd_ram_cnt := 0
         } elsewhen (isEntering(Start_Compute)) {
             rd_ram_cnt := rd_ram_cnt + 1
         } otherwise (
@@ -252,7 +252,7 @@ class four2three(
             }
         Judge_Compute
             .whenIsActive {
-                when(Cnt_Ram === 2) {
+                when(Cnt_Ram === 3) {
                     when(io.M_Ready){
                         goto(Start_Compute)
                     } otherwise goto(Judge_Compute)
@@ -262,7 +262,10 @@ class four2three(
         Start_Compute
             .whenIsActive {
                 when(Last_Row) {
-                    goto(IDLE)
+                    when(io.M_Addr === io.Row_Num_After_Padding -1){
+                        goto(IDLE)
+                    }otherwise goto(Start_Compute)
+
                 } otherwise {
 //                    when(io.M_Ready) {
                         goto(Judge_Fifo)

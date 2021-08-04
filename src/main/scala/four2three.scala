@@ -21,10 +21,11 @@ class four2three(
     }
 
     noIoPrefix()
-    val four2three_fifo = new general_fifo_sync(S_DATA_WIDTH, FEATURE_MAP_SIZE)
+    val four2three_fifo = new general_fifo_sync(S_DATA_WIDTH, FEATURE_MAP_SIZE,ROW_COL_DATA_COUNT_WIDTH)
     four2three_fifo.io.data_in <> io.S_DATA.payload
     four2three_fifo.io.data_in_ready <> io.S_DATA.ready
     four2three_fifo.io.wr_en <> io.S_DATA.valid
+    four2three_fifo.io.m_data_count <> FEATURE_MAP_SIZE
     val ram1 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0,clka = this.clockDomain,clkb = this.clockDomain)
     val ram2 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0,clka = this.clockDomain,clkb = this.clockDomain)
     val ram3 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0,clka = this.clockDomain,clkb = this.clockDomain)

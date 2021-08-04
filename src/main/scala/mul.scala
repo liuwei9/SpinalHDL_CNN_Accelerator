@@ -12,19 +12,19 @@ class mul(
 
     }
     noIoPrefix()
-        val A_q = io.A.asUInt
-        A_q.addAttribute("use_dsp", "yes")
-        val B_q = io.B.asUInt
-        B_q.addAttribute("use_dsp", "yes")
-        val A_qq = RegNext(A_q)
-        A_qq.addAttribute("use_dsp", "yes")
-        val B_qq = RegNext(B_q)
-        B_qq.addAttribute("use_dsp", "yes")
-        val P_q = RegNext(A_qq * B_qq)
-        P_q.addAttribute("use_dsp", "yes")
-        val P_qq = RegNext(P_q)
-        P_qq.addAttribute("use_dsp", "yes")
-        io.P <> P_qq.asBits
+    val A_q = io.A.asUInt
+    A_q.addAttribute("use_dsp", "yes")
+    val B_q = io.B.asUInt
+    B_q.addAttribute("use_dsp", "yes")
+    val A_qq = RegNext(A_q)
+    A_qq.addAttribute("use_dsp", "yes")
+    val B_qq = RegNext(B_q)
+    B_qq.addAttribute("use_dsp", "yes")
+    val P_q = RegNext(A_qq * B_qq)
+    P_q.addAttribute("use_dsp", "yes")
+    val P_qq = RegNext(P_q)
+    P_qq.addAttribute("use_dsp", "yes")
+    io.P <> P_qq.asBits
 
 }
 

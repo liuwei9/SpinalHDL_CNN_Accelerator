@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_padding
-// Git hash  : b28528d04e83bcf1957d30c0da137410e20003f8
-// Date      : 01/08/2021, 23:48:13
+// Git hash  : b80498e7ba4f011f4b3ac5e4fb93afd2fb7a8c4d
+// Date      : 06/08/2021, 19:22:07
 
 
 module image_padding (
@@ -71,7 +71,8 @@ module image_padding (
     .data_in_ready     (padding_fifo_data_in_ready   ), //o
     .data_out          (padding_fifo_data_out        ), //o
     .rd_en             (padding_fifo_rd_en           ), //i
-    .data_out_valid    (padding_fifo_data_out_valid  )  //o
+    .data_out_valid    (padding_fifo_data_out_valid  ), //o
+    .m_data_count      (12'h280                      )  //i
   );
   `ifndef SYNTHESIS
   always @(*) begin

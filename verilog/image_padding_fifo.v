@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_padding_fifo
-// Git hash  : b28528d04e83bcf1957d30c0da137410e20003f8
-// Date      : 01/08/2021, 23:48:12
+// Git hash  : b80498e7ba4f011f4b3ac5e4fb93afd2fb7a8c4d
+// Date      : 06/08/2021, 19:22:06
 
 
 module image_padding_fifo (
@@ -12,7 +12,8 @@ module image_padding_fifo (
   output reg          data_in_ready,
   output     [7:0]    data_out,
   input               rd_en,
-  output reg          data_out_valid
+  output reg          data_out_valid,
+  input      [11:0]   m_data_count
 );
   wire                fifo_full;
   wire                fifo_empty;
@@ -22,9 +23,13 @@ module image_padding_fifo (
   wire                fifo_data_valid;
   wire                fifo_rd_rst_busy;
   wire                fifo_wr_rst_busy;
-  wire                when_general_fifo_sync_l26;
-  wire                when_general_fifo_sync_l31;
+  wire       [11:0]   _zz_when_general_fifo_sync_l38;
+  wire       [10:0]   _zz_when_general_fifo_sync_l38_1;
+  wire                when_general_fifo_sync_l33;
+  wire                when_general_fifo_sync_l38;
 
+  assign _zz_when_general_fifo_sync_l38_1 = fifo_rd_data_count;
+  assign _zz_when_general_fifo_sync_l38 = {1'd0, _zz_when_general_fifo_sync_l38_1};
   image_padding_fifo_sync fifo (
     .full             (fifo_full           ), //o
     .wr_en            (wr_en               ), //i
@@ -41,19 +46,19 @@ module image_padding_fifo (
     .clk              (clk                 )  //i
   );
   assign data_out = fifo_dout;
-  assign when_general_fifo_sync_l26 = (((! fifo_wr_rst_busy) && (fifo_wr_data_count < 11'h3f6)) && (! fifo_full));
-  assign when_general_fifo_sync_l31 = ((! fifo_rd_rst_busy) && (11'h280 <= fifo_rd_data_count));
+  assign when_general_fifo_sync_l33 = ((! fifo_wr_rst_busy) && (! fifo_full));
+  assign when_general_fifo_sync_l38 = ((! fifo_rd_rst_busy) && (m_data_count <= _zz_when_general_fifo_sync_l38));
   always @(posedge clk) begin
     if(reset) begin
       data_in_ready <= 1'b0;
       data_out_valid <= 1'b0;
     end else begin
-      if(when_general_fifo_sync_l26) begin
+      if(when_general_fifo_sync_l33) begin
         data_in_ready <= 1'b1;
       end else begin
         data_in_ready <= 1'b0;
       end
-      if(when_general_fifo_sync_l31) begin
+      if(when_general_fifo_sync_l38) begin
         data_out_valid <= 1'b1;
       end else begin
         data_out_valid <= 1'b0;

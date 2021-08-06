@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : top
-// Git hash  : b28528d04e83bcf1957d30c0da137410e20003f8
-// Date      : 01/08/2021, 23:48:13
+// Git hash  : b80498e7ba4f011f4b3ac5e4fb93afd2fb7a8c4d
+// Date      : 06/08/2021, 19:22:07
 
 
 module top (
@@ -9,9 +9,10 @@ module top (
   input               image_S_DATA_valid,
   output              image_S_DATA_ready,
   input      [7:0]    image_S_DATA_payload,
-  output     [71:0]   M_DATA,
-  output     [8:0]    M_Valid,
+  output     [255:0]  M_DATA,
+  output              M_Valid,
   input               M_Ready,
+  output              Conv_Complete,
   input               reset,
   input               clk
 );
@@ -29,6 +30,10 @@ module top (
   wire       [71:0]   image_three2nine_M_Data;
   wire       [8:0]    image_three2nine_M_Valid;
   wire                image_three2nine_S_Ready;
+  wire                image_conv_1_S_Ready;
+  wire                image_conv_1_M_Valid;
+  wire       [255:0]  image_conv_1_M_DATA;
+  wire                image_conv_1_Conv_Complete;
 
   image_padding image_padding_1 (
     .Start                    (image_Start                            ), //i
@@ -67,14 +72,27 @@ module top (
     .Row_Num_After_Padding    (image_padding_1_Row_Num_After_Padding  ), //i
     .Row_Compute_Sign         (image_four2three_1_StartRow            ), //i
     .M_Data                   (image_three2nine_M_Data                ), //o
-    .M_Ready                  (M_Ready                                ), //i
+    .M_Ready                  (image_conv_1_S_Ready                   ), //i
     .M_Valid                  (image_three2nine_M_Valid               ), //o
     .S_Ready                  (image_three2nine_S_Ready               ), //o
     .clk                      (clk                                    ), //i
     .reset                    (reset                                  )  //i
   );
+  image_conv image_conv_1 (
+    .Start            (image_Start                 ), //i
+    .S_Valid          (image_three2nine_M_Valid    ), //i
+    .S_DATA           (image_three2nine_M_Data     ), //i
+    .S_Ready          (image_conv_1_S_Ready        ), //o
+    .M_Valid          (image_conv_1_M_Valid        ), //o
+    .M_DATA           (image_conv_1_M_DATA         ), //o
+    .M_Ready          (M_Ready                     ), //i
+    .Conv_Complete    (image_conv_1_Conv_Complete  ), //o
+    .reset            (reset                       ), //i
+    .clk              (clk                         )  //i
+  );
   assign image_S_DATA_ready = image_padding_1_S_DATA_ready;
-  assign M_Valid = image_three2nine_M_Valid;
-  assign M_DATA = image_three2nine_M_Data;
+  assign M_Valid = image_conv_1_M_Valid;
+  assign M_DATA = image_conv_1_M_DATA;
+  assign Conv_Complete = image_conv_1_Conv_Complete;
 
 endmodule

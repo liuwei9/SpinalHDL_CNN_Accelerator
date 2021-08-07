@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : mul
-// Git hash  : b80498e7ba4f011f4b3ac5e4fb93afd2fb7a8c4d
-// Date      : 06/08/2021, 19:22:06
+// Git hash  : 627187c3e57e5afa461430fb3119888a5e0edda4
+// Date      : 06/08/2021, 19:31:58
 
 
 module mul (

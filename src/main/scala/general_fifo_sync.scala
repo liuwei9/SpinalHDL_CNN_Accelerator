@@ -13,11 +13,11 @@ class general_fifo_sync(
     val io = new Bundle {
         val data_in = in Bits (DATA_WIDTH bits)
         val wr_en = in Bool()
-        val data_in_ready = out(Reg(Bool()) init (False))
+        val data_in_ready = out Bool()
 
         val data_out = out Bits (DATA_WIDTH bits)
         val rd_en = in Bool()
-        val data_out_valid = out(Reg(Bool()) init False)
+        val data_out_valid = out Bool()
         val m_data_count = in UInt(ROW_COL_DATA_COUNT_WIDTH bits)
     }
     noIoPrefix()

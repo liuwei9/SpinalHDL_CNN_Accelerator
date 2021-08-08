@@ -6,7 +6,8 @@ class image_quan(
                     M_DATA_WIDTH: Int,
                     FEATURE_MAP_SIZE:Int,
                     ROW_COL_DATA_COUNT_WIDTH: Int,
-                    CHANNEL_OUT_TIMES: Int
+                    CHANNEL_OUT_TIMES: Int,
+                    COMPUTE_CHANNEL_OUT_NUM:Int
                 ) extends Component {
 
     val io = new Bundle {
@@ -35,23 +36,49 @@ class image_quan(
 
 
     val bias_data_in = Bits(S_DATA_WIDTH bits) setAsReg() init 0
+    val scale_data_in = Bits(S_DATA_WIDTH bits) setAsReg() init 0
+    val shift_data_in = Bits(S_DATA_WIDTH bits) setAsReg() init 0
     switch(ctrl.io.para_select){
         is(1){
             bias_data_in := bias_data_0
+            scale_data_in := scale_data_0
+            shift_data_in := shift_data_0
         }
         is(2){
             bias_data_in := bias_data_1
+            scale_data_in := scale_data_1
+            shift_data_in := shift_data_1
         }
         is(3){
             bias_data_in := bias_data_2
+            scale_data_in := scale_data_2
+            shift_data_in := shift_data_2
         }
         is(4){
             bias_data_in := bias_data_3
+            scale_data_in := scale_data_3
+            shift_data_in := shift_data_3
         }
         default{
             bias_data_in := 0
+            scale_data_in := 0
+            shift_data_in := 0
         }
     }
+    val image_bias = new image_quan_bias(FEATURE_MAP_SIZE,S_DATA_WIDTH,ROW_COL_DATA_COUNT_WIDTH,CHANNEL_OUT_TIMES,COMPUTE_CHANNEL_OUT_NUM)
+    image_bias.io.S_DATA <> io.S_DATA
+    image_bias.io.bias_data_in <> bias_data_in
+    image_bias.io.fifo_valid <> ctrl.io.fifo_valid
+    image_bias.io.rd_en_fifo <> ctrl.io.rd_en_fifo
+
+    //待定
+    val scale_data_in_delay = Delay(scale_data_in,2)
+    val image_scale = new image_quan_scale (S_DATA_WIDTH,ROW_COL_DATA_COUNT_WIDTH,CHANNEL_OUT_TIMES,COMPUTE_CHANNEL_OUT_NUM)
+    image_scale.io.S_DATA <> image_bias.io.M_Data
+    image_scale.io.scale_data_in <> scale_data_in_delay
+
+    //待定
+    val shift_data_in_delay = Delay(shift_data_in,5)
 
 
 }

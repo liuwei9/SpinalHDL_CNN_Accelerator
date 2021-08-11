@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_conv
-// Git hash  : ce9d8589af39662374a7b5fa9ba3b9a72b161583
-// Date      : 11/08/2021, 12:57:25
+// Git hash  : 4a3cffa6a82f86452f11e887963137268ca9c148
+// Date      : 11/08/2021, 22:11:07
 
 
 module image_conv (
@@ -488,7 +488,9 @@ module image_conv (
   end
 
   always @(posedge clk) begin
-    fifo_out_data_delay_0 <= fifo_out_data;
+    if(image_comp_ctrl_rd_en_fifo) begin
+      fifo_out_data_delay_0 <= fifo_out_data;
+    end
   end
 
 

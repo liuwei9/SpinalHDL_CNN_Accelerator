@@ -15,7 +15,7 @@ class image_compute_ctrl(
         val Conv_Complete = out Bool()
         val rd_en_fifo = out Bool() setAsReg() init False
         val M_Valid = out Bool()
-        val weight_select = out Bits (3 bits) setAsReg() init 0
+        val weight_select = out Bits (3 bits)
     }
     noIoPrefix()
     //待定
@@ -52,7 +52,7 @@ class image_compute_ctrl(
             }
         } otherwise {
             io.rd_en_fifo := False
-            Cnt_Channel_Out_Num := 0
+            Cnt_Column:=0
         }
         when((Cnt_Channel_Out_Num === COMPUTE_TIMES_CHANNEL_OUT_REG - 1) && (Cnt_Column === FEATURE_MAP_SIZE - 3)) {
             En_Compute_Column := True
@@ -88,23 +88,25 @@ class image_compute_ctrl(
             M_Fifo_Valid := False
         }
         //待定
-        io.M_Valid := Delay(M_Fifo_Valid,14)
-
+//        io.M_Valid := Delay(io.rd_en_fifo,13)
+        io.M_Valid := Delay(M_Fifo_Valid,16)
+        val weight = Bits (3 bits) setAsReg() init 0
+        io.weight_select := Delay(weight,3)
         switch(Cnt_Channel_Out_Num){
             is(0){
-                io.weight_select := 1
+                weight := 1
             }
             is(1){
-                io.weight_select := 2
+                weight := 2
             }
             is(2){
-                io.weight_select := 3
+                weight := 3
             }
             is(3){
-                io.weight_select := 4
+                weight := 4
             }
             default{
-                io.weight_select := 0
+                weight := 0
             }
         }
         IDLE

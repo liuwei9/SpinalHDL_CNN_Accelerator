@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : three2nine
-// Git hash  : ce9d8589af39662374a7b5fa9ba3b9a72b161583
-// Date      : 11/08/2021, 12:57:25
+// Git hash  : 4a3cffa6a82f86452f11e887963137268ca9c148
+// Date      : 11/08/2021, 22:11:06
 
 
 module three2nine (
@@ -38,6 +38,7 @@ module three2nine (
   wire                when_three2nine_l53;
   wire                when_three2nine_l59;
   wire                when_three2nine_l65;
+  wire                when_three2nine_l71;
   wire                when_three2nine_l73;
   wire                when_three2nine_l82;
   wire                when_three2nine_l91;
@@ -133,6 +134,12 @@ module three2nine (
     end
   end
 
+  always @(*) begin
+    M_Data[23 : 0] = {{S_DATA[7 : 0],S_DATA[7 : 0]},S_DATA[7 : 0]};
+    M_Data[47 : 24] = {{S_DATA[15 : 8],S_DATA[15 : 8]},S_DATA[15 : 8]};
+    M_Data[71 : 48] = {{S_DATA[23 : 16],S_DATA[23 : 16]},S_DATA[23 : 16]};
+  end
+
   assign when_three2nine_l73 = (three2nine_fsm_Cnt_COl < _zz_when_three2nine_l73);
   assign when_three2nine_l82 = ((12'h0 < three2nine_fsm_Cnt_COl) && (three2nine_fsm_Cnt_COl < _zz_when_three2nine_l82));
   assign when_three2nine_l91 = ((12'h001 < three2nine_fsm_Cnt_COl) && (three2nine_fsm_Cnt_COl < Row_Num_After_Padding));
@@ -191,10 +198,10 @@ module three2nine (
   assign when_three2nine_l48 = (three2nine_fsm_stateReg == `three2nine_fsm_enumDefinition_binary_sequential_three2nine_fsm_IDLE);
   assign when_three2nine_l59 = (three2nine_fsm_stateReg == `three2nine_fsm_enumDefinition_binary_sequential_three2nine_fsm_ComputeRow_Read);
   assign when_three2nine_l65 = (three2nine_fsm_stateReg == `three2nine_fsm_enumDefinition_binary_sequential_three2nine_fsm_Start_Wait);
+  assign when_three2nine_l71 = (three2nine_fsm_stateReg == `three2nine_fsm_enumDefinition_binary_sequential_three2nine_fsm_ComputeRow_Read);
   always @(posedge clk) begin
     if(reset) begin
       S_DATA_Addr <= 12'h0;
-      M_Data <= 72'h0;
       M_Valid <= 9'h0;
       three2nine_fsm_Cnt_COl <= 12'h0;
       three2nine_fsm_Cnt_Row <= 12'h0;
@@ -223,35 +230,36 @@ module three2nine (
       end else begin
         S_DATA_Addr <= 12'h0;
       end
-      M_Data[23 : 0] <= {{S_DATA[7 : 0],S_DATA[7 : 0]},S_DATA[7 : 0]};
-      M_Data[47 : 24] <= {{S_DATA[15 : 8],S_DATA[15 : 8]},S_DATA[15 : 8]};
-      M_Data[71 : 48] <= {{S_DATA[23 : 16],S_DATA[23 : 16]},S_DATA[23 : 16]};
-      if(when_three2nine_l73) begin
-        M_Valid[0] <= 1'b1;
-        M_Valid[3] <= 1'b1;
-        M_Valid[6] <= 1'b1;
+      if(when_three2nine_l71) begin
+        if(when_three2nine_l73) begin
+          M_Valid[0] <= 1'b1;
+          M_Valid[3] <= 1'b1;
+          M_Valid[6] <= 1'b1;
+        end else begin
+          M_Valid[0] <= 1'b0;
+          M_Valid[3] <= 1'b0;
+          M_Valid[6] <= 1'b0;
+        end
+        if(when_three2nine_l82) begin
+          M_Valid[1] <= 1'b1;
+          M_Valid[4] <= 1'b1;
+          M_Valid[7] <= 1'b1;
+        end else begin
+          M_Valid[1] <= 1'b0;
+          M_Valid[4] <= 1'b0;
+          M_Valid[7] <= 1'b0;
+        end
+        if(when_three2nine_l91) begin
+          M_Valid[2] <= 1'b1;
+          M_Valid[5] <= 1'b1;
+          M_Valid[8] <= 1'b1;
+        end else begin
+          M_Valid[2] <= 1'b0;
+          M_Valid[5] <= 1'b0;
+          M_Valid[8] <= 1'b0;
+        end
       end else begin
-        M_Valid[0] <= 1'b0;
-        M_Valid[3] <= 1'b0;
-        M_Valid[6] <= 1'b0;
-      end
-      if(when_three2nine_l82) begin
-        M_Valid[1] <= 1'b1;
-        M_Valid[4] <= 1'b1;
-        M_Valid[7] <= 1'b1;
-      end else begin
-        M_Valid[1] <= 1'b0;
-        M_Valid[4] <= 1'b0;
-        M_Valid[7] <= 1'b0;
-      end
-      if(when_three2nine_l91) begin
-        M_Valid[2] <= 1'b1;
-        M_Valid[5] <= 1'b1;
-        M_Valid[8] <= 1'b1;
-      end else begin
-        M_Valid[2] <= 1'b0;
-        M_Valid[5] <= 1'b0;
-        M_Valid[8] <= 1'b0;
+        M_Valid <= 9'h0;
       end
       three2nine_fsm_stateReg <= three2nine_fsm_stateNext;
     end

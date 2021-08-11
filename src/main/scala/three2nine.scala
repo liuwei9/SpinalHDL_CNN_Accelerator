@@ -14,7 +14,7 @@ class three2nine(
         val S_DATA_Addr = out UInt (ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
         val Row_Num_After_Padding = in UInt (ROW_COL_DATA_COUNT_WIDTH bits)
         val Row_Compute_Sign = in Bool()
-        val M_Data = out Bits (S_DATA_WIDTH * 3 bits) setAsReg() init 0
+        val M_Data = out Bits (S_DATA_WIDTH * 3 bits)
         val M_Ready = in Bool()
         val M_Valid = out Bits (9 bits) setAsReg() init 0
         val S_Ready = out Bool()
@@ -65,11 +65,11 @@ class three2nine(
         when(isActive(Start_Wait)) {
             io.S_Ready := True
         } otherwise (io.S_Ready := False)
+        for (i <- 0 to 2){
+            io.M_Data(3*(i+1)*8 - 1 downto (3*i*8)) := io.S_DATA((i+1)*8-1 downto (i*8)) ## io.S_DATA((i+1)*8-1 downto (i*8)) ## io.S_DATA((i+1)*8-1 downto (i*8))
+        }
+        when(isActive(ComputeRow_Read)){
 
-//        when(io.S_DATA_Valid){
-            for (i <- 0 to 2){
-                io.M_Data(3*(i+1)*8 - 1 downto (3*i*8)) := io.S_DATA((i+1)*8-1 downto (i*8)) ## io.S_DATA((i+1)*8-1 downto (i*8)) ## io.S_DATA((i+1)*8-1 downto (i*8))
-            }
             when(Cnt_COl < io.Row_Num_After_Padding -2){
                 io.M_Valid(0) := True
                 io.M_Valid(3) := True
@@ -97,9 +97,9 @@ class three2nine(
                 io.M_Valid(5) := False
                 io.M_Valid(8) := False
             }
-//        } otherwise {
-//            io.M_Valid.clearAll()
-//        }
+        } otherwise {
+            io.M_Valid.clearAll()
+        }
         IDLE
             .whenIsActive {
                 when(io.Start) {

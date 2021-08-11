@@ -5,6 +5,7 @@ verilog/image_padding_fifo_sync.v
 verilog/mul_simd.v
 verilog/add_simd.v
 verilog/image_padding_fifo.v
+verilog/image_four2three_fifo.v
 verilog/image_four2three_ram1.v
 verilog/image_compute_ctrl.v
 verilog/mul_add_simd.v

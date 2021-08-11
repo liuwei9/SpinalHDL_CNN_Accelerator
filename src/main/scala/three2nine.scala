@@ -66,7 +66,7 @@ class three2nine(
             io.S_Ready := True
         } otherwise (io.S_Ready := False)
 
-        when(io.S_DATA_Valid){
+//        when(io.S_DATA_Valid){
             for (i <- 0 to 2){
                 io.M_Data(3*(i+1)*8 - 1 downto (3*i*8)) := io.S_DATA((i+1)*8-1 downto (i*8)) ## io.S_DATA((i+1)*8-1 downto (i*8)) ## io.S_DATA((i+1)*8-1 downto (i*8))
             }
@@ -97,9 +97,9 @@ class three2nine(
                 io.M_Valid(5) := False
                 io.M_Valid(8) := False
             }
-        } otherwise {
-            io.M_Valid.clearAll()
-        }
+//        } otherwise {
+//            io.M_Valid.clearAll()
+//        }
         IDLE
             .whenIsActive {
                 when(io.Start) {

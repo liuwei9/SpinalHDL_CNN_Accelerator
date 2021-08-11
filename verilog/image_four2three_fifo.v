@@ -1,10 +1,10 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : image_padding_fifo
+// Component : image_four2three_fifo
 // Git hash  : ce9d8589af39662374a7b5fa9ba3b9a72b161583
 // Date      : 11/08/2021, 12:57:25
 
 
-module image_padding_fifo (
+module image_four2three_fifo (
   input               reset,
   input               clk,
   input      [7:0]    data_in,
@@ -13,7 +13,8 @@ module image_padding_fifo (
   output     [7:0]    data_out,
   input               rd_en,
   output reg          data_out_valid,
-  input      [11:0]   m_data_count
+  input      [11:0]   m_data_count,
+  input      [11:0]   s_data_count
 );
   wire                fifo_full;
   wire                fifo_empty;
@@ -23,13 +24,19 @@ module image_padding_fifo (
   wire                fifo_data_valid;
   wire                fifo_rd_rst_busy;
   wire                fifo_wr_rst_busy;
-  wire       [11:0]   _zz_when_image_padding_fifo_l38;
-  wire       [10:0]   _zz_when_image_padding_fifo_l38_1;
-  wire                when_image_padding_fifo_l33;
-  wire                when_image_padding_fifo_l38;
+  wire       [11:0]   _zz_when_general_fifo_sync_l29;
+  wire       [11:0]   _zz_when_general_fifo_sync_l29_1;
+  wire       [10:0]   _zz_when_general_fifo_sync_l29_2;
+  wire       [11:0]   _zz_when_general_fifo_sync_l39;
+  wire       [10:0]   _zz_when_general_fifo_sync_l39_1;
+  wire                when_general_fifo_sync_l29;
+  wire                when_general_fifo_sync_l39;
 
-  assign _zz_when_image_padding_fifo_l38_1 = fifo_rd_data_count;
-  assign _zz_when_image_padding_fifo_l38 = {1'd0, _zz_when_image_padding_fifo_l38_1};
+  assign _zz_when_general_fifo_sync_l29 = (_zz_when_general_fifo_sync_l29_1 + s_data_count);
+  assign _zz_when_general_fifo_sync_l29_2 = fifo_wr_data_count;
+  assign _zz_when_general_fifo_sync_l29_1 = {1'd0, _zz_when_general_fifo_sync_l29_2};
+  assign _zz_when_general_fifo_sync_l39_1 = fifo_rd_data_count;
+  assign _zz_when_general_fifo_sync_l39 = {1'd0, _zz_when_general_fifo_sync_l39_1};
   image_padding_fifo_sync fifo (
     .full             (fifo_full           ), //o
     .wr_en            (wr_en               ), //i
@@ -46,18 +53,18 @@ module image_padding_fifo (
     .clk              (clk                 )  //i
   );
   assign data_out = fifo_dout;
-  assign when_image_padding_fifo_l33 = (((! fifo_wr_rst_busy) && (! fifo_full)) && (fifo_wr_data_count < 11'h3f6));
+  assign when_general_fifo_sync_l29 = (((! fifo_wr_rst_busy) && (_zz_when_general_fifo_sync_l29 < 12'h400)) && (! fifo_full));
   always @(*) begin
-    if(when_image_padding_fifo_l33) begin
+    if(when_general_fifo_sync_l29) begin
       data_in_ready = 1'b1;
     end else begin
       data_in_ready = 1'b0;
     end
   end
 
-  assign when_image_padding_fifo_l38 = ((! fifo_rd_rst_busy) && (m_data_count <= _zz_when_image_padding_fifo_l38));
+  assign when_general_fifo_sync_l39 = ((! fifo_rd_rst_busy) && (m_data_count <= _zz_when_general_fifo_sync_l39));
   always @(*) begin
-    if(when_image_padding_fifo_l38) begin
+    if(when_general_fifo_sync_l39) begin
       data_out_valid = 1'b1;
     end else begin
       data_out_valid = 1'b0;

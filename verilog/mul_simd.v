@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : mul_simd
-// Git hash  : 627187c3e57e5afa461430fb3119888a5e0edda4
-// Date      : 06/08/2021, 19:31:58
+// Git hash  : ce9d8589af39662374a7b5fa9ba3b9a72b161583
+// Date      : 11/08/2021, 12:57:25
 
 
 module mul_simd (

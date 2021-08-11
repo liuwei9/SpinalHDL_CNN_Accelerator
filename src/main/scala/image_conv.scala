@@ -130,7 +130,8 @@ class image_conv(
     fifo_list = fifo_list.reverse
     for (i <- 0 until 9) {
         fifo_list(i).io.data_in <> io.S_DATA(((i + 1) * 8 - 1) downto (i * 8))
-        fifo_list(i).io.m_data_count <> FEATURE_MAP_SIZE
+        fifo_list(i).io.m_data_count <> FEATURE_MAP_SIZE -2
+        fifo_list(i).io.s_data_count <> FEATURE_MAP_SIZE-2
         fifo_list(i).io.wr_en <> io.S_Valid(i)
         fifo_list(i).io.rd_en <> image_comp_ctrl.io.rd_en_fifo
         fifo_list(i).io.data_out <> fifo_out_data(((i + 1) * 8 - 1) downto (i * 8))

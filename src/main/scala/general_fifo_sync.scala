@@ -19,22 +19,23 @@ class general_fifo_sync(
         val rd_en = in Bool()
         val data_out_valid = out Bool()
         val m_data_count = in UInt(ROW_COL_DATA_COUNT_WIDTH bits)
+        val s_data_count = in UInt(ROW_COL_DATA_COUNT_WIDTH bits)
     }
     noIoPrefix()
     fifo.io.wr_en <> io.wr_en
     fifo.io.rd_en <> io.rd_en
     fifo.io.din <> io.data_in
     fifo.io.dout <> io.data_out
-//    when((!fifo.io.wr_rst_busy) && (U(fifo.io.wr_data_count) < (if (fifo_depth > 10) (fifo_depth - 10) else fifo_depth)) && (!fifo.io.full)) {
-//        io.data_in_ready := True
-//    } otherwise (
-//        io.data_in_ready := False
-//        )
-    when((!fifo.io.wr_rst_busy)  && (!fifo.io.full)) {
+    when((!fifo.io.wr_rst_busy) && (U(fifo.io.wr_data_count) + io.s_data_count<fifo_depth) && (!fifo.io.full)) {
         io.data_in_ready := True
     } otherwise (
         io.data_in_ready := False
         )
+//    when((!fifo.io.wr_rst_busy)  && (!fifo.io.full)) {
+//        io.data_in_ready := True
+//    } otherwise (
+//        io.data_in_ready := False
+//        )
     when((!fifo.io.rd_rst_busy) && (U(fifo.io.rd_data_count) >= io.m_data_count)) {
         io.data_out_valid := True
     } otherwise (

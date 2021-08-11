@@ -26,6 +26,7 @@ class four2three(
     four2three_fifo.io.data_in_ready <> io.S_DATA.ready
     four2three_fifo.io.wr_en <> io.S_DATA.valid
     four2three_fifo.io.m_data_count <> FEATURE_MAP_SIZE
+    four2three_fifo.io.s_data_count <> FEATURE_MAP_SIZE
     val ram1 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0,clka = this.clockDomain,clkb = this.clockDomain)
     val ram2 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0,clka = this.clockDomain,clkb = this.clockDomain)
     val ram3 = new sdpram(S_DATA_WIDTH, FEATURE_MAP_SIZE, S_DATA_WIDTH, FEATURE_MAP_SIZE, "distributed", 0,clka = this.clockDomain,clkb = this.clockDomain)

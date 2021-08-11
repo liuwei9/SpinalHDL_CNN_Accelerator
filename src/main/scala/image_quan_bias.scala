@@ -24,6 +24,7 @@ class image_quan_bias(
     bias_fifo.io.data_out_valid <> io.fifo_valid
     //后期改参数传
     bias_fifo.io.m_data_count <> FEATURE_MAP_SIZE * CHANNEL_OUT_TIMES
+    bias_fifo.io.s_data_count <> FEATURE_MAP_SIZE * CHANNEL_OUT_TIMES
     val data_out_fifo_delay = Delay(bias_fifo.io.data_out, 2)
     var add_list: List[add_simd] = Nil
     val DATA_WIDTH = S_DATA_WIDTH / COMPUTE_CHANNEL_OUT_NUM

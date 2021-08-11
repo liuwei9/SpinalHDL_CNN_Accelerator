@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_conv
-// Git hash  : 627187c3e57e5afa461430fb3119888a5e0edda4
-// Date      : 06/08/2021, 19:31:59
+// Git hash  : ce9d8589af39662374a7b5fa9ba3b9a72b161583
+// Date      : 11/08/2021, 12:57:25
 
 
 module image_conv (
@@ -171,7 +171,7 @@ module image_conv (
     .clk                   (clk                                 ), //i
     .reset                 (reset                               )  //i
   );
-  image_padding_fifo general_fifo_sync_9 (
+  image_four2three_fifo general_fifo_sync_9 (
     .reset             (reset                               ), //i
     .clk               (clk                                 ), //i
     .data_in           (general_fifo_sync_9_data_in         ), //i
@@ -180,9 +180,10 @@ module image_conv (
     .data_out          (general_fifo_sync_9_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo          ), //i
     .data_out_valid    (general_fifo_sync_9_data_out_valid  ), //o
-    .m_data_count      (12'h282                             )  //i
+    .m_data_count      (12'h280                             ), //i
+    .s_data_count      (12'h280                             )  //i
   );
-  image_padding_fifo general_fifo_sync_10 (
+  image_four2three_fifo general_fifo_sync_10 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_10_data_in         ), //i
@@ -191,9 +192,10 @@ module image_conv (
     .data_out          (general_fifo_sync_10_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_10_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
-  image_padding_fifo general_fifo_sync_11 (
+  image_four2three_fifo general_fifo_sync_11 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_11_data_in         ), //i
@@ -202,9 +204,10 @@ module image_conv (
     .data_out          (general_fifo_sync_11_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_11_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
-  image_padding_fifo general_fifo_sync_12 (
+  image_four2three_fifo general_fifo_sync_12 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_12_data_in         ), //i
@@ -213,9 +216,10 @@ module image_conv (
     .data_out          (general_fifo_sync_12_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_12_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
-  image_padding_fifo general_fifo_sync_13 (
+  image_four2three_fifo general_fifo_sync_13 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_13_data_in         ), //i
@@ -224,9 +228,10 @@ module image_conv (
     .data_out          (general_fifo_sync_13_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_13_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
-  image_padding_fifo general_fifo_sync_14 (
+  image_four2three_fifo general_fifo_sync_14 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_14_data_in         ), //i
@@ -235,9 +240,10 @@ module image_conv (
     .data_out          (general_fifo_sync_14_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_14_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
-  image_padding_fifo general_fifo_sync_15 (
+  image_four2three_fifo general_fifo_sync_15 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_15_data_in         ), //i
@@ -246,9 +252,10 @@ module image_conv (
     .data_out          (general_fifo_sync_15_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_15_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
-  image_padding_fifo general_fifo_sync_16 (
+  image_four2three_fifo general_fifo_sync_16 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_16_data_in         ), //i
@@ -257,9 +264,10 @@ module image_conv (
     .data_out          (general_fifo_sync_16_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_16_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
-  image_padding_fifo general_fifo_sync_17 (
+  image_four2three_fifo general_fifo_sync_17 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_17_data_in         ), //i
@@ -268,7 +276,8 @@ module image_conv (
     .data_out          (general_fifo_sync_17_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_17_data_out_valid  ), //o
-    .m_data_count      (12'h282                              )  //i
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
   );
   mul_add_simd mul_add_simd_8 (
     .dataIn      (fifo_out_data_delay_0   ), //i

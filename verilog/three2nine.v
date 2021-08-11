@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : three2nine
-// Git hash  : 627187c3e57e5afa461430fb3119888a5e0edda4
-// Date      : 06/08/2021, 19:31:59
+// Git hash  : ce9d8589af39662374a7b5fa9ba3b9a72b161583
+// Date      : 11/08/2021, 12:57:25
 
 
 module three2nine (
@@ -223,39 +223,35 @@ module three2nine (
       end else begin
         S_DATA_Addr <= 12'h0;
       end
-      if(S_DATA_Valid) begin
-        M_Data[23 : 0] <= {{S_DATA[7 : 0],S_DATA[7 : 0]},S_DATA[7 : 0]};
-        M_Data[47 : 24] <= {{S_DATA[15 : 8],S_DATA[15 : 8]},S_DATA[15 : 8]};
-        M_Data[71 : 48] <= {{S_DATA[23 : 16],S_DATA[23 : 16]},S_DATA[23 : 16]};
-        if(when_three2nine_l73) begin
-          M_Valid[0] <= 1'b1;
-          M_Valid[3] <= 1'b1;
-          M_Valid[6] <= 1'b1;
-        end else begin
-          M_Valid[0] <= 1'b0;
-          M_Valid[3] <= 1'b0;
-          M_Valid[6] <= 1'b0;
-        end
-        if(when_three2nine_l82) begin
-          M_Valid[1] <= 1'b1;
-          M_Valid[4] <= 1'b1;
-          M_Valid[7] <= 1'b1;
-        end else begin
-          M_Valid[1] <= 1'b0;
-          M_Valid[4] <= 1'b0;
-          M_Valid[7] <= 1'b0;
-        end
-        if(when_three2nine_l91) begin
-          M_Valid[2] <= 1'b1;
-          M_Valid[5] <= 1'b1;
-          M_Valid[8] <= 1'b1;
-        end else begin
-          M_Valid[2] <= 1'b0;
-          M_Valid[5] <= 1'b0;
-          M_Valid[8] <= 1'b0;
-        end
+      M_Data[23 : 0] <= {{S_DATA[7 : 0],S_DATA[7 : 0]},S_DATA[7 : 0]};
+      M_Data[47 : 24] <= {{S_DATA[15 : 8],S_DATA[15 : 8]},S_DATA[15 : 8]};
+      M_Data[71 : 48] <= {{S_DATA[23 : 16],S_DATA[23 : 16]},S_DATA[23 : 16]};
+      if(when_three2nine_l73) begin
+        M_Valid[0] <= 1'b1;
+        M_Valid[3] <= 1'b1;
+        M_Valid[6] <= 1'b1;
       end else begin
-        M_Valid <= 9'h0;
+        M_Valid[0] <= 1'b0;
+        M_Valid[3] <= 1'b0;
+        M_Valid[6] <= 1'b0;
+      end
+      if(when_three2nine_l82) begin
+        M_Valid[1] <= 1'b1;
+        M_Valid[4] <= 1'b1;
+        M_Valid[7] <= 1'b1;
+      end else begin
+        M_Valid[1] <= 1'b0;
+        M_Valid[4] <= 1'b0;
+        M_Valid[7] <= 1'b0;
+      end
+      if(when_three2nine_l91) begin
+        M_Valid[2] <= 1'b1;
+        M_Valid[5] <= 1'b1;
+        M_Valid[8] <= 1'b1;
+      end else begin
+        M_Valid[2] <= 1'b0;
+        M_Valid[5] <= 1'b0;
+        M_Valid[8] <= 1'b0;
       end
       three2nine_fsm_stateReg <= three2nine_fsm_stateNext;
     end

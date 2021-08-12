@@ -12,9 +12,10 @@ class mul(
 
     }
     noIoPrefix()
-    val A_q = io.A.asUInt
+    //asSInt待定
+    val A_q = io.A.asSInt
     A_q.addAttribute("use_dsp", "yes")
-    val B_q = io.B.asUInt
+    val B_q = io.B.asSInt
     B_q.addAttribute("use_dsp", "yes")
     val A_qq = RegNext(A_q)
     A_qq.addAttribute("use_dsp", "yes")

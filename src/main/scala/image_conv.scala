@@ -140,7 +140,8 @@ class image_conv(
 
     image_comp_ctrl.io.compute_fifo_ready <> (fifo_list(0).io.data_out_valid & fifo_list(1).io.data_out_valid & fifo_list(2).io.data_out_valid)
 
-    val fifo_out_data_delay_0 = RegNextWhen(fifo_out_data,image_comp_ctrl.io.rd_en_fifo)
+   // val fifo_out_data_delay_0 = RegNextWhen(fifo_out_data,image_comp_ctrl.io.rd_en_fifo)
+    val fifo_out_data_delay_0 = RegNext(fifo_out_data)
     val after_conv_data = Vec(Bits(Width_After_Conv bits),COMPUTE_CHANNEL_OUT_NUM)
     var mul_add_list:List[mul_add_simd] = Nil
     for (_ <- 0 until COMPUTE_CHANNEL_OUT_NUM){

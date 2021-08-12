@@ -15,7 +15,7 @@ class image_compute_ctrl(
         val Conv_Complete = out Bool()
         val rd_en_fifo = out Bool() setAsReg() init False
         val M_Valid = out Bool()
-        val weight_select = out Bits (3 bits)
+        val weight_select = out Bits (3 bits) setAsReg() init 0
     }
     noIoPrefix()
     //待定
@@ -89,24 +89,24 @@ class image_compute_ctrl(
         }
         //待定
 //        io.M_Valid := Delay(io.rd_en_fifo,13)
-        io.M_Valid := Delay(M_Fifo_Valid,16)
-        val weight = Bits (3 bits) setAsReg() init 0
-        io.weight_select := Delay(weight,3)
+        io.M_Valid := Delay(M_Fifo_Valid,13)
+        //val weight = Bits (3 bits) setAsReg() init 0
+       // io.weight_select := Delay(weight,3)
         switch(Cnt_Channel_Out_Num){
             is(0){
-                weight := 1
+                io.weight_select := 1
             }
             is(1){
-                weight := 2
+                io.weight_select := 2
             }
             is(2){
-                weight := 3
+                io.weight_select := 3
             }
             is(3){
-                weight := 4
+                io.weight_select := 4
             }
             default{
-                weight := 0
+                io.weight_select := 0
             }
         }
         IDLE

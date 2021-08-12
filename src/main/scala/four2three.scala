@@ -179,51 +179,54 @@ class four2three(
                 ram2.io.enb :=io.M_rd_en
                 ram3.io.enb :=io.M_rd_en
                 ram4.io.enb :=False
-                io.M_DATA := ram1.io.doutb##ram2.io.doutb##ram3.io.doutb
+//                io.M_DATA := ram3.io.doutb##ram2.io.doutb##ram1.io.doutb
             }
             is(2) {
                 ram1.io.enb :=False
                 ram2.io.enb :=io.M_rd_en
                 ram3.io.enb :=io.M_rd_en
                 ram4.io.enb :=io.M_rd_en
-                io.M_DATA := ram2.io.doutb##ram3.io.doutb##ram4.io.doutb
+//                io.M_DATA := ram4.io.doutb##ram3.io.doutb##ram2.io.doutb
             }
             is(3) {
                 ram1.io.enb :=io.M_rd_en
                 ram2.io.enb :=False
                 ram3.io.enb :=io.M_rd_en
                 ram4.io.enb :=io.M_rd_en
-                io.M_DATA := ram3.io.doutb##ram4.io.doutb##ram1.io.doutb
+//                io.M_DATA := ram1.io.doutb##ram4.io.doutb##ram3.io.doutb
             }
             is(4) {
                 ram1.io.enb :=io.M_rd_en
                 ram2.io.enb :=io.M_rd_en
                 ram3.io.enb :=False
                 ram4.io.enb :=io.M_rd_en
-                io.M_DATA := ram4.io.doutb##ram1.io.doutb##ram2.io.doutb
+//                io.M_DATA := ram2.io.doutb##ram1.io.doutb##ram4.io.doutb
             }
             default {
                 ram1.io.enb :=False
                 ram2.io.enb :=False
                 ram3.io.enb :=False
                 ram4.io.enb :=False
-                io.M_DATA := 0
+//                io.M_DATA := 0
             }
         }
         when(io.M_rd_en){
             io.M_Valid := True
             switch(rd_ram_cnt){
                 is(1) {
-                    io.M_DATA := ram1.io.doutb##ram2.io.doutb##ram3.io.doutb
+                    //io.M_DATA := ram1.io.doutb##ram2.io.doutb##ram3.io.doutb
+                    io.M_DATA := ram3.io.doutb##ram2.io.doutb##ram1.io.doutb
                 }
                 is(2) {
-                    io.M_DATA := ram2.io.doutb##ram3.io.doutb##ram4.io.doutb
+//                    io.M_DATA := ram2.io.doutb##ram3.io.doutb##ram4.io.doutb
+                    io.M_DATA := ram4.io.doutb##ram3.io.doutb##ram2.io.doutb
                 }
                 is(3) {
-                    io.M_DATA := ram3.io.doutb##ram4.io.doutb##ram1.io.doutb
+//                    io.M_DATA := ram3.io.doutb##ram4.io.doutb##ram1.io.doutb
+                    io.M_DATA := ram1.io.doutb##ram4.io.doutb##ram3.io.doutb
                 }
                 is(4) {
-                    io.M_DATA := ram4.io.doutb##ram1.io.doutb##ram2.io.doutb
+//                    io.M_DATA := ram4.io.doutb##ram1.io.doutb##ram2.io.doutb
                 }
                 default {
                     io.M_DATA := 0

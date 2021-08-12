@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_compute_ctrl
-// Git hash  : 4a3cffa6a82f86452f11e887963137268ca9c148
-// Date      : 11/08/2021, 22:11:06
+// Git hash  : 273c3163e7ad111796d5ae7321f4b13ac23942b4
+// Date      : 12/08/2021, 11:18:31
 
 
 module image_compute_ctrl (
@@ -12,7 +12,7 @@ module image_compute_ctrl (
   output              Conv_Complete,
   output reg          rd_en_fifo,
   output              M_Valid,
-  output     [2:0]    weight_select,
+  output reg [2:0]    weight_select,
   input               clk,
   input               reset
 );
@@ -66,13 +66,6 @@ module image_compute_ctrl (
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_11;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_12;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_13;
-  reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_14;
-  reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_15;
-  reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_16;
-  reg        [2:0]    image_cmp_ctrl_fsm_weight;
-  reg        [2:0]    image_cmp_ctrl_fsm_weight_delay_1;
-  reg        [2:0]    image_cmp_ctrl_fsm_weight_delay_2;
-  reg        [2:0]    image_cmp_ctrl_fsm_weight_delay_3;
   reg        `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_type image_cmp_ctrl_fsm_stateReg;
   reg        `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_type image_cmp_ctrl_fsm_stateNext;
   `ifndef SYNTHESIS
@@ -152,8 +145,7 @@ module image_compute_ctrl (
     end
   end
 
-  assign M_Valid = image_cmp_ctrl_fsm_M_Fifo_Valid_delay_16;
-  assign weight_select = image_cmp_ctrl_fsm_weight_delay_3;
+  assign M_Valid = image_cmp_ctrl_fsm_M_Fifo_Valid_delay_13;
   always @(*) begin
     image_cmp_ctrl_fsm_stateNext = image_cmp_ctrl_fsm_stateReg;
     case(image_cmp_ctrl_fsm_stateReg)
@@ -213,11 +205,11 @@ module image_compute_ctrl (
     if(reset) begin
       Compute_Complete <= 1'b0;
       rd_en_fifo <= 1'b0;
+      weight_select <= 3'b000;
       image_cmp_ctrl_fsm_Cnt_Channel_Out_Num <= 3'b000;
       image_cmp_ctrl_fsm_Cnt_Column <= 12'h0;
       image_cmp_ctrl_fsm_Cnt_Row <= 12'h0;
       image_cmp_ctrl_fsm_M_Fifo_Valid <= 1'b0;
-      image_cmp_ctrl_fsm_weight <= 3'b000;
       image_cmp_ctrl_fsm_stateReg <= `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_BOOT;
     end else begin
       if(when_image_compute_ctrl_l36) begin
@@ -262,19 +254,19 @@ module image_compute_ctrl (
       end
       case(image_cmp_ctrl_fsm_Cnt_Channel_Out_Num)
         3'b000 : begin
-          image_cmp_ctrl_fsm_weight <= 3'b001;
+          weight_select <= 3'b001;
         end
         3'b001 : begin
-          image_cmp_ctrl_fsm_weight <= 3'b010;
+          weight_select <= 3'b010;
         end
         3'b010 : begin
-          image_cmp_ctrl_fsm_weight <= 3'b011;
+          weight_select <= 3'b011;
         end
         3'b011 : begin
-          image_cmp_ctrl_fsm_weight <= 3'b100;
+          weight_select <= 3'b100;
         end
         default : begin
-          image_cmp_ctrl_fsm_weight <= 3'b000;
+          weight_select <= 3'b000;
         end
       endcase
       image_cmp_ctrl_fsm_stateReg <= image_cmp_ctrl_fsm_stateNext;
@@ -309,12 +301,6 @@ module image_compute_ctrl (
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_11 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_10;
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_12 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_11;
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_13 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_12;
-    image_cmp_ctrl_fsm_M_Fifo_Valid_delay_14 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_13;
-    image_cmp_ctrl_fsm_M_Fifo_Valid_delay_15 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_14;
-    image_cmp_ctrl_fsm_M_Fifo_Valid_delay_16 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_15;
-    image_cmp_ctrl_fsm_weight_delay_1 <= image_cmp_ctrl_fsm_weight;
-    image_cmp_ctrl_fsm_weight_delay_2 <= image_cmp_ctrl_fsm_weight_delay_1;
-    image_cmp_ctrl_fsm_weight_delay_3 <= image_cmp_ctrl_fsm_weight_delay_2;
   end
 
 

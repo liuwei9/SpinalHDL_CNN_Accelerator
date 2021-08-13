@@ -22,7 +22,6 @@ class mul_add_simd(
         mul_list(i).io.data_in <> io.dataIn(((i + 1) * (S_DATA_WIDTH / KERNEL_NUM) - 1) downto (i * (S_DATA_WIDTH / KERNEL_NUM)))
         mul_list(i).io.weight_in <> io.weightIn(((i + 1) * (S_DATA_WIDTH / KERNEL_NUM) - 1) downto (i * (S_DATA_WIDTH / KERNEL_NUM)))
         mul_data_out(i) := mul_list(i).io.data_out
-
     }
     val mul_data_out_delay2 =  Vec(Bits(M_DATA_WIDTH bits),KERNEL_NUM - 1)
     for (i <- 1 until(KERNEL_NUM -1)){

@@ -18,8 +18,7 @@ class image_compute_ctrl(
         val weight_select = out Bits (3 bits) setAsReg() init 0
     }
     noIoPrefix()
-    //待定
-    io.Conv_Complete := Delay(io.Compute_Complete, 14)
+
 
     val image_cmp_ctrl_fsm = new StateMachine {
         val IDLE = new State() with EntryPoint
@@ -60,7 +59,7 @@ class image_compute_ctrl(
             En_Compute_Column := False
         }
 
-        val En_Compute_Row = Bool()
+        val En_Compute_Row = Bool() setAsReg() init False
         val Cnt_Row = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
         when(isEntering(Judge_Row)) {
             Cnt_Row := Cnt_Row + 1
@@ -69,7 +68,7 @@ class image_compute_ctrl(
         } otherwise {
             Cnt_Row := Cnt_Row
         }
-        when(Cnt_Row === FEATURE_MAP_SIZE - 3) {
+        when(Cnt_Row === FEATURE_MAP_SIZE - 3&&En_Compute_Column) {
             En_Compute_Row := True
         } otherwise {
             En_Compute_Row := False
@@ -90,6 +89,8 @@ class image_compute_ctrl(
         //待定
 //        io.M_Valid := Delay(io.rd_en_fifo,13)
         io.M_Valid := Delay(M_Fifo_Valid,13)
+        //待定
+        io.Conv_Complete := Delay(En_Compute_Row, 14)
         //val weight = Bits (3 bits) setAsReg() init 0
        // io.weight_select := Delay(weight,3)
         switch(Cnt_Channel_Out_Num){

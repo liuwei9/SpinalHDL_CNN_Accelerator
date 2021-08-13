@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_compute_ctrl
-// Git hash  : 745cabca1323d9d10687a9041b3bcccb22fd9b3d
-// Date      : 13/08/2021, 11:00:42
+// Git hash  : cef4a6466545330cf4f3db1ec4481309bcef3f2d
+// Date      : 13/08/2021, 16:53:53
 
 
 module image_compute_ctrl (
@@ -16,23 +16,9 @@ module image_compute_ctrl (
   input               clk,
   input               reset
 );
-  wire       [2:0]    _zz_when_image_compute_ctrl_l37;
-  wire       [2:0]    _zz_when_image_compute_ctrl_l46;
-  wire       [2:0]    _zz_when_image_compute_ctrl_l57;
-  reg                 Compute_Complete_delay_1;
-  reg                 Compute_Complete_delay_2;
-  reg                 Compute_Complete_delay_3;
-  reg                 Compute_Complete_delay_4;
-  reg                 Compute_Complete_delay_5;
-  reg                 Compute_Complete_delay_6;
-  reg                 Compute_Complete_delay_7;
-  reg                 Compute_Complete_delay_8;
-  reg                 Compute_Complete_delay_9;
-  reg                 Compute_Complete_delay_10;
-  reg                 Compute_Complete_delay_11;
-  reg                 Compute_Complete_delay_12;
-  reg                 Compute_Complete_delay_13;
-  reg                 Compute_Complete_delay_14;
+  wire       [2:0]    _zz_when_image_compute_ctrl_l36;
+  wire       [2:0]    _zz_when_image_compute_ctrl_l45;
+  wire       [2:0]    _zz_when_image_compute_ctrl_l56;
   wire                image_cmp_ctrl_fsm_wantExit;
   reg                 image_cmp_ctrl_fsm_wantStart;
   wire                image_cmp_ctrl_fsm_wantKill;
@@ -40,19 +26,19 @@ module image_compute_ctrl (
   wire       [2:0]    image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG;
   reg        [2:0]    image_cmp_ctrl_fsm_Cnt_Channel_Out_Num;
   reg        [11:0]   image_cmp_ctrl_fsm_Cnt_Column;
+  wire                when_image_compute_ctrl_l35;
   wire                when_image_compute_ctrl_l36;
-  wire                when_image_compute_ctrl_l37;
+  wire                when_image_compute_ctrl_l44;
   wire                when_image_compute_ctrl_l45;
-  wire                when_image_compute_ctrl_l46;
-  wire                when_image_compute_ctrl_l57;
+  wire                when_image_compute_ctrl_l56;
   reg                 image_cmp_ctrl_fsm_En_Compute_Row;
   reg        [11:0]   image_cmp_ctrl_fsm_Cnt_Row;
-  wire                when_image_compute_ctrl_l65;
-  wire                when_image_compute_ctrl_l67;
-  wire                when_image_compute_ctrl_l72;
-  wire                when_image_compute_ctrl_l78;
+  wire                when_image_compute_ctrl_l64;
+  wire                when_image_compute_ctrl_l66;
+  wire                when_image_compute_ctrl_l71;
+  wire                when_image_compute_ctrl_l77;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid;
-  wire                when_image_compute_ctrl_l85;
+  wire                when_image_compute_ctrl_l84;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_1;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_2;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_3;
@@ -66,6 +52,20 @@ module image_compute_ctrl (
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_11;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_12;
   reg                 image_cmp_ctrl_fsm_M_Fifo_Valid_delay_13;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_1;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_2;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_3;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_4;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_5;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_6;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_7;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_8;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_9;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_10;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_11;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_12;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_13;
+  reg                 image_cmp_ctrl_fsm_En_Compute_Row_delay_14;
   reg        `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_type image_cmp_ctrl_fsm_stateReg;
   reg        `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_type image_cmp_ctrl_fsm_stateNext;
   `ifndef SYNTHESIS
@@ -74,9 +74,9 @@ module image_compute_ctrl (
   `endif
 
 
-  assign _zz_when_image_compute_ctrl_l37 = (image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG - 3'b001);
-  assign _zz_when_image_compute_ctrl_l46 = (image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG - 3'b001);
-  assign _zz_when_image_compute_ctrl_l57 = (image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG - 3'b001);
+  assign _zz_when_image_compute_ctrl_l36 = (image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG - 3'b001);
+  assign _zz_when_image_compute_ctrl_l45 = (image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG - 3'b001);
+  assign _zz_when_image_compute_ctrl_l56 = (image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG - 3'b001);
   `ifndef SYNTHESIS
   always @(*) begin
     case(image_cmp_ctrl_fsm_stateReg)
@@ -102,7 +102,6 @@ module image_compute_ctrl (
   end
   `endif
 
-  assign Conv_Complete = Compute_Complete_delay_14;
   assign image_cmp_ctrl_fsm_wantExit = 1'b0;
   always @(*) begin
     image_cmp_ctrl_fsm_wantStart = 1'b0;
@@ -125,27 +124,20 @@ module image_compute_ctrl (
 
   assign image_cmp_ctrl_fsm_wantKill = 1'b0;
   assign image_cmp_ctrl_fsm_COMPUTE_TIMES_CHANNEL_OUT_REG = 3'b100;
-  assign when_image_compute_ctrl_l37 = (image_cmp_ctrl_fsm_Cnt_Channel_Out_Num == _zz_when_image_compute_ctrl_l37);
-  assign when_image_compute_ctrl_l46 = (image_cmp_ctrl_fsm_Cnt_Channel_Out_Num == _zz_when_image_compute_ctrl_l46);
-  assign when_image_compute_ctrl_l57 = ((image_cmp_ctrl_fsm_Cnt_Channel_Out_Num == _zz_when_image_compute_ctrl_l57) && (image_cmp_ctrl_fsm_Cnt_Column == 12'h27f));
+  assign when_image_compute_ctrl_l36 = (image_cmp_ctrl_fsm_Cnt_Channel_Out_Num == _zz_when_image_compute_ctrl_l36);
+  assign when_image_compute_ctrl_l45 = (image_cmp_ctrl_fsm_Cnt_Channel_Out_Num == _zz_when_image_compute_ctrl_l45);
+  assign when_image_compute_ctrl_l56 = ((image_cmp_ctrl_fsm_Cnt_Channel_Out_Num == _zz_when_image_compute_ctrl_l56) && (image_cmp_ctrl_fsm_Cnt_Column == 12'h27f));
   always @(*) begin
-    if(when_image_compute_ctrl_l57) begin
+    if(when_image_compute_ctrl_l56) begin
       image_cmp_ctrl_fsm_En_Compute_Column = 1'b1;
     end else begin
       image_cmp_ctrl_fsm_En_Compute_Column = 1'b0;
     end
   end
 
-  assign when_image_compute_ctrl_l72 = (image_cmp_ctrl_fsm_Cnt_Row == 12'h27f);
-  always @(*) begin
-    if(when_image_compute_ctrl_l72) begin
-      image_cmp_ctrl_fsm_En_Compute_Row = 1'b1;
-    end else begin
-      image_cmp_ctrl_fsm_En_Compute_Row = 1'b0;
-    end
-  end
-
+  assign when_image_compute_ctrl_l71 = ((image_cmp_ctrl_fsm_Cnt_Row == 12'h27f) && image_cmp_ctrl_fsm_En_Compute_Column);
   assign M_Valid = image_cmp_ctrl_fsm_M_Fifo_Valid_delay_13;
+  assign Conv_Complete = image_cmp_ctrl_fsm_En_Compute_Row_delay_14;
   always @(*) begin
     image_cmp_ctrl_fsm_stateNext = image_cmp_ctrl_fsm_stateReg;
     case(image_cmp_ctrl_fsm_stateReg)
@@ -195,12 +187,12 @@ module image_compute_ctrl (
     end
   end
 
-  assign when_image_compute_ctrl_l36 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Compute);
-  assign when_image_compute_ctrl_l45 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Compute);
-  assign when_image_compute_ctrl_l65 = ((image_cmp_ctrl_fsm_stateNext == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Judge_Row) && (image_cmp_ctrl_fsm_stateReg != `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Judge_Row));
-  assign when_image_compute_ctrl_l67 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_IDLE);
-  assign when_image_compute_ctrl_l78 = ((image_cmp_ctrl_fsm_stateNext == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_IDLE) && (image_cmp_ctrl_fsm_stateReg != `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_IDLE));
-  assign when_image_compute_ctrl_l85 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Compute);
+  assign when_image_compute_ctrl_l35 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Compute);
+  assign when_image_compute_ctrl_l44 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Compute);
+  assign when_image_compute_ctrl_l64 = ((image_cmp_ctrl_fsm_stateNext == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Judge_Row) && (image_cmp_ctrl_fsm_stateReg != `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Judge_Row));
+  assign when_image_compute_ctrl_l66 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_IDLE);
+  assign when_image_compute_ctrl_l77 = ((image_cmp_ctrl_fsm_stateNext == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_IDLE) && (image_cmp_ctrl_fsm_stateReg != `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_IDLE));
+  assign when_image_compute_ctrl_l84 = (image_cmp_ctrl_fsm_stateReg == `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_Compute);
   always @(posedge clk) begin
     if(reset) begin
       Compute_Complete <= 1'b0;
@@ -208,12 +200,13 @@ module image_compute_ctrl (
       weight_select <= 3'b000;
       image_cmp_ctrl_fsm_Cnt_Channel_Out_Num <= 3'b000;
       image_cmp_ctrl_fsm_Cnt_Column <= 12'h0;
+      image_cmp_ctrl_fsm_En_Compute_Row <= 1'b0;
       image_cmp_ctrl_fsm_Cnt_Row <= 12'h0;
       image_cmp_ctrl_fsm_M_Fifo_Valid <= 1'b0;
       image_cmp_ctrl_fsm_stateReg <= `image_cmp_ctrl_fsm_enumDefinition_binary_sequential_image_cmp_ctrl_fsm_BOOT;
     end else begin
-      if(when_image_compute_ctrl_l36) begin
-        if(when_image_compute_ctrl_l37) begin
+      if(when_image_compute_ctrl_l35) begin
+        if(when_image_compute_ctrl_l36) begin
           image_cmp_ctrl_fsm_Cnt_Channel_Out_Num <= 3'b000;
         end else begin
           image_cmp_ctrl_fsm_Cnt_Channel_Out_Num <= (image_cmp_ctrl_fsm_Cnt_Channel_Out_Num + 3'b001);
@@ -221,8 +214,8 @@ module image_compute_ctrl (
       end else begin
         image_cmp_ctrl_fsm_Cnt_Channel_Out_Num <= 3'b000;
       end
-      if(when_image_compute_ctrl_l45) begin
-        if(when_image_compute_ctrl_l46) begin
+      if(when_image_compute_ctrl_l44) begin
+        if(when_image_compute_ctrl_l45) begin
           rd_en_fifo <= 1'b1;
           image_cmp_ctrl_fsm_Cnt_Column <= (image_cmp_ctrl_fsm_Cnt_Column + 12'h001);
         end else begin
@@ -233,21 +226,26 @@ module image_compute_ctrl (
         rd_en_fifo <= 1'b0;
         image_cmp_ctrl_fsm_Cnt_Column <= 12'h0;
       end
-      if(when_image_compute_ctrl_l65) begin
+      if(when_image_compute_ctrl_l64) begin
         image_cmp_ctrl_fsm_Cnt_Row <= (image_cmp_ctrl_fsm_Cnt_Row + 12'h001);
       end else begin
-        if(when_image_compute_ctrl_l67) begin
+        if(when_image_compute_ctrl_l66) begin
           image_cmp_ctrl_fsm_Cnt_Row <= 12'h0;
         end else begin
           image_cmp_ctrl_fsm_Cnt_Row <= image_cmp_ctrl_fsm_Cnt_Row;
         end
       end
-      if(when_image_compute_ctrl_l78) begin
+      if(when_image_compute_ctrl_l71) begin
+        image_cmp_ctrl_fsm_En_Compute_Row <= 1'b1;
+      end else begin
+        image_cmp_ctrl_fsm_En_Compute_Row <= 1'b0;
+      end
+      if(when_image_compute_ctrl_l77) begin
         Compute_Complete <= 1'b1;
       end else begin
         Compute_Complete <= 1'b0;
       end
-      if(when_image_compute_ctrl_l85) begin
+      if(when_image_compute_ctrl_l84) begin
         image_cmp_ctrl_fsm_M_Fifo_Valid <= 1'b1;
       end else begin
         image_cmp_ctrl_fsm_M_Fifo_Valid <= 1'b0;
@@ -274,20 +272,6 @@ module image_compute_ctrl (
   end
 
   always @(posedge clk) begin
-    Compute_Complete_delay_1 <= Compute_Complete;
-    Compute_Complete_delay_2 <= Compute_Complete_delay_1;
-    Compute_Complete_delay_3 <= Compute_Complete_delay_2;
-    Compute_Complete_delay_4 <= Compute_Complete_delay_3;
-    Compute_Complete_delay_5 <= Compute_Complete_delay_4;
-    Compute_Complete_delay_6 <= Compute_Complete_delay_5;
-    Compute_Complete_delay_7 <= Compute_Complete_delay_6;
-    Compute_Complete_delay_8 <= Compute_Complete_delay_7;
-    Compute_Complete_delay_9 <= Compute_Complete_delay_8;
-    Compute_Complete_delay_10 <= Compute_Complete_delay_9;
-    Compute_Complete_delay_11 <= Compute_Complete_delay_10;
-    Compute_Complete_delay_12 <= Compute_Complete_delay_11;
-    Compute_Complete_delay_13 <= Compute_Complete_delay_12;
-    Compute_Complete_delay_14 <= Compute_Complete_delay_13;
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_1 <= image_cmp_ctrl_fsm_M_Fifo_Valid;
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_2 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_1;
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_3 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_2;
@@ -301,6 +285,20 @@ module image_compute_ctrl (
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_11 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_10;
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_12 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_11;
     image_cmp_ctrl_fsm_M_Fifo_Valid_delay_13 <= image_cmp_ctrl_fsm_M_Fifo_Valid_delay_12;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_1 <= image_cmp_ctrl_fsm_En_Compute_Row;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_2 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_1;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_3 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_2;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_4 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_3;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_5 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_4;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_6 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_5;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_7 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_6;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_8 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_7;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_9 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_8;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_10 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_9;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_11 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_10;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_12 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_11;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_13 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_12;
+    image_cmp_ctrl_fsm_En_Compute_Row_delay_14 <= image_cmp_ctrl_fsm_En_Compute_Row_delay_13;
   end
 
 

@@ -9,6 +9,7 @@ class mul_simd (
         val weight_in = in Bits(S_DATA_WIDTH bits)
         val data_out = out Bits(M_DATA_WIDTH bits)
     }
+
     val mul = new mul(S_DATA_WIDTH,S_DATA_WIDTH)
     mul.io.A <> io.data_in
     mul.io.B <> io.weight_in

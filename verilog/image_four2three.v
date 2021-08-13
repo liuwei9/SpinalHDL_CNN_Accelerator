@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_four2three
-// Git hash  : cef4a6466545330cf4f3db1ec4481309bcef3f2d
-// Date      : 13/08/2021, 16:53:53
+// Git hash  : e8c442bcca73bbd2bccec93ed3ca9d5596923c97
+// Date      : 13/08/2021, 20:40:20
 
 
 module image_four2three (
@@ -111,7 +111,7 @@ module image_four2three (
   assign _zz_addra_3 = four2three_fsm_addrRam4;
   assign _zz_when_four2three_l167 = (Row_Num_After_Padding - 12'h001);
   assign _zz_when_four2three_l271 = (Row_Num_After_Padding - 12'h001);
-  image_four2three_fifo four2three_fifo (
+  general_fifo_sync four2three_fifo (
     .reset             (reset                           ), //i
     .clk               (clk                             ), //i
     .data_in           (S_DATA_payload                  ), //i
@@ -123,7 +123,7 @@ module image_four2three (
     .m_data_count      (12'h282                         ), //i
     .s_data_count      (12'h282                         )  //i
   );
-  image_four2three_ram1 ram1 (
+  sdpram ram1 (
     .doutb    (ram1_doutb                ), //o
     .addra    (ram1_addra                ), //i
     .addrb    (ram1_addrb                ), //i
@@ -133,7 +133,7 @@ module image_four2three (
     .wea      (ram1_wea                  ), //i
     .clk      (clk                       )  //i
   );
-  image_four2three_ram1 ram2 (
+  sdpram ram2 (
     .doutb    (ram2_doutb                ), //o
     .addra    (ram2_addra                ), //i
     .addrb    (ram2_addrb                ), //i
@@ -143,7 +143,7 @@ module image_four2three (
     .wea      (ram2_wea                  ), //i
     .clk      (clk                       )  //i
   );
-  image_four2three_ram1 ram3 (
+  sdpram ram3 (
     .doutb    (ram3_doutb                ), //o
     .addra    (ram3_addra                ), //i
     .addrb    (ram3_addrb                ), //i
@@ -153,7 +153,7 @@ module image_four2three (
     .wea      (ram3_wea                  ), //i
     .clk      (clk                       )  //i
   );
-  image_four2three_ram1 ram4 (
+  sdpram ram4 (
     .doutb    (ram4_doutb                ), //o
     .addra    (ram4_addra                ), //i
     .addrb    (ram4_addrb                ), //i

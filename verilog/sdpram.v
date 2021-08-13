@@ -1,10 +1,10 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : image_four2three_ram1
-// Git hash  : cef4a6466545330cf4f3db1ec4481309bcef3f2d
-// Date      : 13/08/2021, 16:53:53
+// Component : sdpram
+// Git hash  : e8c442bcca73bbd2bccec93ed3ca9d5596923c97
+// Date      : 13/08/2021, 20:40:20
 
 
-module image_four2three_ram1 (
+module sdpram (
   output     [7:0]    doutb,
   input      [9:0]    addra,
   input      [9:0]    addrb,

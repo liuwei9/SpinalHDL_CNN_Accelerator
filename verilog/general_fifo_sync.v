@@ -1,10 +1,10 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : image_four2three_fifo
-// Git hash  : cef4a6466545330cf4f3db1ec4481309bcef3f2d
-// Date      : 13/08/2021, 16:53:53
+// Component : general_fifo_sync
+// Git hash  : e8c442bcca73bbd2bccec93ed3ca9d5596923c97
+// Date      : 13/08/2021, 20:40:19
 
 
-module image_four2three_fifo (
+module general_fifo_sync (
   input               reset,
   input               clk,
   input      [7:0]    data_in,
@@ -37,7 +37,7 @@ module image_four2three_fifo (
   assign _zz_when_general_fifo_sync_l29_1 = {1'd0, _zz_when_general_fifo_sync_l29_2};
   assign _zz_when_general_fifo_sync_l39_1 = fifo_rd_data_count;
   assign _zz_when_general_fifo_sync_l39 = {1'd0, _zz_when_general_fifo_sync_l39_1};
-  image_padding_fifo_sync fifo (
+  fifo_sync fifo (
     .full             (fifo_full           ), //o
     .wr_en            (wr_en               ), //i
     .din              (data_in             ), //i

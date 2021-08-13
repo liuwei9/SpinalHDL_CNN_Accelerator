@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_conv
-// Git hash  : cef4a6466545330cf4f3db1ec4481309bcef3f2d
-// Date      : 13/08/2021, 16:53:53
+// Git hash  : e8c442bcca73bbd2bccec93ed3ca9d5596923c97
+// Date      : 13/08/2021, 20:40:20
 
 
 module image_conv (
@@ -17,8 +17,6 @@ module image_conv (
   input               clk
 );
   wire                image_comp_ctrl_compute_fifo_ready;
-  wire       [7:0]    general_fifo_sync_9_data_in;
-  wire                general_fifo_sync_9_wr_en;
   wire       [7:0]    general_fifo_sync_10_data_in;
   wire                general_fifo_sync_10_wr_en;
   wire       [7:0]    general_fifo_sync_11_data_in;
@@ -35,14 +33,13 @@ module image_conv (
   wire                general_fifo_sync_16_wr_en;
   wire       [7:0]    general_fifo_sync_17_data_in;
   wire                general_fifo_sync_17_wr_en;
+  wire       [7:0]    general_fifo_sync_18_data_in;
+  wire                general_fifo_sync_18_wr_en;
   wire                image_comp_ctrl_Compute_Complete;
   wire                image_comp_ctrl_Conv_Complete;
   wire                image_comp_ctrl_rd_en_fifo;
   wire                image_comp_ctrl_M_Valid;
   wire       [2:0]    image_comp_ctrl_weight_select;
-  wire                general_fifo_sync_9_data_in_ready;
-  wire       [7:0]    general_fifo_sync_9_data_out;
-  wire                general_fifo_sync_9_data_out_valid;
   wire                general_fifo_sync_10_data_in_ready;
   wire       [7:0]    general_fifo_sync_10_data_out;
   wire                general_fifo_sync_10_data_out_valid;
@@ -67,6 +64,9 @@ module image_conv (
   wire                general_fifo_sync_17_data_in_ready;
   wire       [7:0]    general_fifo_sync_17_data_out;
   wire                general_fifo_sync_17_data_out_valid;
+  wire                general_fifo_sync_18_data_in_ready;
+  wire       [7:0]    general_fifo_sync_18_data_out;
+  wire                general_fifo_sync_18_data_out_valid;
   wire       [19:0]   mul_add_simd_8_dataOut;
   wire       [19:0]   mul_add_simd_9_dataOut;
   wire       [19:0]   mul_add_simd_10_dataOut;
@@ -171,19 +171,7 @@ module image_conv (
     .clk                   (clk                                 ), //i
     .reset                 (reset                               )  //i
   );
-  image_four2three_fifo general_fifo_sync_9 (
-    .reset             (reset                               ), //i
-    .clk               (clk                                 ), //i
-    .data_in           (general_fifo_sync_9_data_in         ), //i
-    .wr_en             (general_fifo_sync_9_wr_en           ), //i
-    .data_in_ready     (general_fifo_sync_9_data_in_ready   ), //o
-    .data_out          (general_fifo_sync_9_data_out        ), //o
-    .rd_en             (image_comp_ctrl_rd_en_fifo          ), //i
-    .data_out_valid    (general_fifo_sync_9_data_out_valid  ), //o
-    .m_data_count      (12'h280                             ), //i
-    .s_data_count      (12'h280                             )  //i
-  );
-  image_four2three_fifo general_fifo_sync_10 (
+  general_fifo_sync general_fifo_sync_10 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_10_data_in         ), //i
@@ -195,7 +183,7 @@ module image_conv (
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
-  image_four2three_fifo general_fifo_sync_11 (
+  general_fifo_sync general_fifo_sync_11 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_11_data_in         ), //i
@@ -207,7 +195,7 @@ module image_conv (
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
-  image_four2three_fifo general_fifo_sync_12 (
+  general_fifo_sync general_fifo_sync_12 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_12_data_in         ), //i
@@ -219,7 +207,7 @@ module image_conv (
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
-  image_four2three_fifo general_fifo_sync_13 (
+  general_fifo_sync general_fifo_sync_13 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_13_data_in         ), //i
@@ -231,7 +219,7 @@ module image_conv (
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
-  image_four2three_fifo general_fifo_sync_14 (
+  general_fifo_sync general_fifo_sync_14 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_14_data_in         ), //i
@@ -243,7 +231,7 @@ module image_conv (
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
-  image_four2three_fifo general_fifo_sync_15 (
+  general_fifo_sync general_fifo_sync_15 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_15_data_in         ), //i
@@ -255,7 +243,7 @@ module image_conv (
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
-  image_four2three_fifo general_fifo_sync_16 (
+  general_fifo_sync general_fifo_sync_16 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_16_data_in         ), //i
@@ -267,7 +255,7 @@ module image_conv (
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
-  image_four2three_fifo general_fifo_sync_17 (
+  general_fifo_sync general_fifo_sync_17 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_17_data_in         ), //i
@@ -276,6 +264,18 @@ module image_conv (
     .data_out          (general_fifo_sync_17_data_out        ), //o
     .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
     .data_out_valid    (general_fifo_sync_17_data_out_valid  ), //o
+    .m_data_count      (12'h280                              ), //i
+    .s_data_count      (12'h280                              )  //i
+  );
+  general_fifo_sync general_fifo_sync_18 (
+    .reset             (reset                                ), //i
+    .clk               (clk                                  ), //i
+    .data_in           (general_fifo_sync_18_data_in         ), //i
+    .wr_en             (general_fifo_sync_18_wr_en           ), //i
+    .data_in_ready     (general_fifo_sync_18_data_in_ready   ), //o
+    .data_out          (general_fifo_sync_18_data_out        ), //o
+    .rd_en             (image_comp_ctrl_rd_en_fifo           ), //i
+    .data_out_valid    (general_fifo_sync_18_data_out_valid  ), //o
     .m_data_count      (12'h280                              ), //i
     .s_data_count      (12'h280                              )  //i
   );
@@ -370,38 +370,38 @@ module image_conv (
   assign M_Valid = image_comp_ctrl_M_Valid;
   assign Conv_Complete = image_comp_ctrl_Conv_Complete;
   assign weight_select = image_comp_ctrl_weight_select;
-  assign general_fifo_sync_9_data_in = S_DATA[7 : 0];
-  assign general_fifo_sync_9_wr_en = S_Valid[0];
+  assign general_fifo_sync_10_data_in = S_DATA[7 : 0];
+  assign general_fifo_sync_10_wr_en = S_Valid[0];
   always @(*) begin
-    fifo_out_data[7 : 0] = general_fifo_sync_9_data_out;
-    fifo_out_data[15 : 8] = general_fifo_sync_10_data_out;
-    fifo_out_data[23 : 16] = general_fifo_sync_11_data_out;
-    fifo_out_data[31 : 24] = general_fifo_sync_12_data_out;
-    fifo_out_data[39 : 32] = general_fifo_sync_13_data_out;
-    fifo_out_data[47 : 40] = general_fifo_sync_14_data_out;
-    fifo_out_data[55 : 48] = general_fifo_sync_15_data_out;
-    fifo_out_data[63 : 56] = general_fifo_sync_16_data_out;
-    fifo_out_data[71 : 64] = general_fifo_sync_17_data_out;
+    fifo_out_data[7 : 0] = general_fifo_sync_10_data_out;
+    fifo_out_data[15 : 8] = general_fifo_sync_11_data_out;
+    fifo_out_data[23 : 16] = general_fifo_sync_12_data_out;
+    fifo_out_data[31 : 24] = general_fifo_sync_13_data_out;
+    fifo_out_data[39 : 32] = general_fifo_sync_14_data_out;
+    fifo_out_data[47 : 40] = general_fifo_sync_15_data_out;
+    fifo_out_data[55 : 48] = general_fifo_sync_16_data_out;
+    fifo_out_data[63 : 56] = general_fifo_sync_17_data_out;
+    fifo_out_data[71 : 64] = general_fifo_sync_18_data_out;
   end
 
-  assign general_fifo_sync_10_data_in = S_DATA[15 : 8];
-  assign general_fifo_sync_10_wr_en = S_Valid[1];
-  assign general_fifo_sync_11_data_in = S_DATA[23 : 16];
-  assign general_fifo_sync_11_wr_en = S_Valid[2];
-  assign general_fifo_sync_12_data_in = S_DATA[31 : 24];
-  assign general_fifo_sync_12_wr_en = S_Valid[3];
-  assign general_fifo_sync_13_data_in = S_DATA[39 : 32];
-  assign general_fifo_sync_13_wr_en = S_Valid[4];
-  assign general_fifo_sync_14_data_in = S_DATA[47 : 40];
-  assign general_fifo_sync_14_wr_en = S_Valid[5];
-  assign general_fifo_sync_15_data_in = S_DATA[55 : 48];
-  assign general_fifo_sync_15_wr_en = S_Valid[6];
-  assign general_fifo_sync_16_data_in = S_DATA[63 : 56];
-  assign general_fifo_sync_16_wr_en = S_Valid[7];
-  assign general_fifo_sync_17_data_in = S_DATA[71 : 64];
-  assign general_fifo_sync_17_wr_en = S_Valid[8];
-  assign S_Ready = ((general_fifo_sync_9_data_in_ready && general_fifo_sync_10_data_in_ready) && general_fifo_sync_11_data_in_ready);
-  assign image_comp_ctrl_compute_fifo_ready = ((general_fifo_sync_9_data_out_valid && general_fifo_sync_10_data_out_valid) && general_fifo_sync_11_data_out_valid);
+  assign general_fifo_sync_11_data_in = S_DATA[15 : 8];
+  assign general_fifo_sync_11_wr_en = S_Valid[1];
+  assign general_fifo_sync_12_data_in = S_DATA[23 : 16];
+  assign general_fifo_sync_12_wr_en = S_Valid[2];
+  assign general_fifo_sync_13_data_in = S_DATA[31 : 24];
+  assign general_fifo_sync_13_wr_en = S_Valid[3];
+  assign general_fifo_sync_14_data_in = S_DATA[39 : 32];
+  assign general_fifo_sync_14_wr_en = S_Valid[4];
+  assign general_fifo_sync_15_data_in = S_DATA[47 : 40];
+  assign general_fifo_sync_15_wr_en = S_Valid[5];
+  assign general_fifo_sync_16_data_in = S_DATA[55 : 48];
+  assign general_fifo_sync_16_wr_en = S_Valid[6];
+  assign general_fifo_sync_17_data_in = S_DATA[63 : 56];
+  assign general_fifo_sync_17_wr_en = S_Valid[7];
+  assign general_fifo_sync_18_data_in = S_DATA[71 : 64];
+  assign general_fifo_sync_18_wr_en = S_Valid[8];
+  assign S_Ready = ((general_fifo_sync_10_data_in_ready && general_fifo_sync_11_data_in_ready) && general_fifo_sync_12_data_in_ready);
+  assign image_comp_ctrl_compute_fifo_ready = ((general_fifo_sync_10_data_out_valid && general_fifo_sync_11_data_out_valid) && general_fifo_sync_12_data_out_valid);
   assign after_conv_data_0 = mul_add_simd_8_dataOut;
   assign after_conv_data_1 = mul_add_simd_9_dataOut;
   assign after_conv_data_2 = mul_add_simd_10_dataOut;

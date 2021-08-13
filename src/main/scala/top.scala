@@ -18,19 +18,19 @@ class top  extends Component {
     }
     noIoPrefix()
     val image_padding = new padding(8,12,640).setDefinitionName("image_padding")
-    image_padding.padding_fifo.setDefinitionName("image_padding_fifo")
-    image_padding.padding_fifo.fifo.setDefinitionName("image_padding_fifo_sync")
+//    image_padding.padding_fifo.setDefinitionName("image_padding_fifo")
+//    image_padding.padding_fifo.fifo.setDefinitionName("image_padding_fifo_sync")
     io.image_Start <> image_padding.io.Start
     io.image_S_DATA <> image_padding.io.S_DATA
 //    io.image_M_DATA <> image_padding.io.M_DATA
 //    io.image_Row_Num_After_Padding <> image_padding.io.Row_Num_After_Padding
 //    io.image_Last <> image_padding.io.Last
     val image_four2three = new four2three(8,12,642).setDefinitionName("image_four2three")
-    image_four2three.four2three_fifo.setDefinitionName("image_four2three_fifo")
-    image_four2three.ram1.setDefinitionName("image_four2three_ram1")
-    image_four2three.ram2.setDefinitionName("image_four2three_ram2")
-    image_four2three.ram3.setDefinitionName("image_four2three_ram3")
-    image_four2three.ram4.setDefinitionName("image_four2three_ram4")
+//    image_four2three.four2three_fifo.setDefinitionName("image_four2three_fifo")
+//    image_four2three.ram1.setDefinitionName("image_four2three_ram1")
+//    image_four2three.ram2.setDefinitionName("image_four2three_ram2")
+//    image_four2three.ram3.setDefinitionName("image_four2three_ram3")
+//    image_four2three.ram4.setDefinitionName("image_four2three_ram4")
     image_four2three.io.S_DATA<>image_padding.io.M_DATA
     image_four2three.io.Start <> io.image_Start
     image_four2three.io.Row_Num_After_Padding <> image_padding.io.Row_Num_After_Padding

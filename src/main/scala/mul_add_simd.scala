@@ -13,9 +13,10 @@ class mul_add_simd(
     }
     noIoPrefix()
     val mul_data_out =  Vec(Bits(M_DATA_WIDTH bits),KERNEL_NUM)
+    val mul_clk = ClockDomain(this.clockDomain.clock)
     var mul_list: List[mul_simd] = Nil
     for (_ <- 0 until KERNEL_NUM) {
-        mul_list = new mul_simd(S_DATA_WIDTH / KERNEL_NUM, M_DATA_WIDTH) :: mul_list
+        mul_list = mul_clk(new mul_simd(S_DATA_WIDTH / KERNEL_NUM, M_DATA_WIDTH)) :: mul_list
     }
     mul_list = mul_list.reverse
     for (i <- 0 until KERNEL_NUM) {

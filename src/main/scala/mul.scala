@@ -1,5 +1,5 @@
 import spinal.core._
-
+import spinal.lib._
 class mul(
              A_WIDTH: Int,
              B_WIDTH: Int

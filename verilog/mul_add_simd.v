@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : mul_add_simd
-// Git hash  : cef4a6466545330cf4f3db1ec4481309bcef3f2d
-// Date      : 13/08/2021, 16:53:53
+// Git hash  : e8c442bcca73bbd2bccec93ed3ca9d5596923c97
+// Date      : 13/08/2021, 20:40:20
 
 
 module mul_add_simd (
@@ -88,64 +88,55 @@ module mul_add_simd (
     .data_in      (mul_simd_72_data_in    ), //i
     .weight_in    (mul_simd_72_weight_in  ), //i
     .data_out     (mul_simd_72_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_73 (
     .data_in      (mul_simd_73_data_in    ), //i
     .weight_in    (mul_simd_73_weight_in  ), //i
     .data_out     (mul_simd_73_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_74 (
     .data_in      (mul_simd_74_data_in    ), //i
     .weight_in    (mul_simd_74_weight_in  ), //i
     .data_out     (mul_simd_74_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_75 (
     .data_in      (mul_simd_75_data_in    ), //i
     .weight_in    (mul_simd_75_weight_in  ), //i
     .data_out     (mul_simd_75_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_76 (
     .data_in      (mul_simd_76_data_in    ), //i
     .weight_in    (mul_simd_76_weight_in  ), //i
     .data_out     (mul_simd_76_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_77 (
     .data_in      (mul_simd_77_data_in    ), //i
     .weight_in    (mul_simd_77_weight_in  ), //i
     .data_out     (mul_simd_77_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_78 (
     .data_in      (mul_simd_78_data_in    ), //i
     .weight_in    (mul_simd_78_weight_in  ), //i
     .data_out     (mul_simd_78_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_79 (
     .data_in      (mul_simd_79_data_in    ), //i
     .weight_in    (mul_simd_79_weight_in  ), //i
     .data_out     (mul_simd_79_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   mul_simd mul_simd_80 (
     .data_in      (mul_simd_80_data_in    ), //i
     .weight_in    (mul_simd_80_weight_in  ), //i
     .data_out     (mul_simd_80_data_out   ), //o
-    .clk          (clk                    ), //i
-    .reset        (reset                  )  //i
+    .clk          (clk                    )  //i
   );
   add_simd add_simd_64 (
     .A        (mul_data_out_0  ), //i

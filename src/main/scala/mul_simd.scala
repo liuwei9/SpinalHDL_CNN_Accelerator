@@ -1,5 +1,5 @@
 import spinal.core._
-
+import xip._
 class mul_simd (
                S_DATA_WIDTH:Int,
                M_DATA_WIDTH:Int
@@ -10,7 +10,7 @@ class mul_simd (
         val data_out = out Bits(M_DATA_WIDTH bits)
     }
 
-    val mul = new mul(S_DATA_WIDTH,S_DATA_WIDTH)
+    val mul = new xmul(S_DATA_WIDTH,S_DATA_WIDTH,S_DATA_WIDTH+S_DATA_WIDTH,this.clockDomain).setDefinitionName("mul")
     mul.io.A <> io.data_in
     mul.io.B <> io.weight_in
     val data_out_q = RegNext(mul.io.P.asSInt.resize(M_DATA_WIDTH))

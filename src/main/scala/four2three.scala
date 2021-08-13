@@ -227,6 +227,7 @@ class four2three(
                 }
                 is(4) {
 //                    io.M_DATA := ram4.io.doutb##ram1.io.doutb##ram2.io.doutb
+                    io.M_DATA := ram2.io.doutb##ram1.io.doutb##ram4.io.doutb
                 }
                 default {
                     io.M_DATA := 0

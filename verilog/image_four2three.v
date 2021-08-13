@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_four2three
-// Git hash  : 273c3163e7ad111796d5ae7321f4b13ac23942b4
-// Date      : 12/08/2021, 11:18:31
+// Git hash  : 745cabca1323d9d10687a9041b3bcccb22fd9b3d
+// Date      : 13/08/2021, 11:00:42
 
 
 module image_four2three (
@@ -58,7 +58,7 @@ module image_four2three (
   wire       [11:0]   _zz_addra_2;
   wire       [11:0]   _zz_addra_3;
   wire       [11:0]   _zz_when_four2three_l167;
-  wire       [11:0]   _zz_when_four2three_l270;
+  wire       [11:0]   _zz_when_four2three_l271;
   wire                four2three_fsm_wantExit;
   reg                 four2three_fsm_wantStart;
   wire                four2three_fsm_wantKill;
@@ -80,10 +80,10 @@ module image_four2three (
   reg        [11:0]   four2three_fsm_addrRam2;
   reg        [11:0]   four2three_fsm_addrRam3;
   reg        [11:0]   four2three_fsm_addrRam4;
-  wire                when_four2three_l283;
-  wire                when_four2three_l283_1;
-  wire                when_four2three_l283_2;
-  wire                when_four2three_l283_3;
+  wire                when_four2three_l284;
+  wire                when_four2three_l284_1;
+  wire                when_four2three_l284_2;
+  wire                when_four2three_l284_3;
   wire                when_four2three_l119;
   wire                when_four2three_l160;
   reg        [2:0]    four2three_fsm_rd_ram_cnt;
@@ -91,8 +91,8 @@ module image_four2three (
   wire                when_four2three_l169;
   reg        `four2three_fsm_enumDefinition_binary_sequential_type four2three_fsm_stateReg;
   reg        `four2three_fsm_enumDefinition_binary_sequential_type four2three_fsm_stateNext;
-  wire                when_four2three_l260;
-  wire                when_four2three_l270;
+  wire                when_four2three_l261;
+  wire                when_four2three_l271;
   `ifndef SYNTHESIS
   reg [223:0] four2three_fsm_stateReg_string;
   reg [223:0] four2three_fsm_stateNext_string;
@@ -110,7 +110,7 @@ module image_four2three (
   assign _zz_addra_2 = four2three_fsm_addrRam3;
   assign _zz_addra_3 = four2three_fsm_addrRam4;
   assign _zz_when_four2three_l167 = (Row_Num_After_Padding - 12'h001);
-  assign _zz_when_four2three_l270 = (Row_Num_After_Padding - 12'h001);
+  assign _zz_when_four2three_l271 = (Row_Num_After_Padding - 12'h001);
   image_four2three_fifo four2three_fifo (
     .reset             (reset                           ), //i
     .clk               (clk                             ), //i
@@ -502,7 +502,7 @@ module image_four2three (
         end
       end
       `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Judge_Compute : begin
-        if(when_four2three_l260) begin
+        if(when_four2three_l261) begin
           if(M_Ready) begin
             four2three_fsm_stateNext = `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute;
           end else begin
@@ -514,7 +514,7 @@ module image_four2three (
       end
       `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute : begin
         if(four2three_fsm_Last_Row) begin
-          if(when_four2three_l270) begin
+          if(when_four2three_l271) begin
             four2three_fsm_stateNext = `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_IDLE;
           end else begin
             four2three_fsm_stateNext = `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute;
@@ -534,18 +534,18 @@ module image_four2three (
     end
   end
 
-  assign when_four2three_l260 = (four2three_fsm_Cnt_Ram == 2'b11);
-  assign when_four2three_l270 = (M_Addr == _zz_when_four2three_l270);
+  assign when_four2three_l261 = (four2three_fsm_Cnt_Ram == 2'b11);
+  assign when_four2three_l271 = (M_Addr == _zz_when_four2three_l271);
   assign when_four2three_l47 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
   assign when_four2three_l54 = ((four2three_fsm_stateNext == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Judge_Compute) && (four2three_fsm_stateReg != `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Judge_Compute));
   assign when_four2three_l56 = ((four2three_fsm_stateNext == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute) && (four2three_fsm_stateReg != `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute));
   assign when_four2three_l60 = ((four2three_fsm_stateNext == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute) && (four2three_fsm_stateReg != `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute));
   assign when_four2three_l62 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_IDLE);
   assign when_four2three_l72 = ((four2three_fsm_stateNext == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Judge_Compute) && (four2three_fsm_stateReg != `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Judge_Compute));
-  assign when_four2three_l283 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
-  assign when_four2three_l283_1 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
-  assign when_four2three_l283_2 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
-  assign when_four2three_l283_3 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
+  assign when_four2three_l284 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
+  assign when_four2three_l284_1 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
+  assign when_four2three_l284_2 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
+  assign when_four2three_l284_3 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
   assign when_four2three_l119 = (four2three_fsm_stateReg == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Read);
   assign when_four2three_l160 = ((four2three_fsm_stateNext == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute) && (four2three_fsm_stateReg != `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute));
   assign when_four2three_l169 = ((four2three_fsm_stateNext == `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute) && (four2three_fsm_stateReg != `four2three_fsm_enumDefinition_binary_sequential_four2three_fsm_Start_Compute));
@@ -593,22 +593,22 @@ module image_four2three (
       end else begin
         four2three_fsm_En_Ram <= four2three_fsm_En_Ram;
       end
-      if(when_four2three_l283) begin
+      if(when_four2three_l284) begin
         four2three_fsm_addrRam1 <= (four2three_fsm_addrRam1 + 12'h001);
       end else begin
         four2three_fsm_addrRam1 <= 12'h0;
       end
-      if(when_four2three_l283_1) begin
+      if(when_four2three_l284_1) begin
         four2three_fsm_addrRam2 <= (four2three_fsm_addrRam2 + 12'h001);
       end else begin
         four2three_fsm_addrRam2 <= 12'h0;
       end
-      if(when_four2three_l283_2) begin
+      if(when_four2three_l284_2) begin
         four2three_fsm_addrRam3 <= (four2three_fsm_addrRam3 + 12'h001);
       end else begin
         four2three_fsm_addrRam3 <= 12'h0;
       end
-      if(when_four2three_l283_3) begin
+      if(when_four2three_l284_3) begin
         four2three_fsm_addrRam4 <= (four2three_fsm_addrRam4 + 12'h001);
       end else begin
         four2three_fsm_addrRam4 <= 12'h0;
@@ -640,6 +640,7 @@ module image_four2three (
             M_DATA <= {{ram1_doutb,ram4_doutb},ram3_doutb};
           end
           3'b100 : begin
+            M_DATA <= {{ram2_doutb,ram1_doutb},ram4_doutb};
           end
           default : begin
             M_DATA <= 24'h0;

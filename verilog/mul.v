@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : mul
-// Git hash  : 273c3163e7ad111796d5ae7321f4b13ac23942b4
-// Date      : 12/08/2021, 11:18:30
+// Git hash  : 745cabca1323d9d10687a9041b3bcccb22fd9b3d
+// Date      : 13/08/2021, 11:00:41
 
 
 module mul (
@@ -24,7 +24,7 @@ module mul (
   always @(posedge clk) begin
     A_qq <= A_q;
     B_qq <= B_q;
-    P_q <= (A_qq * B_qq);
+    P_q <= ($signed(A_qq) * $signed(B_qq));
     P_qq <= P_q;
   end
 

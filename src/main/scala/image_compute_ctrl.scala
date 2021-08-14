@@ -86,10 +86,8 @@ class image_compute_ctrl(
         } otherwise{
             M_Fifo_Valid := False
         }
-        //待定
 //        io.M_Valid := Delay(io.rd_en_fifo,13)
         io.M_Valid := Delay(M_Fifo_Valid,13)
-        //待定
         io.Conv_Complete := Delay(En_Compute_Row, 14)
         //val weight = Bits (3 bits) setAsReg() init 0
        // io.weight_select := Delay(weight,3)

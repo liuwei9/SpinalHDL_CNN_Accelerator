@@ -1,6 +1,8 @@
 import spinal.core._
 import spinal.lib._
 
+
+//位宽转换可能会出问题，等加上channel_in之后再调试   /COMPUTE_CHANNEL_OUT_NUM这个的
 class image_quan(
                     S_DATA_WIDTH: Int,
                     M_DATA_WIDTH: Int,
@@ -79,6 +81,24 @@ class image_quan(
 
     //待定
     val shift_data_in_delay = Delay(shift_data_in,5)
+    val SHIFT_S_DATA_WIDTH = S_DATA_WIDTH/COMPUTE_CHANNEL_OUT_NUM
+    val SHIFT_M_DATA_WIDTH = 16
+    val shift_data_out_temp = Bits(SHIFT_M_DATA_WIDTH * COMPUTE_CHANNEL_OUT_NUM bits)
+    var shift_list:List[image_quan_shift] = Nil
+    for (_ <- 0 until COMPUTE_CHANNEL_OUT_NUM){
+        //M_DATA_WIDTH待定
+        shift_list = new image_quan_shift(SHIFT_S_DATA_WIDTH,SHIFT_M_DATA_WIDTH)::shift_list
+    }
+    shift_list = shift_list.reverse
+    for (i <- 0 until COMPUTE_CHANNEL_OUT_NUM){
+        shift_list(i).io.data_in <> image_scale.io.M_DATA((i+1)*SHIFT_S_DATA_WIDTH-1 downto i*SHIFT_S_DATA_WIDTH)
+        shift_list(i).io.shift_data_in <> shift_data_in_delay((i+1)*SHIFT_S_DATA_WIDTH-1 downto i*SHIFT_S_DATA_WIDTH)
+        shift_list(i).io.shift_data_out <> shift_data_out_temp((i+1)*SHIFT_M_DATA_WIDTH-1 downto i*SHIFT_M_DATA_WIDTH)
+    }
+
+
+
+
 
 
 }

@@ -1,5 +1,5 @@
 import spinal.core._
-
+import xip._
 class image_quan_scale(
                      S_DATA_WIDTH: Int,
                      ROW_COL_DATA_COUNT_WIDTH: Int,
@@ -13,15 +13,16 @@ class image_quan_scale(
     }
     noIoPrefix()
     val DATA_WIDTH = S_DATA_WIDTH / COMPUTE_CHANNEL_OUT_NUM
-    var mul_list: List[mul] = Nil
+    val mul_clk = ClockDomain(this.clockDomain.clock)
+    var mul_list: List[xmul] = Nil
     for (_ <- 0 until COMPUTE_CHANNEL_OUT_NUM) {
-        mul_list = new mul(DATA_WIDTH, DATA_WIDTH) :: mul_list
+        mul_list = new xmul(DATA_WIDTH, DATA_WIDTH,DATA_WIDTH,mul_clk).setDefinitionName("xmul_32_32") :: mul_list
     }
     mul_list = mul_list.reverse
     for (i <- 0 until COMPUTE_CHANNEL_OUT_NUM) {
         mul_list(i).io.A <> io.S_DATA((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
         mul_list(i).io.B <> io.scale_data_in((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
-        mul_list(i).io.P(DATA_WIDTH*2-1 downto DATA_WIDTH) <> io.M_DATA((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
+        mul_list(i).io.P <> io.M_DATA((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
     }
 }
 object image_quan_scale{

@@ -96,7 +96,11 @@ class image_quan(
         shift_list(i).io.shift_data_out <> shift_data_out_temp((i+1)*SHIFT_M_DATA_WIDTH-1 downto i*SHIFT_M_DATA_WIDTH)
     }
 
-
+    val ZERO_DATA_WIDTH = 8
+    val ZERO_M_DATA_WIDTH = ZERO_DATA_WIDTH*COMPUTE_CHANNEL_OUT_NUM
+    val image_zero = new image_quan_zero(SHIFT_M_DATA_WIDTH * COMPUTE_CHANNEL_OUT_NUM,ZERO_DATA_WIDTH,ZERO_M_DATA_WIDTH,COMPUTE_CHANNEL_OUT_NUM)
+    image_zero.io.data_in <> shift_data_out_temp
+    image_zero.io.zero_data_in <> zero_point
 
 
 

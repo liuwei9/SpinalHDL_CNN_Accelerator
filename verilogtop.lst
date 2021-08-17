@@ -7,7 +7,6 @@ verilog/mul_simd.v
 verilog/add_simd.v
 verilog/general_fifo_sync.v
 verilog/add_simd_64.v
-verilog/leaky_relu.v
 verilog/image_padding_fifo.v
 verilog/general_fifo_sync_1.v
 verilog/sdpram.v

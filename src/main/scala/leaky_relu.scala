@@ -48,7 +48,7 @@ class leaky_relu(
     } otherwise {
         data_negative := data_after_zero
     }
-    val add_zero = new xadd(DATA_WIDTH_TEMP, ZERO_POINT_WIDTH, DATA_WIDTH_TEMP, this.clockDomain)
+    val add_zero = new xadd(DATA_WIDTH_TEMP, ZERO_POINT_WIDTH, DATA_WIDTH_TEMP, this.clockDomain).setDefinitionName("add_16_u8_16")
     add_zero.io.A <> data_negative
     add_zero.io.B <> io.zero_data_in
     when(add_zero.io.S(DATA_WIDTH_TEMP-1)){

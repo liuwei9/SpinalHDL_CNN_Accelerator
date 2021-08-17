@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_quan_zero
-// Git hash  : 27666a2ca9cd05f729dd3f96470cda679b8843ec
-// Date      : 17/08/2021, 15:19:16
+// Git hash  : 5baa66bf9536e4a8433f01bb5557812926788a23
+// Date      : 17/08/2021, 21:09:26
 
 
 module image_quan_zero (
@@ -11,6 +11,7 @@ module image_quan_zero (
   input               clk,
   input               reset
 );
+  wire       [15:0]   xadd_A;
   wire       [15:0]   xadd_1_A;
   wire       [15:0]   xadd_2_A;
   wire       [15:0]   xadd_3_A;
@@ -18,7 +19,7 @@ module image_quan_zero (
   wire       [15:0]   xadd_5_A;
   wire       [15:0]   xadd_6_A;
   wire       [15:0]   xadd_7_A;
-  wire       [15:0]   xadd_8_A;
+  wire       [15:0]   xadd_S;
   wire       [15:0]   xadd_1_S;
   wire       [15:0]   xadd_2_S;
   wire       [15:0]   xadd_3_S;
@@ -26,7 +27,6 @@ module image_quan_zero (
   wire       [15:0]   xadd_5_S;
   wire       [15:0]   xadd_6_S;
   wire       [15:0]   xadd_7_S;
-  wire       [15:0]   xadd_8_S;
   wire       [15:0]   add_out_temp_0;
   wire       [15:0]   add_out_temp_1;
   wire       [15:0]   add_out_temp_2;
@@ -52,70 +52,70 @@ module image_quan_zero (
   wire                when_image_quan_zero_l32_7;
   wire                when_image_quan_zero_l34_7;
 
-  sub_16_u8 xadd_1 (
+  add_16_u8_16 xadd (
+    .A      (xadd_A        ), //i
+    .B      (zero_data_in  ), //i
+    .S      (xadd_S        ), //o
+    .CLK    (clk           )  //i
+  );
+  add_16_u8_16 xadd_1 (
     .A      (xadd_1_A      ), //i
     .B      (zero_data_in  ), //i
     .S      (xadd_1_S      ), //o
     .CLK    (clk           )  //i
   );
-  sub_16_u8 xadd_2 (
+  add_16_u8_16 xadd_2 (
     .A      (xadd_2_A      ), //i
     .B      (zero_data_in  ), //i
     .S      (xadd_2_S      ), //o
     .CLK    (clk           )  //i
   );
-  sub_16_u8 xadd_3 (
+  add_16_u8_16 xadd_3 (
     .A      (xadd_3_A      ), //i
     .B      (zero_data_in  ), //i
     .S      (xadd_3_S      ), //o
     .CLK    (clk           )  //i
   );
-  sub_16_u8 xadd_4 (
+  add_16_u8_16 xadd_4 (
     .A      (xadd_4_A      ), //i
     .B      (zero_data_in  ), //i
     .S      (xadd_4_S      ), //o
     .CLK    (clk           )  //i
   );
-  sub_16_u8 xadd_5 (
+  add_16_u8_16 xadd_5 (
     .A      (xadd_5_A      ), //i
     .B      (zero_data_in  ), //i
     .S      (xadd_5_S      ), //o
     .CLK    (clk           )  //i
   );
-  sub_16_u8 xadd_6 (
+  add_16_u8_16 xadd_6 (
     .A      (xadd_6_A      ), //i
     .B      (zero_data_in  ), //i
     .S      (xadd_6_S      ), //o
     .CLK    (clk           )  //i
   );
-  sub_16_u8 xadd_7 (
+  add_16_u8_16 xadd_7 (
     .A      (xadd_7_A      ), //i
     .B      (zero_data_in  ), //i
     .S      (xadd_7_S      ), //o
     .CLK    (clk           )  //i
   );
-  sub_16_u8 xadd_8 (
-    .A      (xadd_8_A      ), //i
-    .B      (zero_data_in  ), //i
-    .S      (xadd_8_S      ), //o
-    .CLK    (clk           )  //i
-  );
-  assign xadd_1_A = data_in[15 : 0];
-  assign add_out_temp_0 = xadd_1_S;
-  assign xadd_2_A = data_in[31 : 16];
-  assign add_out_temp_1 = xadd_2_S;
-  assign xadd_3_A = data_in[47 : 32];
-  assign add_out_temp_2 = xadd_3_S;
-  assign xadd_4_A = data_in[63 : 48];
-  assign add_out_temp_3 = xadd_4_S;
-  assign xadd_5_A = data_in[79 : 64];
-  assign add_out_temp_4 = xadd_5_S;
-  assign xadd_6_A = data_in[95 : 80];
-  assign add_out_temp_5 = xadd_6_S;
-  assign xadd_7_A = data_in[111 : 96];
-  assign add_out_temp_6 = xadd_7_S;
-  assign xadd_8_A = data_in[127 : 112];
-  assign add_out_temp_7 = xadd_8_S;
+  assign xadd_A = data_in[15 : 0];
+  assign add_out_temp_0 = xadd_S;
+  assign xadd_1_A = data_in[31 : 16];
+  assign add_out_temp_1 = xadd_1_S;
+  assign xadd_2_A = data_in[47 : 32];
+  assign add_out_temp_2 = xadd_2_S;
+  assign xadd_3_A = data_in[63 : 48];
+  assign add_out_temp_3 = xadd_3_S;
+  assign xadd_4_A = data_in[79 : 64];
+  assign add_out_temp_4 = xadd_4_S;
+  assign xadd_5_A = data_in[95 : 80];
+  assign add_out_temp_5 = xadd_5_S;
+  assign xadd_6_A = data_in[111 : 96];
+  assign add_out_temp_6 = xadd_6_S;
+  assign xadd_7_A = data_in[127 : 112];
+  assign add_out_temp_7 = xadd_7_S;
   assign when_image_quan_zero_l32 = add_out_temp_0[15];
   assign when_image_quan_zero_l34 = (add_out_temp_0[14 : 8] != 7'h0);
   assign when_image_quan_zero_l32_1 = add_out_temp_1[15];

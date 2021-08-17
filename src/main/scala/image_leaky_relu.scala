@@ -1,5 +1,5 @@
 import spinal.core._
-
+import util.leaky_relu
 //下一步让进来的数据不经过zero模块
 class image_leaky_relu(
                           S_DATA_WIDTH: Int,
@@ -16,9 +16,9 @@ class image_leaky_relu(
     val LEAKY_S_DATA_WIDTH = S_DATA_WIDTH/COMPUTE_CHANNEL_OUT_NUM
     val LEAKY_M_DATA_WIDTH = M_DATA_WIDTH/COMPUTE_CHANNEL_OUT_NUM
     val leaky_clk = ClockDomain(this.clockDomain.clock)
-    var leaky_list:List[leaky_relu]=Nil
+    var leaky_list:List[util.leaky_relu]=Nil
     for (_ <- 0 until COMPUTE_CHANNEL_OUT_NUM) {
-        leaky_list = leaky_clk(new leaky_relu(LEAKY_S_DATA_WIDTH,ZERO_POINT_WIDTH,LEAKY_M_DATA_WIDTH))::leaky_list
+        leaky_list = new util.leaky_relu(LEAKY_S_DATA_WIDTH,ZERO_POINT_WIDTH,LEAKY_M_DATA_WIDTH,leaky_clk)::leaky_list
     }
     leaky_list = leaky_list.reverse
     for (i <- 0 until COMPUTE_CHANNEL_OUT_NUM) {

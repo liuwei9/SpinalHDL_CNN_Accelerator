@@ -80,4 +80,10 @@ object top{
 
         )generateVerilog(new top)
     }
+    SpinalConfig(
+        defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
+        headerWithDate = true,
+        targetDirectory = "verilog"
+
+    )generateVerilog(new leaky_relu(8,8,8))
 }

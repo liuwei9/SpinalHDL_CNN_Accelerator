@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_quan_scale
-// Git hash  : 27666a2ca9cd05f729dd3f96470cda679b8843ec
-// Date      : 17/08/2021, 15:19:16
+// Git hash  : 5baa66bf9536e4a8433f01bb5557812926788a23
+// Date      : 17/08/2021, 21:09:26
 
 
 module image_quan_scale (

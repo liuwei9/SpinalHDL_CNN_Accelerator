@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_four2three
-// Git hash  : e8c442bcca73bbd2bccec93ed3ca9d5596923c97
-// Date      : 13/08/2021, 20:40:20
+// Git hash  : 27666a2ca9cd05f729dd3f96470cda679b8843ec
+// Date      : 17/08/2021, 15:19:16
 
 
 module image_four2three (
@@ -111,7 +111,7 @@ module image_four2three (
   assign _zz_addra_3 = four2three_fsm_addrRam4;
   assign _zz_when_four2three_l167 = (Row_Num_After_Padding - 12'h001);
   assign _zz_when_four2three_l271 = (Row_Num_After_Padding - 12'h001);
-  general_fifo_sync four2three_fifo (
+  general_fifo_sync_1 four2three_fifo (
     .reset             (reset                           ), //i
     .clk               (clk                             ), //i
     .data_in           (S_DATA_payload                  ), //i

@@ -1,7 +1,7 @@
 package xip
 
 import spinal.core._
-
+import spinal.core.Ram_1wrs
 class xadd (
                A_WIDTH:Int,
                B_WIDTH:Int,
@@ -16,4 +16,9 @@ class xadd (
     }
     noIoPrefix()
     mapClockDomain(clk ,io.CLK)
+//    this.setDefinitionName("a")
+//    this.setBlackBoxName("a")
+//    this.setName("a")
+//
+//    override def setDefinitionName(name: String): xadd.this.type = super.setDefinitionName(name+"a")
 }

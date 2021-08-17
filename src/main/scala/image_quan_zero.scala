@@ -19,7 +19,7 @@ class image_quan_zero(
     val add_out_temp = Vec(Bits(ADD_DATA_WIDTH bits), COMPUTE_CHANNEL_OUT_NUM)
     var add_list: List[xadd] = Nil
     for (_ <- 0 until COMPUTE_CHANNEL_OUT_NUM) {
-        add_list = new xadd(ADD_DATA_WIDTH, ZERO_DATA_WIDTH, ADD_DATA_WIDTH, add_clk).setDefinitionName("xadd_16_u8_16") :: add_list
+        add_list = new xadd(ADD_DATA_WIDTH, ZERO_DATA_WIDTH, ADD_DATA_WIDTH, add_clk) :: add_list
     }
     add_list = add_list.reverse
     for (i <- 0 until COMPUTE_CHANNEL_OUT_NUM) {

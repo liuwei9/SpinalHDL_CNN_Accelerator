@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : top
-// Git hash  : e8c442bcca73bbd2bccec93ed3ca9d5596923c97
-// Date      : 13/08/2021, 20:40:20
+// Git hash  : 27666a2ca9cd05f729dd3f96470cda679b8843ec
+// Date      : 17/08/2021, 15:19:17
 
 
 module top (
@@ -9,10 +9,9 @@ module top (
   input               image_S_DATA_valid,
   output              image_S_DATA_ready,
   input      [7:0]    image_S_DATA_payload,
-  output     [255:0]  M_DATA,
-  output              M_Valid,
-  input               M_Ready,
-  output              Conv_Complete,
+  output              M_DATA_valid,
+  input               M_DATA_ready,
+  output     [63:0]   M_DATA_payload,
   input               reset,
   input               clk
 );
@@ -34,6 +33,9 @@ module top (
   wire                image_conv_1_M_Valid;
   wire       [255:0]  image_conv_1_M_DATA;
   wire                image_conv_1_Conv_Complete;
+  wire                image_quan_1_S_DATA_ready;
+  wire                image_quan_1_M_DATA_valid;
+  wire       [63:0]   image_quan_1_M_DATA_payload;
 
   image_padding image_padding_1 (
     .Start                    (image_Start                            ), //i
@@ -85,14 +87,23 @@ module top (
     .S_Ready          (image_conv_1_S_Ready        ), //o
     .M_Valid          (image_conv_1_M_Valid        ), //o
     .M_DATA           (image_conv_1_M_DATA         ), //o
-    .M_Ready          (M_Ready                     ), //i
+    .M_Ready          (image_quan_1_S_DATA_ready   ), //i
     .Conv_Complete    (image_conv_1_Conv_Complete  ), //o
     .reset            (reset                       ), //i
     .clk              (clk                         )  //i
   );
+  image_quan image_quan_1 (
+    .S_DATA_valid      (image_conv_1_M_Valid         ), //i
+    .S_DATA_ready      (image_quan_1_S_DATA_ready    ), //o
+    .S_DATA_payload    (image_conv_1_M_DATA          ), //i
+    .M_DATA_valid      (image_quan_1_M_DATA_valid    ), //o
+    .M_DATA_ready      (M_DATA_ready                 ), //i
+    .M_DATA_payload    (image_quan_1_M_DATA_payload  ), //o
+    .reset             (reset                        ), //i
+    .clk               (clk                          )  //i
+  );
   assign image_S_DATA_ready = image_padding_1_S_DATA_ready;
-  assign M_Valid = image_conv_1_M_Valid;
-  assign M_DATA = image_conv_1_M_DATA;
-  assign Conv_Complete = image_conv_1_Conv_Complete;
+  assign M_DATA_valid = image_quan_1_M_DATA_valid;
+  assign M_DATA_payload = image_quan_1_M_DATA_payload;
 
 endmodule

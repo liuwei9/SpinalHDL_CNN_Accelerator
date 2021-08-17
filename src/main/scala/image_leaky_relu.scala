@@ -27,3 +27,16 @@ class image_leaky_relu(
         leaky_list(i).io.data_out <> io.data_out((i+1)*LEAKY_S_DATA_WIDTH -1 downto i*LEAKY_S_DATA_WIDTH)
     }
 }
+
+object image_leaky_relu{
+    def main(args: Array[String]): Unit = {
+        SpinalConfig(
+            defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
+            oneFilePerComponent = true,
+            headerWithDate = true
+//            targetDirectory = "verilog"
+
+        )generateVerilog(new image_leaky_relu(64,8,64,8))
+        //SpinalVerilog(new image_leaky_relu(64,8,64,8))
+    }
+}

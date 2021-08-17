@@ -1,15 +1,14 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : leaky_relu
-// Git hash  : ef86ab4ae3bc803653c9a57d9edc6c54634afdc9
-
+// Git hash  : 27666a2ca9cd05f729dd3f96470cda679b8843ec
+// Date      : 17/08/2021, 15:19:16
 
 
 module leaky_relu (
   input      [7:0]    data_in,
   input      [7:0]    zero_data_in,
   output reg [7:0]    data_out,
-  input               clk,
-  input               reset
+  input               clk
 );
   wire       [15:0]   sub_zero_S;
   wire       [29:0]   mul_leaky_P;
@@ -46,7 +45,7 @@ module leaky_relu (
     .P      (mul_leaky_P     ), //o
     .CLK    (clk             )  //i
   );
-  xadd_16_u8_16 add_zero (
+  sub_16_u8 add_zero (
     .A      (data_negative  ), //i
     .B      (zero_data_in   ), //i
     .S      (add_zero_S     ), //o

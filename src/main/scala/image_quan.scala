@@ -102,9 +102,9 @@ class image_quan(
     image_zero.io.data_in <> shift_data_out_temp
     image_zero.io.zero_data_in <> zero_point
 
-    val image_leaky = new image_leaky_relu(ZERO_M_DATA_WIDTH,ZERO_DATA_WIDTH,ZERO_M_DATA_WIDTH,COMPUTE_CHANNEL_OUT_NUM)
+    val image_leaky = new image_leaky_relu(ZERO_M_DATA_WIDTH,ZERO_DATA_WIDTH,M_DATA_WIDTH,COMPUTE_CHANNEL_OUT_NUM)
     image_leaky.io.data_in<>image_zero.io.data_out
-    image_leaky.io.data_out<>io.M_DATA
+    image_leaky.io.data_out<>io.M_DATA.payload
     image_leaky.io.zero_data_in <> zero_point
 
 

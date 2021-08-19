@@ -17,7 +17,7 @@ class leaky_relu(
     noIoPrefix()
     val DATA_WIDTH_TEMP = 16
     val data_after1 = RegNext(io.data_in.resize(DATA_WIDTH_TEMP bits))
-    val sub_zero = new xsub(DATA_WIDTH_TEMP, ZERO_POINT_WIDTH, DATA_WIDTH_TEMP, this.clockDomain).setDefinitionName("sub_16_u8")
+    val sub_zero = new xsub(DATA_WIDTH_TEMP, ZERO_POINT_WIDTH, DATA_WIDTH_TEMP, this.clockDomain,"sub_16_u8")
     sub_zero.io.A <> data_after1
     sub_zero.io.B <> io.zero_data_in
     val MUL_LEAKY_POW = 17
@@ -48,7 +48,7 @@ class leaky_relu(
     } otherwise {
         data_negative := data_after_zero
     }
-    val add_zero = new xadd(DATA_WIDTH_TEMP, ZERO_POINT_WIDTH, DATA_WIDTH_TEMP, this.clockDomain).setDefinitionName("add_16_u8_16")
+    val add_zero = new xadd(DATA_WIDTH_TEMP, ZERO_POINT_WIDTH, DATA_WIDTH_TEMP, this.clockDomain,"add_16_u8_16")
     add_zero.io.A <> data_negative
     add_zero.io.B <> io.zero_data_in
     when(add_zero.io.S(DATA_WIDTH_TEMP-1)){

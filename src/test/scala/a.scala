@@ -8,20 +8,20 @@ class a extends Component {
         val S2 = out Bits(8 bits)
     }
     noIoPrefix()
-    val a1 = new xadd(8,8,8,this.clockDomain).setDefinitionName("xadd")//BlackBox
+    val a1 = new xadd(8,8,8,this.clockDomain,"xadd")//.setDefinitionName("xadd")//BlackBox
     a1.io.A<>io.A
     a1.io.B<>io.B
     a1.io.S<>io.S1
-    val a2 = new xsub(8,8,8,this.clockDomain).setDefinitionName("xsub")//BlackBox
-    a2.io.A<>io.A
-    a2.io.B<>io.B
+    val a2 = new xsub(8,8,8,this.clockDomain,"xsub")//.setDefinitionName("xsub")//BlackBox
+    a2.io.A<>0
+    a2.io.B<>0
     a2.io.S<>io.S2
 }
 object a{
     def main(args: Array[String]): Unit = {
         SpinalConfig(
             defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
-        //    oneFilePerComponent = true,
+            oneFilePerComponent = true,
             headerWithDate = true,
             targetDirectory = "test"
 

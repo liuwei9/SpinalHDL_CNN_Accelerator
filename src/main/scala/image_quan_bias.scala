@@ -16,7 +16,7 @@ class image_quan_bias(
         val M_Data = out Bits (S_DATA_WIDTH bits)
     }
     noIoPrefix()
-    val bias_fifo = new general_fifo_sync(S_DATA_WIDTH, FEATURE_MAP_SIZE * CHANNEL_OUT_TIMES, ROW_COL_DATA_COUNT_WIDTH)
+    val bias_fifo = new general_fifo_sync(S_DATA_WIDTH, S_DATA_WIDTH,FEATURE_MAP_SIZE * CHANNEL_OUT_TIMES, ROW_COL_DATA_COUNT_WIDTH)
     bias_fifo.io.data_in <> io.S_DATA.payload
     bias_fifo.io.wr_en <> io.S_DATA.valid
     bias_fifo.io.data_in_ready <> io.S_DATA.ready

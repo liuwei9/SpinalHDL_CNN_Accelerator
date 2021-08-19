@@ -126,7 +126,7 @@ class image_conv(
     val fifo_out_data = Bits(S_DATA_WIDTH bits)
     var fifo_list: List[general_fifo_sync] = Nil
     for (_ <- 0 until 9)
-        fifo_list = new general_fifo_sync(8, FEATURE_MAP_SIZE, ROW_COL_DATA_COUNT_WIDTH) :: fifo_list
+        fifo_list = new general_fifo_sync(8, 8,FEATURE_MAP_SIZE, ROW_COL_DATA_COUNT_WIDTH) :: fifo_list
     fifo_list = fifo_list.reverse
     for (i <- 0 until 9) {
         fifo_list(i).io.data_in <> io.S_DATA(((i + 1) * 8 - 1) downto (i * 8))

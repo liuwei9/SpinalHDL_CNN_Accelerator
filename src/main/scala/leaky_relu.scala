@@ -58,7 +58,6 @@ class leaky_relu(
     } otherwise{
         io.data_out<>add_zero.io.S(DATA_WIDTH_TEMP / 2 - 1 downto 0)
     }
-    SpinalConfig(oneFilePerComponent = false)
 
 
 }

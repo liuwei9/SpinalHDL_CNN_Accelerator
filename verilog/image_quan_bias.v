@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_quan_bias
-// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
-// Date      : 20/08/2021, 12:03:13
+// Git hash  : 2735a0a9a0d8255679cd14c554c6d83469e1ac84
+// Date      : 20/08/2021, 19:05:31
 
 
 module image_quan_bias (
@@ -121,7 +121,7 @@ module image_quan_bias (
   );
   assign S_DATA_ready = bias_fifo_data_in_ready;
   assign fifo_valid = bias_fifo_data_out_valid;
-  assign add_simd_72_A = S_DATA_payload[31 : 0];
+  assign add_simd_72_A = data_out_fifo_delay[31 : 0];
   assign add_simd_72_B = bias_data_in[31 : 0];
   always @(*) begin
     M_Data[31 : 0] = add_simd_72_P;
@@ -134,19 +134,19 @@ module image_quan_bias (
     M_Data[255 : 224] = add_simd_79_P;
   end
 
-  assign add_simd_73_A = S_DATA_payload[63 : 32];
+  assign add_simd_73_A = data_out_fifo_delay[63 : 32];
   assign add_simd_73_B = bias_data_in[63 : 32];
-  assign add_simd_74_A = S_DATA_payload[95 : 64];
+  assign add_simd_74_A = data_out_fifo_delay[95 : 64];
   assign add_simd_74_B = bias_data_in[95 : 64];
-  assign add_simd_75_A = S_DATA_payload[127 : 96];
+  assign add_simd_75_A = data_out_fifo_delay[127 : 96];
   assign add_simd_75_B = bias_data_in[127 : 96];
-  assign add_simd_76_A = S_DATA_payload[159 : 128];
+  assign add_simd_76_A = data_out_fifo_delay[159 : 128];
   assign add_simd_76_B = bias_data_in[159 : 128];
-  assign add_simd_77_A = S_DATA_payload[191 : 160];
+  assign add_simd_77_A = data_out_fifo_delay[191 : 160];
   assign add_simd_77_B = bias_data_in[191 : 160];
-  assign add_simd_78_A = S_DATA_payload[223 : 192];
+  assign add_simd_78_A = data_out_fifo_delay[223 : 192];
   assign add_simd_78_B = bias_data_in[223 : 192];
-  assign add_simd_79_A = S_DATA_payload[255 : 224];
+  assign add_simd_79_A = data_out_fifo_delay[255 : 224];
   assign add_simd_79_B = bias_data_in[255 : 224];
   always @(posedge clk) begin
     bias_fifo_data_out_delay_1 <= bias_fifo_data_out;

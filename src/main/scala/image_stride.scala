@@ -132,7 +132,12 @@ class image_stride(
             }
         STRIDE
             .whenIsActive {
-                goto(IDLE)
+                when(En_Last_Channel_out && En_Last_Col && En_Last_Row){
+                    goto(IDLE)
+                } otherwise{
+                    goto(STRIDE)
+                }
+
             }
     }
 }

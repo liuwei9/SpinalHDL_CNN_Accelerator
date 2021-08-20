@@ -102,7 +102,7 @@ class image_quan_ctrl(
             io.rd_en_fifo := False
         }
         //待定
-        io.M_Valid := Delay(M_Valid_Temp, 26)
+        io.M_Valid := Delay(M_Valid_Temp, 21)
 
     }
 }

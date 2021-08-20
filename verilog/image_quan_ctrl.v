@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_quan_ctrl
-// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
-// Date      : 20/08/2021, 12:03:13
+// Git hash  : 2735a0a9a0d8255679cd14c554c6d83469e1ac84
+// Date      : 20/08/2021, 19:05:31
 
 
 module image_quan_ctrl (
@@ -48,11 +48,6 @@ module image_quan_ctrl (
   reg                 image_quan_fsm_M_Valid_Temp_delay_19;
   reg                 image_quan_fsm_M_Valid_Temp_delay_20;
   reg                 image_quan_fsm_M_Valid_Temp_delay_21;
-  reg                 image_quan_fsm_M_Valid_Temp_delay_22;
-  reg                 image_quan_fsm_M_Valid_Temp_delay_23;
-  reg                 image_quan_fsm_M_Valid_Temp_delay_24;
-  reg                 image_quan_fsm_M_Valid_Temp_delay_25;
-  reg                 image_quan_fsm_M_Valid_Temp_delay_26;
   reg        `image_quan_fsm_enumDefinition_binary_sequential_type image_quan_fsm_stateReg;
   reg        `image_quan_fsm_enumDefinition_binary_sequential_type image_quan_fsm_stateNext;
   `ifndef SYNTHESIS
@@ -134,7 +129,7 @@ module image_quan_ctrl (
     end
   end
 
-  assign M_Valid = image_quan_fsm_M_Valid_Temp_delay_26;
+  assign M_Valid = image_quan_fsm_M_Valid_Temp_delay_21;
   always @(*) begin
     image_quan_fsm_stateNext = image_quan_fsm_stateReg;
     case(image_quan_fsm_stateReg)
@@ -241,11 +236,6 @@ module image_quan_ctrl (
     image_quan_fsm_M_Valid_Temp_delay_19 <= image_quan_fsm_M_Valid_Temp_delay_18;
     image_quan_fsm_M_Valid_Temp_delay_20 <= image_quan_fsm_M_Valid_Temp_delay_19;
     image_quan_fsm_M_Valid_Temp_delay_21 <= image_quan_fsm_M_Valid_Temp_delay_20;
-    image_quan_fsm_M_Valid_Temp_delay_22 <= image_quan_fsm_M_Valid_Temp_delay_21;
-    image_quan_fsm_M_Valid_Temp_delay_23 <= image_quan_fsm_M_Valid_Temp_delay_22;
-    image_quan_fsm_M_Valid_Temp_delay_24 <= image_quan_fsm_M_Valid_Temp_delay_23;
-    image_quan_fsm_M_Valid_Temp_delay_25 <= image_quan_fsm_M_Valid_Temp_delay_24;
-    image_quan_fsm_M_Valid_Temp_delay_26 <= image_quan_fsm_M_Valid_Temp_delay_25;
   end
 
 

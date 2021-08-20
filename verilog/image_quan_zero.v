@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_quan_zero
-// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
-// Date      : 20/08/2021, 12:03:13
+// Git hash  : 2735a0a9a0d8255679cd14c554c6d83469e1ac84
+// Date      : 20/08/2021, 19:05:31
 
 
 module image_quan_zero (

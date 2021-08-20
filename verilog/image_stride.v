@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_stride
-// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
-// Date      : 20/08/2021, 12:03:14
+// Git hash  : 2735a0a9a0d8255679cd14c554c6d83469e1ac84
+// Date      : 20/08/2021, 19:05:32
 
 
 module image_stride (
@@ -53,6 +53,7 @@ module image_stride (
   reg        [63:0]   S_DATA_payload_regNext;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateReg;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateNext;
+  wire                when_image_stride_l135;
   `ifndef SYNTHESIS
   reg [79:0] fsm_stateReg_string;
   reg [79:0] fsm_stateNext_string;
@@ -174,7 +175,11 @@ module image_stride (
         end
       end
       `fsm_enumDefinition_binary_sequential_fsm_STRIDE : begin
-        fsm_stateNext = `fsm_enumDefinition_binary_sequential_fsm_IDLE;
+        if(when_image_stride_l135) begin
+          fsm_stateNext = `fsm_enumDefinition_binary_sequential_fsm_IDLE;
+        end else begin
+          fsm_stateNext = `fsm_enumDefinition_binary_sequential_fsm_STRIDE;
+        end
       end
       default : begin
       end
@@ -187,6 +192,7 @@ module image_stride (
     end
   end
 
+  assign when_image_stride_l135 = ((fsm_En_Last_Channel_out && fsm_En_Last_Col) && fsm_En_Last_Row);
   assign when_image_stride_l72 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_STRIDE);
   assign when_image_stride_l86 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_STRIDE);
   assign when_image_stride_l103 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_STRIDE);

@@ -33,7 +33,7 @@ class image_quan_bias(
     }
     add_list = add_list.reverse
     for (i <- 0 until COMPUTE_CHANNEL_OUT_NUM){
-        add_list(i).io.A <> io.S_DATA.payload((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
+        add_list(i).io.A <> data_out_fifo_delay((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
         add_list(i).io.B <> io.bias_data_in((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
         add_list(i).io.P <> io.M_Data((i+1)*DATA_WIDTH-1 downto i*DATA_WIDTH)
     }

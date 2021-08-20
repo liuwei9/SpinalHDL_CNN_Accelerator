@@ -13,7 +13,7 @@ class image_quan_shift(
     }
     noIoPrefix()
     val data_out_temp = UInt()
-    data_out_temp := io.shift_data_in.asUInt >> io.data_in.asUInt
+    data_out_temp := io.data_in.asUInt >> io.shift_data_in.asUInt
     when(data_out_temp(0).asBits === 1){
         io.shift_data_out:=((data_out_temp(31)##data_out_temp(15 downto 1)).asUInt+1).asBits
     } otherwise{

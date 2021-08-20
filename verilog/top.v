@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : top
-// Git hash  : 5baa66bf9536e4a8433f01bb5557812926788a23
-// Date      : 17/08/2021, 21:09:27
+// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
+// Date      : 20/08/2021, 12:03:14
 
 
 module top (
@@ -12,6 +12,8 @@ module top (
   output              M_DATA_valid,
   input               M_DATA_ready,
   output     [63:0]   M_DATA_payload,
+  output              Stride_Complete,
+  output              Img_Last,
   input               reset,
   input               clk
 );
@@ -36,6 +38,11 @@ module top (
   wire                image_quan_1_S_DATA_ready;
   wire                image_quan_1_M_DATA_valid;
   wire       [63:0]   image_quan_1_M_DATA_payload;
+  wire                image_stride_1_S_DATA_ready;
+  wire                image_stride_1_M_DATA_valid;
+  wire       [63:0]   image_stride_1_M_DATA_payload;
+  wire                image_stride_1_Stride_Complete;
+  wire                image_stride_1_Img_Last;
 
   image_padding image_padding_1 (
     .Start                    (image_Start                            ), //i
@@ -97,13 +104,28 @@ module top (
     .S_DATA_ready      (image_quan_1_S_DATA_ready    ), //o
     .S_DATA_payload    (image_conv_1_M_DATA          ), //i
     .M_DATA_valid      (image_quan_1_M_DATA_valid    ), //o
-    .M_DATA_ready      (M_DATA_ready                 ), //i
+    .M_DATA_ready      (image_stride_1_S_DATA_ready  ), //i
     .M_DATA_payload    (image_quan_1_M_DATA_payload  ), //o
     .reset             (reset                        ), //i
     .clk               (clk                          )  //i
   );
+  image_stride image_stride_1 (
+    .Start              (image_Start                     ), //i
+    .S_DATA_valid       (image_quan_1_M_DATA_valid       ), //i
+    .S_DATA_ready       (image_stride_1_S_DATA_ready     ), //o
+    .S_DATA_payload     (image_quan_1_M_DATA_payload     ), //i
+    .M_DATA_valid       (image_stride_1_M_DATA_valid     ), //o
+    .M_DATA_ready       (M_DATA_ready                    ), //i
+    .M_DATA_payload     (image_stride_1_M_DATA_payload   ), //o
+    .Stride_Complete    (image_stride_1_Stride_Complete  ), //o
+    .Img_Last           (image_stride_1_Img_Last         ), //o
+    .reset              (reset                           ), //i
+    .clk                (clk                             )  //i
+  );
   assign image_S_DATA_ready = image_padding_1_S_DATA_ready;
-  assign M_DATA_valid = image_quan_1_M_DATA_valid;
-  assign M_DATA_payload = image_quan_1_M_DATA_payload;
+  assign M_DATA_valid = image_stride_1_M_DATA_valid;
+  assign M_DATA_payload = image_stride_1_M_DATA_payload;
+  assign Stride_Complete = image_stride_1_Stride_Complete;
+  assign Img_Last = image_stride_1_Img_Last;
 
 endmodule

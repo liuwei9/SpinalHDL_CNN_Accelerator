@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : fifo_sync
-// Git hash  : 5baa66bf9536e4a8433f01bb5557812926788a23
-// Date      : 17/08/2021, 21:09:25
+// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
+// Date      : 20/08/2021, 12:03:12
 
 
 module fifo_sync (

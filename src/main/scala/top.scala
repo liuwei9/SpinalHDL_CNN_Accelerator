@@ -16,6 +16,8 @@ class top  extends Component {
 //        val StartRow = out Bool()
 //        val Conv_Complete = out Bool()
         val M_DATA = master Stream(Bits(64 bits))
+        val Stride_Complete = out Bool()
+        val Img_Last = out Bool()
     }
     noIoPrefix()
     val image_padding = new padding(8,12,640).setDefinitionName("image_padding")
@@ -68,7 +70,15 @@ class top  extends Component {
     image_quan.io.S_DATA.payload <> image_conv.io.M_DATA
     image_quan.io.S_DATA.ready <> image_conv.io.M_Ready
     image_quan.io.S_DATA.valid <> image_conv.io.M_Valid
-    image_quan.io.M_DATA <> io.M_DATA
+//    image_quan.io.M_DATA <> io.M_DATA
+
+    val image_stride = new image_stride(64,64,2048,640,12,4)
+    image_stride.io.S_DATA <> image_quan.io.M_DATA
+    image_stride.io.M_DATA <> io.M_DATA
+    image_stride.io.Start <> io.image_Start
+    image_stride.io.Stride_Complete <> io.Stride_Complete
+    image_stride.io.Img_Last <> io.Img_Last
+
 }
 object top{
     def main(args: Array[String]): Unit = {

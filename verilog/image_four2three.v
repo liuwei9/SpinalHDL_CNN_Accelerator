@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_four2three
-// Git hash  : 5baa66bf9536e4a8433f01bb5557812926788a23
-// Date      : 17/08/2021, 21:09:27
+// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
+// Date      : 20/08/2021, 12:03:14
 
 
 module image_four2three (
@@ -43,6 +43,9 @@ module image_four2three (
   wire                four2three_fifo_data_in_ready;
   wire       [7:0]    four2three_fifo_data_out;
   wire                four2three_fifo_data_out_valid;
+  wire                four2three_fifo_data_valid;
+  wire                four2three_fifo_full;
+  wire                four2three_fifo_empty;
   wire       [7:0]    ram1_doutb;
   wire       [7:0]    ram2_doutb;
   wire       [7:0]    ram3_doutb;
@@ -121,7 +124,10 @@ module image_four2three (
     .rd_en             (four2three_fifo_rd_en           ), //i
     .data_out_valid    (four2three_fifo_data_out_valid  ), //o
     .m_data_count      (12'h282                         ), //i
-    .s_data_count      (12'h282                         )  //i
+    .s_data_count      (12'h282                         ), //i
+    .data_valid        (four2three_fifo_data_valid      ), //o
+    .full              (four2three_fifo_full            ), //o
+    .empty             (four2three_fifo_empty           )  //o
   );
   sdpram ram1 (
     .doutb    (ram1_doutb                ), //o

@@ -20,9 +20,29 @@ class image_stride(
     }
     noIoPrefix()
 
-    val stride_fifo = new general_fifo_sync(S_DATA_WIDTH, S_DATA_WIDTH, MEM_DEPTH, ROW_COL_DATA_COUNT_WIDTH)
+    val stride_fifo = new general_fifo_sync(S_DATA_WIDTH, M_DATA_WIDTH, MEM_DEPTH, ROW_COL_DATA_COUNT_WIDTH)
     io.S_DATA.ready <> stride_fifo.io.data_in_ready
-
+    stride_fifo.io.s_data_count := (FEATURE_MAP_SIZE >> 1) * CHANNEL_OUT_TIMES
+    stride_fifo.io.m_data_count := (FEATURE_MAP_SIZE >> 1) * CHANNEL_OUT_TIMES
+    io.M_DATA.valid <> stride_fifo.io.data_valid
+    (io.M_DATA.ready & stride_fifo.io.data_valid) <> stride_fifo.io.rd_en
+    io.M_DATA.payload <> stride_fifo.io.data_out
+    val data_count = B((FEATURE_MAP_SIZE >> 1) * (FEATURE_MAP_SIZE >> 1) * CHANNEL_OUT_TIMES)
+    val Cnt_Stride_Complete = UInt(data_count.getBitsWidth bits) setAsReg() init 0
+    when(Cnt_Stride_Complete === data_count.asUInt - 1) {
+        Cnt_Stride_Complete := 0
+    } elsewhen(io.M_DATA.valid && io.M_DATA.ready){
+        Cnt_Stride_Complete := Cnt_Stride_Complete + 1
+    } otherwise{
+        Cnt_Stride_Complete := Cnt_Stride_Complete
+    }
+    when(Cnt_Stride_Complete === data_count.asUInt - 1){
+        io.Stride_Complete := True
+        io.Img_Last := True
+    } otherwise{
+        io.Stride_Complete := False
+        io.Img_Last := False
+    }
 
     val fsm = new StateMachine {
         val IDLE = new State() with EntryPoint

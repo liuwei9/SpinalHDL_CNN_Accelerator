@@ -40,3 +40,8 @@
 `define image_quan_fsm_enumDefinition_binary_sequential_image_quan_fsm_After_Fifo 2'b10
 `define image_quan_fsm_enumDefinition_binary_sequential_image_quan_fsm_Compute 2'b11
 
+`define fsm_enumDefinition_binary_sequential_type [1:0]
+`define fsm_enumDefinition_binary_sequential_fsm_BOOT 2'b00
+`define fsm_enumDefinition_binary_sequential_fsm_IDLE 2'b01
+`define fsm_enumDefinition_binary_sequential_fsm_STRIDE 2'b10
+

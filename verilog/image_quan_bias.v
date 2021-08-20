@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : image_quan_bias
-// Git hash  : 5baa66bf9536e4a8433f01bb5557812926788a23
-// Date      : 17/08/2021, 21:09:26
+// Git hash  : 7cff059cfd45157f7b8458b21b9667f4b8ae1e40
+// Date      : 20/08/2021, 12:03:13
 
 
 module image_quan_bias (
@@ -34,6 +34,9 @@ module image_quan_bias (
   wire                bias_fifo_data_in_ready;
   wire       [255:0]  bias_fifo_data_out;
   wire                bias_fifo_data_out_valid;
+  wire                bias_fifo_data_valid;
+  wire                bias_fifo_full;
+  wire                bias_fifo_empty;
   wire       [31:0]   add_simd_72_P;
   wire       [31:0]   add_simd_73_P;
   wire       [31:0]   add_simd_74_P;
@@ -55,7 +58,10 @@ module image_quan_bias (
     .rd_en             (rd_en_fifo                ), //i
     .data_out_valid    (bias_fifo_data_out_valid  ), //o
     .m_data_count      (12'ha00                   ), //i
-    .s_data_count      (12'ha00                   )  //i
+    .s_data_count      (12'ha00                   ), //i
+    .data_valid        (bias_fifo_data_valid      ), //o
+    .full              (bias_fifo_full            ), //o
+    .empty             (bias_fifo_empty           )  //o
   );
   add_simd_64 add_simd_72 (
     .A        (add_simd_72_A  ), //i

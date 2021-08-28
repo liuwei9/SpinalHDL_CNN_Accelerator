@@ -30,7 +30,7 @@ class image_padding(
     EN_Col0 := True
     val EN_Col1 = Bool()
     EN_Col1 := True
-    val padding_fifo = new image_padding_fifo(DATA_WIDTH, FEATURE_MAP_SIZE,ROW_COL_DATA_COUNT_WIDTH)
+    val padding_fifo = new padding_fifo(DATA_WIDTH, DATA_WIDTH,FEATURE_MAP_SIZE,ROW_COL_DATA_COUNT_WIDTH)
     padding_fifo.io.data_in_ready <> io.S_DATA.ready
     padding_fifo.io.wr_en <> io.S_DATA.valid
     padding_fifo.io.data_in <> io.S_DATA.payload

@@ -20,7 +20,7 @@ class top  extends Component {
         val Img_Last = out Bool()
     }
     noIoPrefix()
-    val image_padding = new padding(8,12,640).setDefinitionName("image_padding")
+    val image_padding = new image_padding(8,12,640).setDefinitionName("image_padding")
 //    image_padding.padding_fifo.setDefinitionName("image_padding_fifo")
 //    image_padding.padding_fifo.fifo.setDefinitionName("image_padding_fifo_sync")
     io.image_Start <> image_padding.io.Start
@@ -28,7 +28,7 @@ class top  extends Component {
 //    io.image_M_DATA <> image_padding.io.M_DATA
 //    io.image_Row_Num_After_Padding <> image_padding.io.Row_Num_After_Padding
 //    io.image_Last <> image_padding.io.Last
-    val image_four2three = new four2three(8,12,642).setDefinitionName("image_four2three")
+    val image_four2three = new image_four2three(8,12,642).setDefinitionName("image_four2three")
 //    image_four2three.four2three_fifo.setDefinitionName("image_four2three_fifo")
 //    image_four2three.ram1.setDefinitionName("image_four2three_ram1")
 //    image_four2three.ram2.setDefinitionName("image_four2three_ram2")
@@ -44,7 +44,7 @@ class top  extends Component {
 //    image_four2three.io.StartRow <> io.StartRow
 //    image_four2three.io.M_rd_en <> io.M_rd_en
 
-    val image_three2nine = new three2nine(24,12)
+    val image_three2nine = new image_three2nine(24,12)
     image_three2nine.io.Start <> io.image_Start
     image_three2nine.io.Row_Num_After_Padding <> image_padding.io.Row_Num_After_Padding
     image_three2nine.io.S_DATA <> image_four2three.io.M_DATA

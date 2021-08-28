@@ -2,7 +2,7 @@ import spinal.core._
 import spinal.lib._
 import spinal.lib.fsm._
 
-class three2nine(
+class image_three2nine(
                     S_DATA_WIDTH: Int,
                     ROW_COL_DATA_COUNT_WIDTH: Int
                 ) extends Component {
@@ -135,8 +135,8 @@ class three2nine(
     }
 }
 
-object three2nine {
+object image_three2nine {
     def main(args: Array[String]): Unit = {
-SpinalVerilog(new three2nine(24,12))
+SpinalVerilog(new image_three2nine(24,12))
     }
 }

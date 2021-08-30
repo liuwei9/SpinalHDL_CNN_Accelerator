@@ -1,6 +1,7 @@
 import spinal.core._
 import spinal.lib._
 import spinal.lib.fsm._
+import xip._
 
 class padding(
                  S_DATA_WIDTH: Int,
@@ -24,13 +25,23 @@ class padding(
 
     }
     noIoPrefix()
+    val Channel_Times = io.Channel_In_Num_REG.asUInt >> 3
+    val Zero_Point = Bits(M_DATA_WIDTH bits)
+    for (i <- 0 until M_DATA_WIDTH / DATA_WIDTH) {
+        Zero_Point((i + 1) * DATA_WIDTH - 1 downto i * DATA_WIDTH) := io.Zero_Point_REG
+    }
 
-    val S_Count_Fifo = UInt(ROW_COL_DATA_COUNT_WIDTH bits)
+
+    val count_mult = new xmul(ROW_COL_DATA_COUNT_WIDTH, Channel_Times.getWidth, ROW_COL_DATA_COUNT_WIDTH, this.clockDomain).setDefinitionName("count_mult")
+    count_mult.io.A := io.Row_Num_In_REG
+    count_mult.io.B := Channel_Times.asBits
+
+    //    val S_Count_Fifo = UInt(ROW_COL_DATA_COUNT_WIDTH bits)
     val fifo = new padding_fifo(S_DATA_WIDTH, S_DATA_WIDTH, MEMORY_DEPTH, ROW_COL_DATA_COUNT_WIDTH)
     fifo.io.wr_en <> io.S_DATA.valid
     fifo.io.data_in <> io.S_DATA.payload
     fifo.io.data_in_ready <> io.S_DATA.ready
-
+    fifo.io.m_data_count <> count_mult.io.P.asUInt
     val EN_Row0 = Bool()
     val EN_Row1 = Bool()
     val EN_Col0 = Bool()
@@ -46,15 +57,14 @@ class padding(
         EN_Col0 := False
         EN_Col1 := False
     }
-    val In_Size = RegNext(io.Row_Num_In_REG)
+    val In_Size = RegNext(io.Row_Num_In_REG).asUInt
     val Out_Size = UInt(ROW_COL_DATA_COUNT_WIDTH bits)
     when(io.Padding_REG) {
-        Out_Size := io.Row_Num_In_REG + 2 * io.Zero_Num_REG
+        Out_Size := io.Row_Num_In_REG.asUInt +  2*io.Zero_Num_REG.asUInt
     } otherwise {
-        Out_Size := io.Row_Num_In_REG
+        Out_Size := io.Row_Num_In_REG.asUInt
     }
-
-    val Channel_Times = io.Channel_In_Num_REG.asUInt >> 3
+    io.RowNum_After_Padding := Out_Size.asBits
 
     val padding_fsm = new StateMachine {
         val IDLE = new State() with EntryPoint
@@ -90,7 +100,7 @@ class padding(
             Cnt_Row := Cnt_Row
         }
         val EN_Left_Padding = Bool()
-        when((EN_Row0 && Cnt_Row < io.Zero_Num_REG.asUInt) || (EN_Row1 & (Cnt_Row > Out_Size - io.Zero_Num_REG.asUInt-1 ))) {
+        when((EN_Row0 && Cnt_Row < io.Zero_Num_REG.asUInt) || (EN_Row1 & (Cnt_Row > Out_Size - io.Zero_Num_REG.asUInt - 1))) {
             EN_Left_Padding := True
         } otherwise {
             EN_Left_Padding := False
@@ -98,22 +108,65 @@ class padding(
 
         val Cnt_Cin = UInt(CHANNEL_NUM_WIDTH bits) setAsReg()
         val EN_Last_Cin = Bool()
-        when(Cnt_Cin === Channel_Times - 1){
+        when(Cnt_Cin === Channel_Times - 1) {
             EN_Last_Cin := True
-        } otherwise{
+        } otherwise {
             EN_Last_Cin := False
         }
-        when(isActive(M_Row_Read) || isActive(M_Up_Down_Padding) || isActive(S_Left_Padding)||isActive(M_Right_Padding)){
-            when(EN_Last_Cin){
+        when(isActive(M_Row_Read) || isActive(M_Up_Down_Padding) || isActive(S_Left_Padding) || isActive(M_Right_Padding)) {
+            when(EN_Last_Cin) {
                 Cnt_Cin := 0
-            }otherwise{
+            } otherwise {
                 Cnt_Cin := Cnt_Cin + 1
             }
-        } otherwise{
+        } otherwise {
             Cnt_Cin := 0
         }
 
 
+        val Cnt_Column = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg()
+        val EN_Row_Read = Bool()
+        when(Cnt_Column === In_Size - 1 && EN_Last_Cin) {
+            EN_Row_Read := True
+        } otherwise {
+            EN_Row_Read := False
+        }
+        when(isActive(M_Row_Read) || isActive(M_Up_Down_Padding)) {
+            when(EN_Last_Cin) {
+                Cnt_Column := Cnt_Column + 1
+            } otherwise {
+                Cnt_Column := Cnt_Column
+            }
+        } otherwise {
+            Cnt_Column := 0
+        }
+
+        val EN_Judge_Row = Bool()
+        when(Cnt_Row === Out_Size - 1) {
+            EN_Judge_Row := True
+        } otherwise {
+            EN_Judge_Row := False
+        }
+
+        when(isActive(M_Row_Read)) {
+            fifo.io.rd_en := True
+        } otherwise {
+            fifo.io.rd_en := False
+        }
+
+        when(isActive(S_Left_Padding) || isActive(M_Up_Down_Padding) || isActive(M_Right_Padding) || isActive(M_Row_Read)) {
+            io.M_DATA.valid := True
+        } otherwise {
+            io.M_DATA.valid := False
+        }
+
+        when(isActive(S_Left_Padding) || isActive(M_Up_Down_Padding) || isActive(M_Right_Padding)) {
+            io.M_DATA.payload := Zero_Point
+        } elsewhen isActive(M_Row_Read) {
+            io.M_DATA.payload := fifo.io.data_out
+        } otherwise {
+            io.M_DATA.payload := 0
+        }
 
         IDLE
             .whenIsActive {
@@ -149,26 +202,55 @@ class padding(
             }
         M_Row_Read
             .whenIsActive {
+                when(EN_Row_Read) {
+                    when(!EN_Col1) {
+                        goto(Judge_Row)
+                    } otherwise goto(M_Right_Padding)
 
+                } otherwise goto(M_Row_Read)
             }
         Judge_Row
             .whenIsActive {
-
+                when(EN_Judge_Row) {
+                    goto(IDLE)
+                } otherwise {
+                    goto(M_Row_Wait)
+                }
             }
         S_Left_Padding
             .whenIsActive {
-                when(EN_Left_Padding){
-                    goto(M_Up_Down_Padding)
-                } otherwise goto(S_Left_Padding)
+                when(EN_Left_Padding) {
+                    when(EN_Last_Cin) {
+                        goto(M_Up_Down_Padding)
+                    } otherwise goto(S_Left_Padding)
+
+                } otherwise {
+                    when(EN_Last_Cin) {
+                        goto(S_Row_Wait)
+                    } otherwise goto(S_Left_Padding)
+                }
             }
         M_Up_Down_Padding
             .whenIsActive {
-
+                when(EN_Row_Read) {
+                    when(!EN_Col1) {
+                        goto(Judge_Row)
+                    } otherwise {
+                        goto(M_Right_Padding)
+                    }
+                } otherwise goto(M_Up_Down_Padding)
             }
         M_Right_Padding
             .whenIsActive {
-
+                when(EN_Last_Cin) {
+                    goto(Judge_Row)
+                } otherwise goto(M_Right_Padding)
             }
 
+    }
+}
+object padding{
+    def main(args: Array[String]): Unit = {
+        SpinalVerilog(new padding(64,64,12,4,8,3,2048))
     }
 }

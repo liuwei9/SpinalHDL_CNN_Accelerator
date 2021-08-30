@@ -53,6 +53,9 @@ class padding(
     } otherwise {
         Out_Size := io.Row_Num_In_REG
     }
+
+    val Channel_Times = io.Channel_In_Num_REG.asUInt >> 3
+
     val padding_fsm = new StateMachine {
         val IDLE = new State() with EntryPoint
         val INIT = new State()
@@ -79,15 +82,38 @@ class padding(
         }
 
         val Cnt_Row = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg()
-        when(isActive(Judge_Row)){
+        when(isActive(Judge_Row)) {
             Cnt_Row := Cnt_Row + 1
-        } elsewhen isActive(IDLE){
+        } elsewhen isActive(IDLE) {
             Cnt_Row := 0
-        } otherwise{
+        } otherwise {
             Cnt_Row := Cnt_Row
         }
         val EN_Left_Padding = Bool()
-        
+        when((EN_Row0 && Cnt_Row < io.Zero_Num_REG.asUInt) || (EN_Row1 & (Cnt_Row > Out_Size - io.Zero_Num_REG.asUInt-1 ))) {
+            EN_Left_Padding := True
+        } otherwise {
+            EN_Left_Padding := False
+        }
+
+        val Cnt_Cin = UInt(CHANNEL_NUM_WIDTH bits) setAsReg()
+        val EN_Last_Cin = Bool()
+        when(Cnt_Cin === Channel_Times - 1){
+            EN_Last_Cin := True
+        } otherwise{
+            EN_Last_Cin := False
+        }
+        when(isActive(M_Row_Read) || isActive(M_Up_Down_Padding) || isActive(S_Left_Padding)||isActive(M_Right_Padding)){
+            when(EN_Last_Cin){
+                Cnt_Cin := 0
+            }otherwise{
+                Cnt_Cin := Cnt_Cin + 1
+            }
+        } otherwise{
+            Cnt_Cin := 0
+        }
+
+
 
         IDLE
             .whenIsActive {
@@ -131,7 +157,9 @@ class padding(
             }
         S_Left_Padding
             .whenIsActive {
-
+                when(EN_Left_Padding){
+                    goto(M_Up_Down_Padding)
+                } otherwise goto(S_Left_Padding)
             }
         M_Up_Down_Padding
             .whenIsActive {

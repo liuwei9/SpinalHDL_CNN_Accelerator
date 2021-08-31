@@ -32,7 +32,7 @@ class padding(
     }
 
 
-    val count_mult = new xmul(ROW_COL_DATA_COUNT_WIDTH, Channel_Times.getWidth, ROW_COL_DATA_COUNT_WIDTH, this.clockDomain).setDefinitionName("count_mult")
+    val count_mult = new mul(ROW_COL_DATA_COUNT_WIDTH, Channel_Times.getWidth, ROW_COL_DATA_COUNT_WIDTH,false)
     count_mult.io.A := io.Row_Num_In_REG
     count_mult.io.B := Channel_Times.asBits
 

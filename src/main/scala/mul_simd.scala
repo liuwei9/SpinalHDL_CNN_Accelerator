@@ -10,10 +10,10 @@ class mul_simd (
         val data_out = out Bits(M_DATA_WIDTH bits)
     }
 
-    val mul = new xmul(S_DATA_WIDTH,S_DATA_WIDTH,S_DATA_WIDTH+S_DATA_WIDTH,this.clockDomain).setDefinitionName("mul")
-    mul.io.A <> io.data_in
-    mul.io.B <> io.weight_in
-    val data_out_q = RegNext(mul.io.P.asSInt.resize(M_DATA_WIDTH))
+    val mult_8_8_16 = new xmul(S_DATA_WIDTH,S_DATA_WIDTH,S_DATA_WIDTH+S_DATA_WIDTH,this.clockDomain).setDefinitionName("mult_8_8_16")
+    mult_8_8_16.io.A <> io.data_in
+    mult_8_8_16.io.B <> io.weight_in
+    val data_out_q = RegNext(mult_8_8_16.io.P.asSInt.resize(M_DATA_WIDTH))
     io.data_out <> data_out_q.asBits
     noIoPrefix()
 }

@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : padding
-// Git hash  : d30f8576adbd39ba013ee53b1f61f8f971de4fd6
+// Git hash  : 771888fb29272bd153a0d0311d54890fe226a373
 
 
 `define padding_fsm_enumDefinition_binary_sequential_type [3:0]
@@ -30,13 +30,13 @@ module padding (
   input      [7:0]    Zero_Point_REG,
   input      [2:0]    Zero_Num_REG,
   output     [11:0]   RowNum_After_Padding,
-  input               clk,
-  input               reset
+  input               reset,
+  input               clk
 );
-  wire       [0:0]    count_mult_1_B;
+  wire       [0:0]    count_mult_B;
   reg                 fifo_rd_en;
   wire       [11:0]   fifo_m_data_count;
-  wire       [11:0]   count_mult_1_P;
+  wire       [11:0]   count_mult_P;
   wire                fifo_data_in_ready;
   wire       [63:0]   fifo_data_out;
   wire                fifo_data_out_valid;
@@ -112,11 +112,12 @@ module padding (
   assign _zz_when_padding_l111 = {3'd0, _zz_when_padding_l111_1};
   assign _zz_when_padding_l129 = (In_Size - 12'h001);
   assign _zz_when_padding_l145 = (Out_Size - 12'h001);
-  count_mult count_mult_1 (
-    .A      (Row_Num_In_REG  ), //i
-    .B      (count_mult_1_B  ), //i
-    .P      (count_mult_1_P  ), //o
-    .CLK    (clk             )  //i
+  mul count_mult (
+    .A        (Row_Num_In_REG  ), //i
+    .B        (count_mult_B    ), //i
+    .P        (count_mult_P    ), //o
+    .clk      (clk             ), //i
+    .reset    (reset           )  //i
   );
   padding_fifo fifo (
     .reset             (reset                ), //i
@@ -177,9 +178,9 @@ module padding (
     Zero_Point[63 : 56] = Zero_Point_REG;
   end
 
-  assign count_mult_1_B = Channel_Times;
+  assign count_mult_B = Channel_Times;
   assign S_DATA_ready = fifo_data_in_ready;
-  assign fifo_m_data_count = count_mult_1_P;
+  assign fifo_m_data_count = count_mult_P;
   always @(*) begin
     if(Padding_REG) begin
       EN_Row0 = 1'b1;
@@ -539,6 +540,35 @@ module padding_fifo (
     end else begin
       data_out_valid = 1'b0;
     end
+  end
+
+
+endmodule
+
+module mul (
+  input      [11:0]   A,
+  input      [0:0]    B,
+  output     [11:0]   P,
+  input               clk,
+  input               reset
+);
+  wire       [12:0]   _zz_P_6;
+  (* use_dsp = "yes" *) wire       [11:0]   _zz_P;
+  (* use_dsp = "yes" *) wire       [0:0]    _zz_P_1;
+  (* use_dsp = "yes" *) reg        [11:0]   _zz_P_2;
+  (* use_dsp = "yes" *) reg        [0:0]    _zz_P_3;
+  (* use_dsp = "yes" *) reg        [12:0]   _zz_P_4;
+  (* use_dsp = "yes" *) reg        [12:0]   _zz_P_5;
+
+  assign _zz_P_6 = _zz_P_5;
+  assign _zz_P = A;
+  assign _zz_P_1 = B;
+  assign P = _zz_P_6[11:0];
+  always @(posedge clk) begin
+    _zz_P_2 <= _zz_P;
+    _zz_P_3 <= _zz_P_1;
+    _zz_P_4 <= (_zz_P_2 * _zz_P_3);
+    _zz_P_5 <= _zz_P_4;
   end
 
 

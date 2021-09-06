@@ -82,6 +82,56 @@ class three2nine(
             Cnt_Row := Cnt_Row
         }
 
+        when(isActive(ComputeRow_Read)) {
+            io.S_DATA_Ready := True
+        } otherwise {
+            io.S_DATA_Ready := False
+        }
+        when(io.S_DATA_Ready) {
+            io.S_DATA_Addr := io.S_DATA_Addr + 1
+        } otherwise {
+            io.S_DATA_Addr := 0
+        }
+        when(isActive(Start_Wait)) {
+            io.S_Ready := True
+        } otherwise {
+            io.S_Ready := False
+        }
+        for (i <- 0 to 2) {
+            io.M_Data(3 * (i + 1) * 64 - 1 downto (3 * i * 64)) := io.S_DATA((i + 1) * 64 - 1 downto (i * 64)) ## io.S_DATA((i + 1) * 64 - 1 downto (i * 64)) ## io.S_DATA((i + 1) * 64 - 1 downto (i * 64))
+        }
+        when(isActive(ComputeRow_Read)) {
+
+            when(Cnt_Column < io.Row_Num_After_Padding - 2) {
+                io.M_Valid(0) := True
+                io.M_Valid(3) := True
+                io.M_Valid(6) := True
+            } otherwise {
+                io.M_Valid(0) := False
+                io.M_Valid(3) := False
+                io.M_Valid(6) := False
+            }
+            when(Cnt_Column > 0 && Cnt_Column < io.Row_Num_After_Padding - 1) {
+                io.M_Valid(1) := True
+                io.M_Valid(4) := True
+                io.M_Valid(7) := True
+            } otherwise {
+                io.M_Valid(1) := False
+                io.M_Valid(4) := False
+                io.M_Valid(7) := False
+            }
+            when(Cnt_Column > 1 && Cnt_Column < io.Row_Num_After_Padding) {
+                io.M_Valid(2) := True
+                io.M_Valid(5) := True
+                io.M_Valid(8) := True
+            } otherwise {
+                io.M_Valid(2) := False
+                io.M_Valid(5) := False
+                io.M_Valid(8) := False
+            }
+        } otherwise {
+            io.M_Valid.clearAll()
+        }
         IDLE
             .whenIsActive {
                 when(io.Start) {
@@ -113,10 +163,16 @@ class three2nine(
             .whenIsActive {
                 when(EN_Judge_LastRow) {
                     goto(IDLE)
-                } otherwise{
+                } otherwise {
                     goto(Start_Wait)
                 }
             }
 
+    }
+}
+
+object three2nine{
+    def main(args: Array[String]): Unit = {
+        SpinalVerilog(new three2nine(192,576,12,12))
     }
 }

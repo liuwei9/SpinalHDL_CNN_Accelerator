@@ -34,9 +34,11 @@ class image_three2nine(
         val Cnt_COl = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg() init 0
         when(isActive(ComputeRow_Read)) {
             Cnt_COl := Cnt_COl + 1
-        } elsewhen isActive(ComputeRow_Read) {
-            Cnt_COl := Cnt_COl
-        } otherwise (Cnt_COl := 0)
+        }otherwise (Cnt_COl := 0)
+//        } elsewhen isActive(ComputeRow_Read) {
+//            Cnt_COl := Cnt_COl
+//        }
+
         when(Cnt_COl === io.Row_Num_After_Padding - 1) {
             EN_ComputeRow_Read := True
         } otherwise (EN_ComputeRow_Read := False)

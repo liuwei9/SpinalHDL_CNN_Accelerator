@@ -43,4 +43,6 @@ class Conv_Norm(
     val COMPUTE_TIMES_CHANNEL_IN_REG = io.Channel_In_Num_REG >> log2Up(CHANNEL_IN_NUM)
     val COMPUTE_TIMES_CHANNEL_IN_REG_8 = io.Channel_In_Num_REG >> log2Up(3)
     val COMPUTE_TIMES_CHANNEL_OUT_REG = io.Channel_In_Num_REG >> log2Up(CHANNEL_OUT_NUM)
+
+
 }

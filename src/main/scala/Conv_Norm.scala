@@ -30,7 +30,7 @@ class Conv_Norm(
         val RowNum_After_Padding = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
         val Channel_In_Num_REG = in Bits (CHANNEL_NUM_WIDTH bits)
         val Channel_Out_Num_REG = in Bits (CHANNEL_NUM_WIDTH bits)
-        val Weight_Single_Num_REG = in Bits (WEIGHT_NUM_WIDTH)
+        val Weight_Single_Num_REG = in Bits (WEIGHT_NUM_WIDTH bits)
         val Bias_Num_REG = in Bits (BIAS_NUM_WIDTH bits)
         val Bias_Addrb = in Bits (BIAS_NUM_WIDTH bits)
         val Data_Out_Bias = out Bits (BIAS_DATA_WIDTH bits)

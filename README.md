@@ -6,3 +6,4 @@
 + scala：2.11.12
 + sbt：1.5.5
 + spinal hdl：1.6.0
++ gson: 2.7

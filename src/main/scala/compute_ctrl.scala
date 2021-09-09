@@ -8,7 +8,7 @@ class compute_ctrl(
                       WIDTH_TEMP_ADDR_SIZE: Int,
                       ROW_COL_DATA_COUNT_WIDTH: Int,
                       CHANNEL_NUM_WIDTH: Int,
-                      CHANNEL_IN_NUM:Int
+                      CHANNEL_IN_NUM: Int
                   ) extends Component {
 
     val io = new Bundle {
@@ -32,7 +32,7 @@ class compute_ctrl(
     }
     noIoPrefix()
 
-    val count_mult = new mul(ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH,false)
+    val count_mult = new mul(ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, false)
     count_mult.io.A := io.ROW_NUM_CHANNEL_OUT_REG
     count_mult.io.B := io.COMPUTE_TIMES_CHANNEL_IN_REG_8
     count_mult.io.P <> io.M_Count_Fifo
@@ -105,37 +105,65 @@ class compute_ctrl(
             Cnt_Row := Cnt_Row
         }
         val En_Compute_Column = Bool()
-        when(Cnt_Column === io.ROW_NUM_CHANNEL_OUT_REG.asUInt - 1 && Cnt_Channel_In_Num === io.COMPUTE_TIMES_CHANNEL_IN_REG.asUInt - 1 && Cnt_Channel_Out_Num === io.COMPUTE_TIMES_CHANNEL_OUT_REG.asUInt - 1){
+        when(Cnt_Column === io.ROW_NUM_CHANNEL_OUT_REG.asUInt - 1 && Cnt_Channel_In_Num === io.COMPUTE_TIMES_CHANNEL_IN_REG.asUInt - 1 && Cnt_Channel_Out_Num === io.COMPUTE_TIMES_CHANNEL_OUT_REG.asUInt - 1) {
             En_Compute_Column := True
         } otherwise {
             En_Compute_Column := False
         }
         val En_Compute_Row = Bool()
-        when(Cnt_Row === io.ROW_NUM_CHANNEL_OUT_REG.asUInt - 1){
+        when(Cnt_Row === io.ROW_NUM_CHANNEL_OUT_REG.asUInt - 1) {
             En_Compute_Row := True
         } otherwise {
             En_Compute_Row := False
         }
 
-        when(isActive(Judge_Row) && isEntering(IDLE)){
+        when(isActive(Judge_Row) && isEntering(IDLE)) {
             io.Compute_Complete := True
         } otherwise {
             io.Compute_Complete := False
         }
 
-        when(isActive(Compute)){
-            when(Cnt_Channel_Out_Num === 0){
+        when(isActive(Compute)) {
+            when(Cnt_Channel_Out_Num === 0) {
                 io.rd_en_fifo := True
-            } otherwise{
+            } otherwise {
                 io.rd_en_fifo := False
             }
-        } otherwise{
+        } otherwise {
             io.rd_en_fifo := False
         }
-        when(Cnt_Channel_Out_Num === 0 && Cnt_Channel_In_Num === 0){
+        when(Cnt_Channel_Out_Num === 0 && Cnt_Channel_In_Num === 0) {
             io.ram_temp_write_address := 0
-        } elsewhen io.rd_en_fifo{
+        } elsewhen io.rd_en_fifo {
             io.ram_temp_write_address := (io.ram_temp_write_address.asUInt + 1).asBits
+        }
+
+        val ram_temp_read_address_temp = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg()
+        when(isActive(Compute)) {
+            when(Cnt_Channel_In_Num === io.COMPUTE_TIMES_CHANNEL_IN_REG.asUInt - 1) {
+                ram_temp_read_address_temp := 0
+            } otherwise {
+                ram_temp_read_address_temp := ram_temp_read_address_temp + 1
+            }
+        } otherwise {
+            ram_temp_read_address_temp := 0
+        }
+        io.ram_temp_read_address := Delay(ram_temp_read_address_temp, 2)
+
+        val weight_addrb_temp = UInt(WEIGHT_ADDR_WIDTH bits) setAsReg()
+        when(isActive(Compute)) {
+            when(Cnt_Channel_Out_Num === io.COMPUTE_TIMES_CHANNEL_OUT_REG.asUInt - 1 && Cnt_Channel_In_Num === io.COMPUTE_TIMES_CHANNEL_IN_REG.asUInt - 1) {
+                weight_addrb_temp := 0
+            } otherwise {
+                weight_addrb_temp := weight_addrb_temp + 1
+            }
+        } otherwise {
+            weight_addrb_temp := 0
+        }
+        io.weight_addrb := Delay(weight_addrb_temp, 2)
+
+        when(isActive(Compute)){
+
         }
 
         IDLE
@@ -164,14 +192,14 @@ class compute_ctrl(
             }
         Compute
             .whenIsActive {
-                when(En_Compute_Column){
+                when(En_Compute_Column) {
                     goto(Judge_Row)
                 } otherwise goto(Compute)
             }
 
         Judge_Row
-            .whenIsActive{
-                when(En_Compute_Row){
+            .whenIsActive {
+                when(En_Compute_Row) {
                     goto(IDLE)
                 } otherwise {
                     goto(Judge_Before_Fifo)

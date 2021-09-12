@@ -148,7 +148,7 @@ class compute_ctrl(
         } otherwise {
             ram_temp_read_address_temp := 0
         }
-        io.ram_temp_read_address := Delay(ram_temp_read_address_temp, 2)
+        io.ram_temp_read_address := Delay(ram_temp_read_address_temp.asBits, 2)
 
         val weight_addrb_temp = UInt(WEIGHT_ADDR_WIDTH bits) setAsReg()
         when(isActive(Compute)) {
@@ -160,7 +160,7 @@ class compute_ctrl(
         } otherwise {
             weight_addrb_temp := 0
         }
-        io.weight_addrb := Delay(weight_addrb_temp, 2)
+        io.weight_addrb := Delay(weight_addrb_temp.asBits, 2)
 
         when(isActive(Compute)){
 

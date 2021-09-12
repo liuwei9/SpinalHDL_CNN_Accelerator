@@ -1,6 +1,7 @@
 import spinal.core._
 import spinal.lib._
 import spinal.lib.fsm._
+import xmemory._
 
 class load_weight(
                      KERNEL_NUM: Int,
@@ -12,7 +13,8 @@ class load_weight(
                      BIAS_DATA_WIDTH: Int,
                      SCALE_DATA_WIDTH: Int,
                      SHIFT_DATA_WIDTH: Int,
-                     WEIGHT_MEM_WRITE_DEPTH: Int
+                     WEIGHT_MEM_WRITE_DEPTH: Int,
+                     QUAN_MEM_WRITE_DEPTH: Int
                  ) extends Component {
     val io = new Bundle {
         val Start_Pa = in Bool()
@@ -22,7 +24,7 @@ class load_weight(
         val S_Para_Data = slave Stream Bits(PARA_DATA_WIDTH bits)
         val Weight_Addrb = in Bits (WEIGHT_ADDR_WIDTH bits)
         val Data_Out_Weight = out Vec(Bits(WEIGHT_DATA_WIDTH bits), KERNEL_NUM)
-        val Bias_Addrb = out Bits (BIAS_NUM_WIDTH bits)
+        val Bias_Addrb = in Bits (BIAS_NUM_WIDTH bits)
         val Data_Out_Bias = out Bits (BIAS_DATA_WIDTH bits)
         val Data_Out_Scale = out Bits (SCALE_DATA_WIDTH bits)
         val Data_Out_Shift = out Bits (SHIFT_DATA_WIDTH bits)
@@ -177,6 +179,107 @@ class load_weight(
         Compute_3_3_Weight.io.weight_ram_data_out <> io.Data_Out_Weight
 
 
+        val En_Wr_Bias = Bool() setAsReg()
+        when(isActive(Copy_Bias)) {
+            when(io.S_Para_Data.valid) {
+                En_Wr_Bias := True
+            } otherwise {
+                En_Wr_Bias := False
+            }
+        } otherwise {
+            En_Wr_Bias := False
+        }
+        val Bias_Addra_Temp = UInt(BIAS_NUM_WIDTH bits) setAsReg()
+        when(isActive(Copy_Bias)) {
+            when(io.S_Para_Data.valid) {
+                Bias_Addra_Temp := Bias_Addra_Temp + 1
+            } otherwise {
+                Bias_Addra_Temp := Bias_Addra_Temp
+            }
+        } otherwise {
+            Bias_Addra_Temp := 0
+        }
+        val Bias_Addra = RegNext(Bias_Addra_Temp.asBits)
+        val Bias_data = RegNext(io.S_Para_Data.payload)
+        val BIAS_DATA_READ_WIDTH = PARA_DATA_WIDTH * QUAN_MEM_WRITE_DEPTH / BIAS_DATA_WIDTH
+        val Bias_ram = new sdpram(PARA_DATA_WIDTH, QUAN_MEM_WRITE_DEPTH, BIAS_DATA_WIDTH,BIAS_DATA_READ_WIDTH,"block",1,"common_clock",clockDomain,clockDomain)
+        Bias_ram.io.wea <> True.asBits
+        Bias_ram.io.ena <> En_Wr_Bias
+        Bias_ram.io.dina <> Bias_data
+        Bias_ram.io.addra <> Bias_Addra.resized
+        Bias_ram.io.doutb <> io.Data_Out_Bias
+        Bias_ram.io.addrb <> io.Bias_Addrb.resized
+        Bias_ram.io.enb <> True
+
+
+        val En_Wr_Scale = Bool() setAsReg()
+        when(isActive(Copy_Scale)) {
+            when(io.S_Para_Data.valid) {
+                En_Wr_Scale := True
+            } otherwise {
+                En_Wr_Scale := False
+            }
+        } otherwise {
+            En_Wr_Scale := False
+        }
+        val Scale_Addra_Temp = UInt(BIAS_NUM_WIDTH bits) setAsReg()
+        when(isActive(Copy_Scale)) {
+            when(io.S_Para_Data.valid) {
+                Scale_Addra_Temp := Scale_Addra_Temp + 1
+            } otherwise {
+                Scale_Addra_Temp := Scale_Addra_Temp
+            }
+        } otherwise {
+            Scale_Addra_Temp := 0
+        }
+        val Scale_Addra = RegNext(Scale_Addra_Temp.asBits)
+        val Scale_data = RegNext(io.S_Para_Data.payload)
+        val SCALE_DATA_READ_WIDTH = PARA_DATA_WIDTH * QUAN_MEM_WRITE_DEPTH / SCALE_DATA_WIDTH
+        val Scale_ram = new sdpram(PARA_DATA_WIDTH, QUAN_MEM_WRITE_DEPTH, SCALE_DATA_WIDTH,SCALE_DATA_READ_WIDTH,"block",1,"common_clock",clockDomain,clockDomain)
+        Scale_ram.io.wea <> True.asBits
+        Scale_ram.io.ena <> En_Wr_Scale
+        Scale_ram.io.dina <> Scale_data
+        Scale_ram.io.addra <> Scale_Addra.resized
+        Scale_ram.io.doutb <> io.Data_Out_Scale
+        Scale_ram.io.addrb <> io.Bias_Addrb.resized
+        Scale_ram.io.enb <> True
+
+
+        val En_Wr_Shift = Bool() setAsReg()
+        when(isActive(Copy_Shift)) {
+            when(io.S_Para_Data.valid) {
+                En_Wr_Shift := True
+            } otherwise {
+                En_Wr_Shift := False
+            }
+        } otherwise {
+            En_Wr_Shift := False
+        }
+        val Shift_Addra_Temp = UInt(SHIFT_DATA_WIDTH bits) setAsReg()
+        when(isActive(Copy_Shift)) {
+            when(io.S_Para_Data.valid) {
+                Shift_Addra_Temp := Shift_Addra_Temp + 1
+            } otherwise {
+                Shift_Addra_Temp := Shift_Addra_Temp
+            }
+        } otherwise {
+            Shift_Addra_Temp := 0
+        }
+        val Shift_Addra = RegNext(Shift_Addra_Temp.asBits)
+        val Shift_data = RegNext(io.S_Para_Data.payload)
+        val SHIFT_DATA_READ_WIDTH = PARA_DATA_WIDTH * QUAN_MEM_WRITE_DEPTH / SHIFT_DATA_WIDTH
+        val Shift_ram = new sdpram(PARA_DATA_WIDTH, QUAN_MEM_WRITE_DEPTH, SHIFT_DATA_WIDTH,SHIFT_DATA_READ_WIDTH,"block",1,"common_clock",clockDomain,clockDomain)
+        Shift_ram.io.wea <> True.asBits
+        Shift_ram.io.ena <> En_Wr_Shift
+        Shift_ram.io.dina <> Shift_data
+        Shift_ram.io.addra <> Shift_Addra.resized
+        Shift_ram.io.doutb <> io.Data_Out_Shift
+        Shift_ram.io.addrb <> io.Bias_Addrb.resized
+        Shift_ram.io.enb <> True
+
+
+
+
         IDLE
             .whenIsActive {
                 when(io.Start_Pa) {
@@ -219,4 +322,9 @@ class load_weight(
             }
     }
 
+}
+object load_weight{
+    def main(args: Array[String]): Unit = {
+        SpinalVerilog(new load_weight(9,15,13,15,64,1024,256,256,256,8192,128))
+    }
 }

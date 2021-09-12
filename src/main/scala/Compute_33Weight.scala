@@ -44,6 +44,6 @@ class Compute_33Weight(
 
 object Compute_33Weight{
     def main(args: Array[String]): Unit = {
-        SpinalVerilog(new Compute_33Weight(1024,13,9,64,16,8,8,8192))
+        SpinalVerilog(new Compute_33Weight(1024,13,9,64,8192))
     }
 }

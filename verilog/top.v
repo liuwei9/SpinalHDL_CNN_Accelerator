@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : top
-// Git hash  : c12011d1e8655c6f5dcb4228add939efcb9499aa
-// Date      : 20/08/2021, 22:45:47
+// Git hash  : 3de18e70bd50589bd21035e4fb7a1c12a3bd4cfa
+// Date      : 13/09/2021, 21:49:41
 
 
 module top (
@@ -26,11 +26,11 @@ module top (
   wire                image_four2three_1_S_DATA_ready;
   wire       [23:0]   image_four2three_1_M_DATA;
   wire                image_four2three_1_M_Valid;
-  wire                image_three2nine_S_DATA_Ready;
-  wire       [11:0]   image_three2nine_S_DATA_Addr;
-  wire       [71:0]   image_three2nine_M_Data;
-  wire       [8:0]    image_three2nine_M_Valid;
-  wire                image_three2nine_S_Ready;
+  wire                image_three2nine_1_S_DATA_Ready;
+  wire       [11:0]   image_three2nine_1_S_DATA_Addr;
+  wire       [71:0]   image_three2nine_1_M_Data;
+  wire       [8:0]    image_three2nine_1_M_Valid;
+  wire                image_three2nine_1_S_Ready;
   wire                image_conv_1_S_Ready;
   wire                image_conv_1_M_Valid;
   wire       [255:0]  image_conv_1_M_DATA;
@@ -65,32 +65,32 @@ module top (
     .S_DATA_ready             (image_four2three_1_S_DATA_ready        ), //o
     .S_DATA_payload           (image_padding_1_M_DATA_payload         ), //i
     .M_DATA                   (image_four2three_1_M_DATA              ), //o
-    .M_Ready                  (image_three2nine_S_Ready               ), //i
+    .M_Ready                  (image_three2nine_1_S_Ready             ), //i
     .M_Valid                  (image_four2three_1_M_Valid             ), //o
-    .M_rd_en                  (image_three2nine_S_DATA_Ready          ), //i
-    .M_Addr                   (image_three2nine_S_DATA_Addr           ), //i
+    .M_rd_en                  (image_three2nine_1_S_DATA_Ready        ), //i
+    .M_Addr                   (image_three2nine_1_S_DATA_Addr         ), //i
     .reset                    (reset                                  ), //i
     .clk                      (clk                                    )  //i
   );
-  three2nine image_three2nine (
+  image_three2nine image_three2nine_1 (
     .Start                    (image_Start                            ), //i
     .S_DATA                   (image_four2three_1_M_DATA              ), //i
     .S_DATA_Valid             (image_four2three_1_M_Valid             ), //i
-    .S_DATA_Ready             (image_three2nine_S_DATA_Ready          ), //o
-    .S_DATA_Addr              (image_three2nine_S_DATA_Addr           ), //o
+    .S_DATA_Ready             (image_three2nine_1_S_DATA_Ready        ), //o
+    .S_DATA_Addr              (image_three2nine_1_S_DATA_Addr         ), //o
     .Row_Num_After_Padding    (image_padding_1_Row_Num_After_Padding  ), //i
     .Row_Compute_Sign         (image_four2three_1_StartRow            ), //i
-    .M_Data                   (image_three2nine_M_Data                ), //o
+    .M_Data                   (image_three2nine_1_M_Data              ), //o
     .M_Ready                  (image_conv_1_S_Ready                   ), //i
-    .M_Valid                  (image_three2nine_M_Valid               ), //o
-    .S_Ready                  (image_three2nine_S_Ready               ), //o
+    .M_Valid                  (image_three2nine_1_M_Valid             ), //o
+    .S_Ready                  (image_three2nine_1_S_Ready             ), //o
     .clk                      (clk                                    ), //i
     .reset                    (reset                                  )  //i
   );
   image_conv image_conv_1 (
     .Start            (image_Start                 ), //i
-    .S_Valid          (image_three2nine_M_Valid    ), //i
-    .S_DATA           (image_three2nine_M_Data     ), //i
+    .S_Valid          (image_three2nine_1_M_Valid  ), //i
+    .S_DATA           (image_three2nine_1_M_Data   ), //i
     .S_Ready          (image_conv_1_S_Ready        ), //o
     .M_Valid          (image_conv_1_M_Valid        ), //o
     .M_DATA           (image_conv_1_M_DATA         ), //o

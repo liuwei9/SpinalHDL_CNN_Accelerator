@@ -8,7 +8,7 @@ verilog/add_simd.v
 verilog/general_fifo_sync.v
 verilog/add_simd_64.v
 verilog/fifo_sync_12.v
-verilog/image_padding_fifo.v
+verilog/padding_fifo.v
 verilog/general_fifo_sync_1.v
 verilog/sdpram.v
 verilog/image_compute_ctrl.v
@@ -22,7 +22,7 @@ verilog/image_leaky_relu.v
 verilog/general_fifo_sync_11.v
 verilog/image_padding.v
 verilog/image_four2three.v
-verilog/three2nine.v
+verilog/image_three2nine.v
 verilog/image_conv.v
 verilog/image_quan.v
 verilog/image_stride.v

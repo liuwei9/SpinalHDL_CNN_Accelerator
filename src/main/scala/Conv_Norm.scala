@@ -20,7 +20,8 @@ class Conv_Norm(
                    WIDTH_TEMP_RAM_ADDR: Int,
                    FEATURE_FIFO_DEPTH: Int,
                    WEIGHT_MEM_WRITE_DEPTH: Int,
-                   QUAN_MEM_WRITE_DEPTH: Int
+                   QUAN_MEM_WRITE_DEPTH: Int,
+                   DATA_WIDTH: Int
                ) extends Component {
     val io = new Bundle {
         val Start_Cu = in Bool()
@@ -84,9 +85,9 @@ class Conv_Norm(
         fifo_list(i).io.wr_en <> io.S_DATA_Valid(i)
         fifo_list(i).io.data_in <> io.S_DATA((i + 1) * FIFO_W_DATA_WIDTH - 1 downto (i * FIFO_W_DATA_WIDTH))
         fifo_list(i).io.rd_en <> compute_ctrl.io.rd_en_fifo
-        fifo_list(i).io.m_data_count <> compute_ctrl.io.M_Count_Fifo
-        fifo_list(i).io.s_data_count <> compute_ctrl.io.S_Count_Fifo
-        fifo_list(i).io.data_out <> data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH))
+        fifo_list(i).io.m_data_count <> compute_ctrl.io.M_Count_Fifo.asUInt
+        fifo_list(i).io.s_data_count <> compute_ctrl.io.S_Count_Fifo.asUInt
+        reverseData(fifo_list(i).io.data_out, 64) <> data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH))
     }
     (fifo_list(0).io.data_in_ready & fifo_list(1).io.data_in_ready & fifo_list(2).io.data_in_ready) <> io.S_DATA_Ready
     compute_ctrl.io.compute_fifo_ready <> (fifo_list(0).io.data_out_valid & fifo_list(1).io.data_out_valid & fifo_list(2).io.data_out_valid)
@@ -98,5 +99,37 @@ class Conv_Norm(
     Configurable_RAM_Norm.io.wea <> compute_ctrl.io.rd_en_fifo.asBits
     Configurable_RAM_Norm.io.ena <> True
     Configurable_RAM_Norm.io.enb <> True
+    Configurable_RAM_Norm.io.dina <> data_fifo_out
+
+    val ram_temp_output_data = Bits(FIFO_DATA_OUT_WIDTH bits)
+    Configurable_RAM_Norm.io.doutb <> ram_temp_output_data
+    val ram_temp_output_data_delay = Delay(ram_temp_output_data, 2)
+    val compute_data_in = Vec(Bits(DATA_WIDTH * KERNEL_NUM bits), CHANNEL_IN_NUM)
+    for (i <- 0 until CHANNEL_IN_NUM; j <- 0 until KERNEL_NUM) {
+        compute_data_in(i)((j + 1) * DATA_WIDTH - 1 downto j * DATA_WIDTH) := ram_temp_output_data((j * CHANNEL_IN_NUM + i + 1) * DATA_WIDTH - 1 downto (j * CHANNEL_IN_NUM + i) * DATA_WIDTH)
+    }
+    val compute_weight_in = Vec(Bits(CHANNEL_IN_NUM * DATA_WIDTH * KERNEL_NUM bits), CHANNEL_OUT_NUM)
+    for (i <- 0 until CHANNEL_OUT_NUM; j <- 0 until CHANNEL_IN_NUM; k <- 0 until KERNEL_NUM) {
+        compute_weight_in(i)((j * KERNEL_NUM + k + 1) * DATA_WIDTH - 1 downto (j * KERNEL_NUM + k) * DATA_WIDTH) := load_weight.io.Data_Out_Weight(k)((j + 1) * DATA_WIDTH downto j * DATA_WIDTH)
+    }
+
+    val compute_weight_in_delay = Vec(Bits(CHANNEL_IN_NUM * DATA_WIDTH * KERNEL_NUM bits), CHANNEL_OUT_NUM)
+    for (i <- 0 until CHANNEL_OUT_NUM) {
+        compute_weight_in_delay(i) := RegNext(compute_weight_in(i))
+    }
+    for (i <- 0 until CHANNEL_OUT_NUM; j <- 0 until CHANNEL_IN_NUM) {
+
+    }
+
+
+    def reverseData(in: Bits, width: Int): Bits = {
+        val data_width = in.getWidth
+        val out = Bits(data_width bits)
+        val temp = in.subdivideIn(width bits).reverse
+        for (i <- 0 until data_width / width) {
+            out((i + 1) * width - 1 downto i * width) := temp(i)
+        }
+        out
+    }
 
 }

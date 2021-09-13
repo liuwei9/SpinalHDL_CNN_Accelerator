@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : mul_simd
-// Git hash  : c12011d1e8655c6f5dcb4228add939efcb9499aa
-// Date      : 20/08/2021, 22:45:45
+// Git hash  : 3de18e70bd50589bd21035e4fb7a1c12a3bd4cfa
+// Date      : 13/09/2021, 21:49:38
 
 
 module mul_simd (
@@ -10,16 +10,16 @@ module mul_simd (
   output     [19:0]   data_out,
   input               clk
 );
-  wire       [15:0]   mul_1_P;
+  wire       [15:0]   mult_8_8_16_1_P;
   wire       [15:0]   _zz_data_out_q;
   reg        [19:0]   data_out_q;
 
-  assign _zz_data_out_q = mul_1_P;
-  mul mul_1 (
-    .A      (data_in    ), //i
-    .B      (weight_in  ), //i
-    .P      (mul_1_P    ), //o
-    .CLK    (clk        )  //i
+  assign _zz_data_out_q = mult_8_8_16_1_P;
+  mult_8_8_16 mult_8_8_16_1 (
+    .A      (data_in          ), //i
+    .B      (weight_in        ), //i
+    .P      (mult_8_8_16_1_P  ), //o
+    .CLK    (clk              )  //i
   );
   assign data_out = data_out_q;
   always @(posedge clk) begin

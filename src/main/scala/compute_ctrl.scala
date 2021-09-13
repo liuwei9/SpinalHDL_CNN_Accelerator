@@ -35,8 +35,8 @@ class compute_ctrl(
     val count_mult = new mul(ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, false)
     count_mult.io.A := io.ROW_NUM_CHANNEL_OUT_REG
     count_mult.io.B := io.COMPUTE_TIMES_CHANNEL_IN_REG_8
-    count_mult.io.P <> io.M_Count_Fifo
-    (count_mult.io.P >> log2Up(CHANNEL_IN_NUM / 8)) <> io.S_Count_Fifo
+    count_mult.io.P <> io.S_Count_Fifo
+    (count_mult.io.P >> log2Up(CHANNEL_IN_NUM / 8)) <> io.M_Count_Fifo
 
 
     val fsm = new StateMachine {

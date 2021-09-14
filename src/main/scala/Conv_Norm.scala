@@ -117,7 +117,16 @@ class Conv_Norm(
     for (i <- 0 until CHANNEL_OUT_NUM) {
         compute_weight_in_delay(i) := RegNext(compute_weight_in(i))
     }
+    val AFTER_CONV_WIDTH: Int = DATA_WIDTH * 2 + (KERNEL_NUM - 1) / 2
+    val compute_data_out = Vec(Bits())
+    var mul_add_list: List[mul_add_simd] = Nil
+    for (_ <- 0 until CHANNEL_OUT_NUM; __ <- 0 until CHANNEL_IN_NUM) {
+        mul_add_list = new mul_add_simd(KERNEL_NUM, KERNEL_NUM * DATA_WIDTH, AFTER_CONV_WIDTH) :: mul_add_list
+    }
+    mul_add_list = mul_add_list.reverse
     for (i <- 0 until CHANNEL_OUT_NUM; j <- 0 until CHANNEL_IN_NUM) {
+        mul_add_list(i * CHANNEL_IN_NUM + j).io.dataIn <> compute_data_in(j)
+        mul_add_list(i * CHANNEL_IN_NUM + j).io.weightIn <> compute_weight_in(i)((j + 1) * KERNEL_NUM * DATA_WIDTH - 1 downto (j * KERNEL_NUM * DATA_WIDTH))
 
     }
 

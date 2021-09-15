@@ -118,18 +118,29 @@ class Conv_Norm(
         compute_weight_in_delay(i) := RegNext(compute_weight_in(i))
     }
     val AFTER_CONV_WIDTH: Int = DATA_WIDTH * 2 + (KERNEL_NUM - 1) / 2
-    val compute_data_out = Vec(Bits())
+    val AFTER_CIN_ACC_WIDTH = 32
+    val compute_data_out = Vec(Bits(CHANNEL_IN_NUM * AFTER_CONV_WIDTH bits), CHANNEL_OUT_NUM)
     var mul_add_list: List[mul_add_simd] = Nil
     for (_ <- 0 until CHANNEL_OUT_NUM; __ <- 0 until CHANNEL_IN_NUM) {
         mul_add_list = new mul_add_simd(KERNEL_NUM, KERNEL_NUM * DATA_WIDTH, AFTER_CONV_WIDTH) :: mul_add_list
+
     }
     mul_add_list = mul_add_list.reverse
     for (i <- 0 until CHANNEL_OUT_NUM; j <- 0 until CHANNEL_IN_NUM) {
         mul_add_list(i * CHANNEL_IN_NUM + j).io.dataIn <> compute_data_in(j)
         mul_add_list(i * CHANNEL_IN_NUM + j).io.weightIn <> compute_weight_in(i)((j + 1) * KERNEL_NUM * DATA_WIDTH - 1 downto (j * KERNEL_NUM * DATA_WIDTH))
-
+        mul_add_list(i * CHANNEL_IN_NUM + j).io.dataOut <> compute_data_out(i)((j + 1) * AFTER_CONV_WIDTH - 1 downto j * AFTER_CONV_WIDTH)
     }
-
+    val data_result_temp = Vec(Bits(AFTER_CONV_WIDTH bits), CHANNEL_OUT_NUM)
+    var c_in_acc: List[channel_in_acc] = Nil
+    for (_ <- 0 until CHANNEL_OUT_NUM) {
+        c_in_acc = new channel_in_acc(CHANNEL_IN_NUM, CHANNEL_IN_NUM * AFTER_CONV_WIDTH, AFTER_CIN_ACC_WIDTH) :: c_in_acc
+    }
+    c_in_acc = c_in_acc.reverse
+    for (i <- 0 until CHANNEL_OUT_NUM) {
+        c_in_acc(i).io.data_in <> compute_data_out(i)
+        c_in_acc(i).io.data_out <> data_result_temp(i)
+    }
 
     def reverseData(in: Bits, width: Int): Bits = {
         val data_width = in.getWidth

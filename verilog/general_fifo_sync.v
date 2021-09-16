@@ -1,35 +1,35 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : general_fifo_sync
-// Git hash  : 3de18e70bd50589bd21035e4fb7a1c12a3bd4cfa
-// Date      : 13/09/2021, 21:49:39
+// Git hash  : efc1c477d46adc8af190bd5f1fd3546169f4e71c
+// Date      : 16/09/2021, 16:33:36
 
 
 module general_fifo_sync (
   input               reset,
   input               clk,
-  input      [255:0]  data_in,
+  input      [63:0]   data_in,
   input               wr_en,
   output reg          data_in_ready,
-  output     [255:0]  data_out,
+  output     [63:0]   data_out,
   input               rd_en,
   output reg          data_out_valid,
-  input      [11:0]   m_data_count,
-  input      [11:0]   s_data_count,
+  input      [10:0]   m_data_count,
+  input      [10:0]   s_data_count,
   output              data_valid,
   output              full,
   output              empty
 );
   wire                fifo_full;
   wire                fifo_empty;
-  wire       [255:0]  fifo_dout;
-  wire       [12:0]   fifo_wr_data_count;
-  wire       [12:0]   fifo_rd_data_count;
+  wire       [63:0]   fifo_dout;
+  wire       [11:0]   fifo_wr_data_count;
+  wire       [11:0]   fifo_rd_data_count;
   wire                fifo_data_valid;
   wire                fifo_rd_rst_busy;
   wire                fifo_wr_rst_busy;
-  wire       [12:0]   _zz_when_general_fifo_sync_l39;
-  wire       [12:0]   _zz_when_general_fifo_sync_l39_1;
-  wire       [12:0]   _zz_when_general_fifo_sync_l49;
+  wire       [11:0]   _zz_when_general_fifo_sync_l39;
+  wire       [11:0]   _zz_when_general_fifo_sync_l39_1;
+  wire       [11:0]   _zz_when_general_fifo_sync_l49;
   wire                when_general_fifo_sync_l39;
   wire                when_general_fifo_sync_l49;
 
@@ -55,7 +55,7 @@ module general_fifo_sync (
   assign full = fifo_full;
   assign empty = fifo_empty;
   assign data_out = fifo_dout;
-  assign when_general_fifo_sync_l39 = (((! fifo_wr_rst_busy) && (_zz_when_general_fifo_sync_l39 < 13'h1000)) && (! fifo_full));
+  assign when_general_fifo_sync_l39 = (((! fifo_wr_rst_busy) && (_zz_when_general_fifo_sync_l39 < 12'h800)) && (! fifo_full));
   always @(*) begin
     if(when_general_fifo_sync_l39) begin
       data_in_ready = 1'b1;

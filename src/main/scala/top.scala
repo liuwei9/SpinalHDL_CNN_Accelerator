@@ -89,11 +89,12 @@ object top{
             targetDirectory = "verilog"
 
         )generateVerilog(new top)
-    }
-    SpinalConfig(
-        defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
-        headerWithDate = true,
-        targetDirectory = "verilog"
+        SpinalConfig(
+            defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
+            headerWithDate = true,
+            targetDirectory = "verilog"
 
-    )generateVerilog(new leaky_relu(8,8,8))
+        )generateVerilog(new leaky_relu(8,8,8))
+    }
+
 }

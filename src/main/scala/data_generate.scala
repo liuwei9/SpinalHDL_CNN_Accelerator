@@ -44,7 +44,7 @@ class data_generate(
     padding.io.Zero_Num_REG <> io.Zero_Num_REG
     padding.io.RowNum_After_Padding <> io.RowNum_After_Padding
     val T2N_S_DATA_WIDTH = F2T_S_DATA_WIDTH * 3
-    val f2t = new four2three(S_DATA_WIDTH, M_DATA_WIDTH, CHANNEL_NUM_WIDTH, ROW_COL_DATA_COUNT_WIDTH, M_DATA_WIDTH)
+    val f2t = new four2three(F2T_S_DATA_WIDTH, T2N_S_DATA_WIDTH, CHANNEL_NUM_WIDTH, ROW_COL_DATA_COUNT_WIDTH, MEMORY_DEPTH)
     f2t.io.S_DATA <> padding.io.M_DATA
     f2t.io.Start <> io.Start
     f2t.io.Row_Num_After_Padding <> padding.io.RowNum_After_Padding.asUInt

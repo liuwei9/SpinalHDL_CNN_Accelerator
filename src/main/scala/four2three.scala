@@ -15,7 +15,7 @@ class four2three(
         val StartRow = out Bool() setAsReg() init False
         val Row_Num_After_Padding = in UInt (ROW_COL_DATA_COUNT_WIDTH bits)
         val S_DATA = slave Stream Bits(S_DATA_WIDTH bits)
-        val M_DATA = out Bits (S_DATA_WIDTH * 3 bits) setAsReg() init 0
+        val M_DATA = out Bits (M_DATA_WIDTH bits) setAsReg() init 0
         val M_Ready = in Bool()
         val M_Valid = out Bool() setAsReg() init False
         val M_rd_en = in Bool()

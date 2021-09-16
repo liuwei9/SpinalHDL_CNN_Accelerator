@@ -50,7 +50,7 @@ class Conv_Norm(
 
     val COMPUTE_TIMES_CHANNEL_IN_REG = io.Channel_In_Num_REG >> log2Up(CHANNEL_IN_NUM)
     val COMPUTE_TIMES_CHANNEL_IN_REG_8 = io.Channel_In_Num_REG >> log2Up(3)
-    val COMPUTE_TIMES_CHANNEL_OUT_REG = io.Channel_In_Num_REG >> log2Up(CHANNEL_OUT_NUM)
+    val COMPUTE_TIMES_CHANNEL_OUT_REG = io.Channel_Out_Num_REG >> log2Up(CHANNEL_OUT_NUM)
 
     val compute_ctrl = new compute_ctrl(WEIGHT_ADDR_WIDTH, WIDTH_TEMP_RAM_ADDR, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_IN_NUM)
     compute_ctrl.io.Start_Cu <> io.Start_Cu
@@ -59,6 +59,9 @@ class Conv_Norm(
     compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG <> COMPUTE_TIMES_CHANNEL_IN_REG
     compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG_8 <> COMPUTE_TIMES_CHANNEL_IN_REG_8
     compute_ctrl.io.COMPUTE_TIMES_CHANNEL_OUT_REG <> COMPUTE_TIMES_CHANNEL_OUT_REG
+    compute_ctrl.io.ROW_NUM_CHANNEL_OUT_REG <> io.Row_Num_Out_REG
+    compute_ctrl.io.Compute_Complete <> io.Compute_Complete
+
 
     val WEIGHT_DATA_WIDTH = CHANNEL_IN_NUM * CHANNEL_OUT_NUM * 8
     val load_weight = new load_weight(KERNEL_NUM, WEIGHT_NUM_WIDTH, WEIGHT_ADDR_WIDTH, BIAS_NUM_WIDTH, PARA_DATA_WIDTH, WEIGHT_DATA_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, WEIGHT_MEM_WRITE_DEPTH, QUAN_MEM_WRITE_DEPTH)
@@ -69,6 +72,10 @@ class Conv_Norm(
     load_weight.io.Write_Block_Complete <> io.Write_Block_Complete
     load_weight.io.S_Para_Data <> io.para_data
     load_weight.io.Bias_Addrb <> io.Bias_Addrb
+    load_weight.io.Data_Out_Bias <> io.Data_Out_Bias
+    load_weight.io.Data_Out_Scale <> io.Data_Out_Scale
+    load_weight.io.Data_Out_Shift <> io.Data_Out_Shift
+
 
     val FIFO_W_DATA_WIDTH = S_DATA_WIDTH / KERNEL_NUM
     val FEATURE_DATA_WIDTH = FIFO_W_DATA_WIDTH * (CHANNEL_IN_NUM / 8)
@@ -141,6 +148,18 @@ class Conv_Norm(
         c_in_acc(i).io.data_in <> compute_data_out(i)
         c_in_acc(i).io.data_out <> data_result_temp(i)
     }
+
+    var c_out_acc: List[channel_out_acc] = Nil
+    for (_ <- 0 until CHANNEL_OUT_NUM) {
+        c_out_acc = new channel_out_acc(AFTER_CIN_ACC_WIDTH, AFTER_CIN_ACC_WIDTH) :: c_out_acc
+    }
+    c_out_acc = c_out_acc.reverse
+    for (i <- 0 until CHANNEL_OUT_NUM) {
+        c_out_acc(i).io.data_in <> c_in_acc(i).io.data_out
+        c_out_acc(i).io.First_Compute_Complete <> compute_ctrl.io.First_Compute_Complete
+        c_out_acc(i).io.data_out <> io.M_DATA.payload((i + 1) * AFTER_CIN_ACC_WIDTH - 1 downto i * AFTER_CIN_ACC_WIDTH)
+    }
+
 
     def reverseData(in: Bits, width: Int): Bits = {
         val data_width = in.getWidth

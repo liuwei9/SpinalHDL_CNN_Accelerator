@@ -225,6 +225,6 @@ class sdpram(
 
 object sdpram {
     def main(args: Array[String]): Unit = {
-        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sdpram(32, 511, 16, 1022,"block", 1,"independent_clock",new ClockDomain(new Bool()),new ClockDomain(new Bool)))
+        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sdpram(64,409600,64,409600,"distributed",0,"common_clock",new ClockDomain(new Bool()),new ClockDomain(new Bool)))
     }
 }

@@ -125,7 +125,6 @@ class sprom(
 
     val io = new Bundle{
         val addra = in Bits(log2Up(DEPTH )bits)
-        val clka = in Bool()
         val douta = out Bits(WIDTH bits)
         val ena = in Bool()
     }
@@ -149,6 +148,6 @@ class sprom(
 }
 object sprom{
     def main(args: Array[String]): Unit = {
-        SpinalConfig(targetDirectory = "verilog/xmemory").generateVerilog(new sprom(8,640*640,"block",2,"ori640.mem"))
+        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sprom(64,409600,"distributed",0,"feature__conv2_leak.mem"))
     }
 }

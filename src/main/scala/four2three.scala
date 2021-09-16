@@ -201,7 +201,7 @@ class four2three(
             io.StartRow := False
         }
         val rd_ram_cnt = UInt(3 bits) setAsReg() init (0)
-        when(rd_ram_cnt === 4 && io.M_Addr === io.Row_Num_After_Padding - 1) {
+        when(rd_ram_cnt === 4 && io.M_Addr === (io.Row_Num_After_Padding * 4) - 1) {
             rd_ram_cnt := 0
         } elsewhen (isEntering(Start_Compute)) {
             rd_ram_cnt := rd_ram_cnt + 1
@@ -301,9 +301,9 @@ class four2three(
         Start_Compute
             .whenIsActive {
                 when(Last_Row) {
-                    when(io.M_Addr === io.Row_Num_After_Padding * Channel_Times -1){
+                    when(io.M_Addr === io.Row_Num_After_Padding * Channel_Times - 1) {
                         goto(IDLE)
-                    }otherwise goto(Start_Compute)
+                    } otherwise goto(Start_Compute)
 
                 } otherwise {
                     goto(Judge_Fifo)
@@ -321,8 +321,9 @@ class four2three(
 
     }
 }
-object four2three{
+
+object four2three {
     def main(args: Array[String]): Unit = {
-        SpinalVerilog(new four2three(64,64,10,12,2048))
+        SpinalVerilog(new four2three(64, 64, 10, 12, 2048))
     }
 }

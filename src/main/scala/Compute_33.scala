@@ -2,6 +2,7 @@ import spinal.core._
 import spinal.lib._
 
 class Compute_33(
+                    KERNEL_NUM: Int,
                     REG_WIDTH: Int,
                     S_DATA_WIDTH: Int,
                     PARA_DATA_WIDTH: Int,
@@ -10,28 +11,37 @@ class Compute_33(
                     ROW_COL_DATA_COUNT_WIDTH: Int,
                     CHANNEL_NUM_WIDTH: Int,
                     ZERO_NUM_WIDTH: Int,
-                    DATA_GENERATE_MEM_DEPTH: Int
+                    DATA_GENERATE_MEM_DEPTH: Int,
+                    WEIGHT_ADDR_WIDTH: Int,
+                    WEIGHT_NUM_WIDTH: Int,
+                    BIAS_NUM_WIDTH: Int,
+                    BIAS_DATA_WIDTH: Int,
+                    SCALE_DATA_WIDTH: Int,
+                    SHIFT_DATA_WIDTH: Int,
+                    CHANNEL_IN_NUM: Int,
+                    CHANNEL_OUT_NUM: Int,
+                    WIDTH_TEMP_RAM_ADDR: Int,
+                    FEATURE_FIFO_DEPTH: Int,
+                    WEIGHT_MEM_WRITE_DEPTH: Int,
+                    QUAN_DATA_GENERATE_MEM_WRITE_DEPTH: Int
                 ) extends Component {
 
     val io = new Bundle {
-        //        val Conv_Complete = out Bool()
-        //        val Stride_Complete = out Bool()
-        //        val Write_Block_Complete = out Bool()
+        val Conv_Complete = out Bool()
+//        val Stride_Complete = out Bool()
+        val Write_Block_Complete = out Bool()
         val Sign = in Bits (3 bits)
         val Reg_4 = in Bits (REG_WIDTH bits)
         val Reg_5 = in Bits (REG_WIDTH bits)
         val Reg_6 = in Bits (REG_WIDTH bits)
         val Reg_7 = in Bits (REG_WIDTH bits)
         val S_DATA = slave Stream Bits(S_DATA_WIDTH bits)
-        //        val para_data = slave Stream Bits(PARA_DATA_WIDTH bits)
-        //        val M_DATA = master Stream Bits(M_DATA_WIDTH bits)
-        //        val Start_Pa = in Bool()
+        val para_data = slave Stream Bits(PARA_DATA_WIDTH bits)
+        val M_DATA = master Stream Bits(M_DATA_WIDTH bits)
+        val Start_Pa = in Bool()
         val Start_Cu = in Bool()
-        //        val Last_33 = out Bool()
+//        val Last_33 = out Bool()
 
-        val M_DATA = out Bits (M_DATA_WIDTH bits)
-        val M_DATA_Valid = out Bits (9 bits)
-        val M_DATA_Ready = in Bool()
     }
     noIoPrefix()
     val Cu_Instruction_reg = Bits(REG_WIDTH * 4 bits) setAsReg()
@@ -74,12 +84,28 @@ class Compute_33(
     data_generate.io.Zero_Num_REG <> Zero_Num_REG
     data_generate.io.Channel_In_Num_REG <> Channel_In_Num_REG
     data_generate.io.EN_Cin_Select_REG <> EN_Cin_Select_REG
-    data_generate.io.M_DATA <> io.M_DATA
-    data_generate.io.M_DATA_Ready <> io.M_DATA_Ready
-    data_generate.io.M_DATA_Valid <> io.M_DATA_Valid
+    //    data_generate.io.M_DATA <> io.M_DATA
+    //    data_generate.io.M_DATA_Ready <> io.M_DATA_Ready
+    //    data_generate.io.M_DATA_Valid <> io.M_DATA_Valid
     data_generate.io.Start <> io.Start_Cu
     //data_generate.io.RowNum_After_Padding
-
+    val conv_norm = new Conv_Norm(KERNEL_NUM, PARA_DATA_WIDTH, AFTER_DATA_GENERATE_WIDTH, M_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, WEIGHT_ADDR_WIDTH, WEIGHT_NUM_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, CHANNEL_IN_NUM, CHANNEL_OUT_NUM, WIDTH_TEMP_RAM_ADDR, FEATURE_FIFO_DEPTH, WEIGHT_MEM_WRITE_DEPTH, QUAN_DATA_GENERATE_MEM_WRITE_DEPTH, DATA_WIDTH)
+    conv_norm.io.S_DATA <> data_generate.io.M_DATA
+    conv_norm.io.S_DATA_Ready <> data_generate.io.M_DATA_Ready
+    conv_norm.io.S_DATA_Valid <> data_generate.io.M_DATA_Valid
+    conv_norm.io.Start_Cu <> io.Start_Cu
+    conv_norm.io.Start_Pa <> io.Start_Pa
+    conv_norm.io.para_data <> io.para_data
+    conv_norm.io.Write_Block_Complete <> io.Write_Block_Complete
+    conv_norm.io.Compute_Complete <> io.Conv_Complete
+    conv_norm.io.RowNum_After_Padding <> data_generate.io.RowNum_After_Padding
+    conv_norm.io.Row_Num_Out_REG <> Row_Num_Out_REG
+    conv_norm.io.Channel_In_Num_REG <> Channel_In_Num_REG
+    conv_norm.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
+    conv_norm.io.Weight_Single_Num_REG <> Weight_Num_REG
+    conv_norm.io.Bias_Num_REG <> Bias_Num_REG
+    conv_norm.io.Bias_Addrb <> 0
+    conv_norm.io.M_DATA <> io.M_DATA
 }
 
 object Compute_33 {
@@ -90,6 +116,6 @@ object Compute_33 {
             headerWithDate = true,
             targetDirectory = "verilog"
 
-        )generateVerilog(new Compute_33(32,64,64,64*9,8,11,10,3,2048))
+        ) generateVerilog (new Compute_33(9,32, 64, 64, 256, 8, 11, 10, 3, 2048,13,15,8,256,256,256,16,8,11,2048,8192,128))
     }
 }

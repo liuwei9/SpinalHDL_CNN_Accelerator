@@ -28,3 +28,20 @@
 `define t2n_fsm_enumDefinition_binary_sequential_t2n_fsm_ComputeRow_Read 3'b100
 `define t2n_fsm_enumDefinition_binary_sequential_t2n_fsm_Judge_LastRow 3'b101
 
+`define fsm_enumDefinition_binary_sequential_type [2:0]
+`define fsm_enumDefinition_binary_sequential_fsm_BOOT 3'b000
+`define fsm_enumDefinition_binary_sequential_fsm_IDLE 3'b001
+`define fsm_enumDefinition_binary_sequential_fsm_Wait 3'b010
+`define fsm_enumDefinition_binary_sequential_fsm_Judge_Before_Fifo 3'b011
+`define fsm_enumDefinition_binary_sequential_fsm_Judge_After_Fifo 3'b100
+`define fsm_enumDefinition_binary_sequential_fsm_Compute 3'b101
+`define fsm_enumDefinition_binary_sequential_fsm_Judge_Row 3'b110
+
+`define fsm_enumDefinition_1_binary_sequential_type [2:0]
+`define fsm_enumDefinition_1_binary_sequential_fsm_BOOT 3'b000
+`define fsm_enumDefinition_1_binary_sequential_fsm_IDLE 3'b001
+`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Weight 3'b010
+`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Bias 3'b011
+`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Scale 3'b100
+`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Shift 3'b101
+

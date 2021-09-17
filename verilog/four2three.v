@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : four2three
-// Git hash  : 5e1b82d0af135d1f0cd525844f0bb03779615cb8
-// Date      : 17/09/2021, 10:04:11
+// Git hash  : a7a69259854496944a80b53cb839562d830e2b39
+// Date      : 17/09/2021, 17:43:44
 
 
 module four2three (
@@ -148,7 +148,7 @@ module four2three (
     .full              (fifo_full            ), //o
     .empty             (fifo_empty           )  //o
   );
-  sdpram ram1 (
+  sdpram_9 ram1 (
     .doutb    (ram1_doutb     ), //o
     .addra    (ram1_addra     ), //i
     .addrb    (ram1_addrb     ), //i
@@ -158,7 +158,7 @@ module four2three (
     .wea      (ram1_wea       ), //i
     .clk      (clk            )  //i
   );
-  sdpram ram2 (
+  sdpram_9 ram2 (
     .doutb    (ram2_doutb     ), //o
     .addra    (ram2_addra     ), //i
     .addrb    (ram2_addrb     ), //i
@@ -168,7 +168,7 @@ module four2three (
     .wea      (ram2_wea       ), //i
     .clk      (clk            )  //i
   );
-  sdpram ram3 (
+  sdpram_9 ram3 (
     .doutb    (ram3_doutb     ), //o
     .addra    (ram3_addra     ), //i
     .addrb    (ram3_addrb     ), //i
@@ -178,7 +178,7 @@ module four2three (
     .wea      (ram3_wea       ), //i
     .clk      (clk            )  //i
   );
-  sdpram ram4 (
+  sdpram_9 ram4 (
     .doutb    (ram4_doutb     ), //o
     .addra    (ram4_addra     ), //i
     .addrb    (ram4_addrb     ), //i

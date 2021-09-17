@@ -26,8 +26,8 @@ class compute_ctrl(
         val COMPUTE_TIMES_CHANNEL_IN_REG_8 = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
         val COMPUTE_TIMES_CHANNEL_OUT_REG = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
         val ROW_NUM_CHANNEL_OUT_REG = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
-        val S_Count_Fifo = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
-        val M_Count_Fifo = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
+        val S_Count_Fifo = out Bits (ROW_COL_DATA_COUNT_WIDTH bits)
+        val M_Count_Fifo = out Bits (ROW_COL_DATA_COUNT_WIDTH bits)
 
     }
     noIoPrefix()
@@ -35,8 +35,8 @@ class compute_ctrl(
     val count_mult = new mul(ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, false)
     count_mult.io.A := io.ROW_NUM_CHANNEL_OUT_REG
     count_mult.io.B := io.COMPUTE_TIMES_CHANNEL_IN_REG_8
-    count_mult.io.P <> io.S_Count_Fifo
-    (count_mult.io.P >> log2Up(CHANNEL_IN_NUM / 8)) <> io.M_Count_Fifo
+    count_mult.io.P.resized <> io.S_Count_Fifo
+    io.M_Count_Fifo := (count_mult.io.P >> log2Up(CHANNEL_IN_NUM / 8)).resized
 
 
     val fsm = new StateMachine {
@@ -162,10 +162,29 @@ class compute_ctrl(
         }
         io.weight_addrb := Delay(weight_addrb_temp.asBits, 2)
 
-        when(isActive(Compute)){
-
+        val M_Fifo_Valid = Bool() setAsReg()
+        when(isActive(Compute)) {
+            when(Cnt_Channel_In_Num === io.COMPUTE_TIMES_CHANNEL_IN_REG.asUInt - 1) {
+                M_Fifo_Valid := True
+            } otherwise {
+                M_Fifo_Valid := False
+            }
+        } otherwise {
+            M_Fifo_Valid := False
         }
-
+        //先测试计算，测试没问题后增加适配
+        io.M_Valid := Delay(M_Fifo_Valid, 26)
+        val First_Complete = Bool() setAsReg()
+        when(isActive(Compute)) {
+            when(Cnt_Channel_In_Num === 0) {
+                First_Complete := True
+            } otherwise {
+                First_Complete := False
+            }
+        } otherwise {
+            First_Complete := False
+        }
+        io.First_Compute_Complete := Delay(First_Complete, 25)
         IDLE
             .whenIsActive {
                 when(io.Start_Cu) {

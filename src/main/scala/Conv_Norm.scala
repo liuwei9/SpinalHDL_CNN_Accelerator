@@ -56,10 +56,10 @@ class Conv_Norm(
     compute_ctrl.io.Start_Cu <> io.Start_Cu
     compute_ctrl.io.M_ready <> io.M_DATA.ready
     RegNext(compute_ctrl.io.M_Valid) <> io.M_DATA.valid
-    compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG <> COMPUTE_TIMES_CHANNEL_IN_REG
-    compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG_8 <> COMPUTE_TIMES_CHANNEL_IN_REG_8
-    compute_ctrl.io.COMPUTE_TIMES_CHANNEL_OUT_REG <> COMPUTE_TIMES_CHANNEL_OUT_REG
-    compute_ctrl.io.ROW_NUM_CHANNEL_OUT_REG <> io.Row_Num_Out_REG
+    compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG <> COMPUTE_TIMES_CHANNEL_IN_REG.resized
+    compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG_8 <> COMPUTE_TIMES_CHANNEL_IN_REG_8.resized
+    compute_ctrl.io.COMPUTE_TIMES_CHANNEL_OUT_REG <> COMPUTE_TIMES_CHANNEL_OUT_REG.resized
+    compute_ctrl.io.ROW_NUM_CHANNEL_OUT_REG <> io.Row_Num_Out_REG.resized
     compute_ctrl.io.Compute_Complete <> io.Compute_Complete
 
 
@@ -94,7 +94,7 @@ class Conv_Norm(
         fifo_list(i).io.rd_en <> compute_ctrl.io.rd_en_fifo
         fifo_list(i).io.m_data_count <> compute_ctrl.io.M_Count_Fifo.asUInt
         fifo_list(i).io.s_data_count <> compute_ctrl.io.S_Count_Fifo.asUInt
-        reverseData(fifo_list(i).io.data_out, 64) <> data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH))
+        data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := reverseData(fifo_list(i).io.data_out, 64)
     }
     (fifo_list(0).io.data_in_ready & fifo_list(1).io.data_in_ready & fifo_list(2).io.data_in_ready) <> io.S_DATA_Ready
     compute_ctrl.io.compute_fifo_ready <> (fifo_list(0).io.data_out_valid & fifo_list(1).io.data_out_valid & fifo_list(2).io.data_out_valid)
@@ -117,7 +117,7 @@ class Conv_Norm(
     }
     val compute_weight_in = Vec(Bits(CHANNEL_IN_NUM * DATA_WIDTH * KERNEL_NUM bits), CHANNEL_OUT_NUM)
     for (i <- 0 until CHANNEL_OUT_NUM; j <- 0 until CHANNEL_IN_NUM; k <- 0 until KERNEL_NUM) {
-        compute_weight_in(i)((j * KERNEL_NUM + k + 1) * DATA_WIDTH - 1 downto (j * KERNEL_NUM + k) * DATA_WIDTH) := load_weight.io.Data_Out_Weight(k)((j + 1) * DATA_WIDTH downto j * DATA_WIDTH)
+        compute_weight_in(i)((j * KERNEL_NUM + k + 1) * DATA_WIDTH - 1 downto (j * KERNEL_NUM + k) * DATA_WIDTH) := load_weight.io.Data_Out_Weight(k)((j + 1) * DATA_WIDTH - 1 downto j * DATA_WIDTH)
     }
 
     val compute_weight_in_delay = Vec(Bits(CHANNEL_IN_NUM * DATA_WIDTH * KERNEL_NUM bits), CHANNEL_OUT_NUM)
@@ -138,7 +138,7 @@ class Conv_Norm(
         mul_add_list(i * CHANNEL_IN_NUM + j).io.weightIn <> compute_weight_in(i)((j + 1) * KERNEL_NUM * DATA_WIDTH - 1 downto (j * KERNEL_NUM * DATA_WIDTH))
         mul_add_list(i * CHANNEL_IN_NUM + j).io.dataOut <> compute_data_out(i)((j + 1) * AFTER_CONV_WIDTH - 1 downto j * AFTER_CONV_WIDTH)
     }
-    val data_result_temp = Vec(Bits(AFTER_CONV_WIDTH bits), CHANNEL_OUT_NUM)
+    val data_result_temp = Vec(Bits(AFTER_CIN_ACC_WIDTH bits), CHANNEL_OUT_NUM)
     var c_in_acc: List[channel_in_acc] = Nil
     for (_ <- 0 until CHANNEL_OUT_NUM) {
         c_in_acc = new channel_in_acc(CHANNEL_IN_NUM, CHANNEL_IN_NUM * AFTER_CONV_WIDTH, AFTER_CIN_ACC_WIDTH) :: c_in_acc

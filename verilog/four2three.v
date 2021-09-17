@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : four2three
-// Git hash  : d32cde3db027d89428574702988f88c1cdde3b16
-// Date      : 16/09/2021, 21:40:14
+// Git hash  : 5e1b82d0af135d1f0cd525844f0bb03779615cb8
+// Date      : 17/09/2021, 10:04:11
 
 
 module four2three (
@@ -60,9 +60,9 @@ module four2three (
   wire       [6:0]    _zz_when_four2three_l72_1;
   wire       [10:0]   _zz_when_four2three_l89;
   wire       [10:0]   _zz_when_four2three_l110;
-  wire       [13:0]   _zz_when_four2three_l204;
-  wire       [13:0]   _zz_when_four2three_l204_1;
-  wire       [13:0]   _zz_when_four2three_l204_2;
+  wire       [17:0]   _zz_when_four2three_l204;
+  wire       [17:0]   _zz_when_four2three_l204_1;
+  wire       [17:0]   _zz_when_four2three_l204_2;
   wire       [17:0]   _zz_when_four2three_l304;
   wire       [17:0]   _zz_when_four2three_l304_1;
   wire       [17:0]   _zz_when_four2three_l304_2;
@@ -120,9 +120,9 @@ module four2three (
   assign _zz_when_four2three_l72 = {3'd0, _zz_when_four2three_l72_1};
   assign _zz_when_four2three_l89 = (Row_Num_After_Padding - 11'h001);
   assign _zz_when_four2three_l110 = (Row_Num_After_Padding - 11'h002);
-  assign _zz_when_four2three_l204 = {3'd0, M_Addr};
-  assign _zz_when_four2three_l204_1 = (_zz_when_four2three_l204_2 - 14'h0001);
-  assign _zz_when_four2three_l204_2 = (Row_Num_After_Padding * 3'b100);
+  assign _zz_when_four2three_l204 = {7'd0, M_Addr};
+  assign _zz_when_four2three_l204_1 = (_zz_when_four2three_l204_2 - 18'h00001);
+  assign _zz_when_four2three_l204_2 = (Row_Num_After_Padding * Channel_Times);
   assign _zz_when_four2three_l304 = {7'd0, M_Addr};
   assign _zz_when_four2three_l304_1 = (_zz_when_four2three_l304_2 - 18'h00001);
   assign _zz_when_four2three_l304_2 = (Row_Num_After_Padding * Channel_Times);

@@ -201,7 +201,7 @@ class four2three(
             io.StartRow := False
         }
         val rd_ram_cnt = UInt(3 bits) setAsReg() init (0)
-        when(rd_ram_cnt === 4 && io.M_Addr === (io.Row_Num_After_Padding * 4) - 1) {
+        when(rd_ram_cnt === 4 && io.M_Addr === (io.Row_Num_After_Padding * Channel_Times) - 1) {
             rd_ram_cnt := 0
         } elsewhen (isEntering(Start_Compute)) {
             rd_ram_cnt := rd_ram_cnt + 1

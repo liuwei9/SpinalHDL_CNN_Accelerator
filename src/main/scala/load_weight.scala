@@ -298,7 +298,7 @@ class load_weight(
             }
         Copy_Bias
             .whenIsActive {
-                when(En_Weight) {
+                when(En_Bias) {
                     goto(Copy_Scale)
                 } otherwise {
                     goto(Copy_Bias)
@@ -306,7 +306,7 @@ class load_weight(
             }
         Copy_Scale
             .whenIsActive {
-                when(En_Weight) {
+                when(En_Bias) {
                     goto(Copy_Shift)
                 } otherwise {
                     goto(Copy_Scale)
@@ -314,7 +314,7 @@ class load_weight(
             }
         Copy_Shift
             .whenIsActive {
-                when(En_Weight) {
+                when(En_Bias) {
                     goto(IDLE)
                 } otherwise {
                     goto(Copy_Shift)

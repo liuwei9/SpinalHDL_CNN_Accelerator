@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : load_weight
-// Git hash  : a7a69259854496944a80b53cb839562d830e2b39
-// Date      : 17/09/2021, 17:43:44
+// Git hash  : 166ad749a20f55503ea9181f2b02d7a1ff2d73c3
+// Date      : 20/09/2021, 12:49:40
 
 
 module load_weight (
@@ -281,21 +281,21 @@ module load_weight (
         end
       end
       `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Bias : begin
-        if(fsm_En_Weight) begin
+        if(fsm_En_Bias) begin
           fsm_stateNext = `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Scale;
         end else begin
           fsm_stateNext = `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Bias;
         end
       end
       `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Scale : begin
-        if(fsm_En_Weight) begin
+        if(fsm_En_Bias) begin
           fsm_stateNext = `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Shift;
         end else begin
           fsm_stateNext = `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Scale;
         end
       end
       `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Shift : begin
-        if(fsm_En_Weight) begin
+        if(fsm_En_Bias) begin
           fsm_stateNext = `fsm_enumDefinition_1_binary_sequential_fsm_IDLE;
         end else begin
           fsm_stateNext = `fsm_enumDefinition_1_binary_sequential_fsm_Copy_Shift;

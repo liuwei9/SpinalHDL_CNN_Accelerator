@@ -148,6 +148,6 @@ class sprom(
 }
 object sprom{
     def main(args: Array[String]): Unit = {
-        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sprom(64,409600,"distributed",0,"feature__conv2_leak.mem"))
+        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sprom(64,2304,"distributed",0,"weight_conv2.mem"))
     }
 }

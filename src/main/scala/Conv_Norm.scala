@@ -46,16 +46,15 @@ class Conv_Norm(
         val Data_Out_Shift = out Bits (SHIFT_DATA_WIDTH bits)
     }
     noIoPrefix()
-    io.M_DATA.valid.setAsReg()
 
     val COMPUTE_TIMES_CHANNEL_IN_REG = io.Channel_In_Num_REG >> log2Up(CHANNEL_IN_NUM)
-    val COMPUTE_TIMES_CHANNEL_IN_REG_8 = io.Channel_In_Num_REG >> log2Up(3)
+    val COMPUTE_TIMES_CHANNEL_IN_REG_8 = io.Channel_In_Num_REG >> log2Up(8)
     val COMPUTE_TIMES_CHANNEL_OUT_REG = io.Channel_Out_Num_REG >> log2Up(CHANNEL_OUT_NUM)
 
     val compute_ctrl = new compute_ctrl(WEIGHT_ADDR_WIDTH, WIDTH_TEMP_RAM_ADDR, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_IN_NUM)
     compute_ctrl.io.Start_Cu <> io.Start_Cu
     compute_ctrl.io.M_ready <> io.M_DATA.ready
-    RegNext(compute_ctrl.io.M_Valid) <> io.M_DATA.valid
+    compute_ctrl.io.M_Valid <> io.M_DATA.valid
     compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG <> COMPUTE_TIMES_CHANNEL_IN_REG.resized
     compute_ctrl.io.COMPUTE_TIMES_CHANNEL_IN_REG_8 <> COMPUTE_TIMES_CHANNEL_IN_REG_8.resized
     compute_ctrl.io.COMPUTE_TIMES_CHANNEL_OUT_REG <> COMPUTE_TIMES_CHANNEL_OUT_REG.resized
@@ -94,7 +93,8 @@ class Conv_Norm(
         fifo_list(i).io.rd_en <> compute_ctrl.io.rd_en_fifo
         fifo_list(i).io.m_data_count <> compute_ctrl.io.M_Count_Fifo.asUInt
         fifo_list(i).io.s_data_count <> compute_ctrl.io.S_Count_Fifo.asUInt
-        data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := reverseData(fifo_list(i).io.data_out, 64)
+        //data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := reverseData(fifo_list(i).io.data_out, 64)
+        data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := fifo_list(i).io.data_out
     }
     (fifo_list(0).io.data_in_ready & fifo_list(1).io.data_in_ready & fifo_list(2).io.data_in_ready) <> io.S_DATA_Ready
     compute_ctrl.io.compute_fifo_ready <> (fifo_list(0).io.data_out_valid & fifo_list(1).io.data_out_valid & fifo_list(2).io.data_out_valid)
@@ -113,11 +113,11 @@ class Conv_Norm(
     val ram_temp_output_data_delay = Delay(ram_temp_output_data, 2)
     val compute_data_in = Vec(Bits(DATA_WIDTH * KERNEL_NUM bits), CHANNEL_IN_NUM)
     for (i <- 0 until CHANNEL_IN_NUM; j <- 0 until KERNEL_NUM) {
-        compute_data_in(i)((j + 1) * DATA_WIDTH - 1 downto j * DATA_WIDTH) := ram_temp_output_data((j * CHANNEL_IN_NUM + i + 1) * DATA_WIDTH - 1 downto (j * CHANNEL_IN_NUM + i) * DATA_WIDTH)
+        compute_data_in(i)((j + 1) * DATA_WIDTH - 1 downto j * DATA_WIDTH) := ram_temp_output_data_delay((j * CHANNEL_IN_NUM + i + 1) * DATA_WIDTH - 1 downto (j * CHANNEL_IN_NUM + i) * DATA_WIDTH)
     }
     val compute_weight_in = Vec(Bits(CHANNEL_IN_NUM * DATA_WIDTH * KERNEL_NUM bits), CHANNEL_OUT_NUM)
     for (i <- 0 until CHANNEL_OUT_NUM; j <- 0 until CHANNEL_IN_NUM; k <- 0 until KERNEL_NUM) {
-        compute_weight_in(i)((j * KERNEL_NUM + k + 1) * DATA_WIDTH - 1 downto (j * KERNEL_NUM + k) * DATA_WIDTH) := load_weight.io.Data_Out_Weight(k)((j + 1) * DATA_WIDTH - 1 downto j * DATA_WIDTH)
+        compute_weight_in(i)((j * KERNEL_NUM + k + 1) * DATA_WIDTH - 1 downto (j * KERNEL_NUM + k) * DATA_WIDTH) := load_weight.io.Data_Out_Weight(k)((i * CHANNEL_IN_NUM + j + 1) * DATA_WIDTH - 1 downto (i * CHANNEL_IN_NUM + j) * DATA_WIDTH)
     }
 
     val compute_weight_in_delay = Vec(Bits(CHANNEL_IN_NUM * DATA_WIDTH * KERNEL_NUM bits), CHANNEL_OUT_NUM)
@@ -135,7 +135,7 @@ class Conv_Norm(
     mul_add_list = mul_add_list.reverse
     for (i <- 0 until CHANNEL_OUT_NUM; j <- 0 until CHANNEL_IN_NUM) {
         mul_add_list(i * CHANNEL_IN_NUM + j).io.dataIn <> compute_data_in(j)
-        mul_add_list(i * CHANNEL_IN_NUM + j).io.weightIn <> compute_weight_in(i)((j + 1) * KERNEL_NUM * DATA_WIDTH - 1 downto (j * KERNEL_NUM * DATA_WIDTH))
+        mul_add_list(i * CHANNEL_IN_NUM + j).io.weightIn <> compute_weight_in_delay(i)((j + 1) * KERNEL_NUM * DATA_WIDTH - 1 downto (j * KERNEL_NUM * DATA_WIDTH))
         mul_add_list(i * CHANNEL_IN_NUM + j).io.dataOut <> compute_data_out(i)((j + 1) * AFTER_CONV_WIDTH - 1 downto j * AFTER_CONV_WIDTH)
     }
     val data_result_temp = Vec(Bits(AFTER_CIN_ACC_WIDTH bits), CHANNEL_OUT_NUM)

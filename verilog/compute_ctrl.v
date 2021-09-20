@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : compute_ctrl
-// Git hash  : a7a69259854496944a80b53cb839562d830e2b39
-// Date      : 17/09/2021, 17:43:44
+// Git hash  : 166ad749a20f55503ea9181f2b02d7a1ff2d73c3
+// Date      : 20/09/2021, 12:49:40
 
 
 module compute_ctrl (
@@ -116,8 +116,6 @@ module compute_ctrl (
   reg                 fsm_M_Fifo_Valid_delay_22;
   reg                 fsm_M_Fifo_Valid_delay_23;
   reg                 fsm_M_Fifo_Valid_delay_24;
-  reg                 fsm_M_Fifo_Valid_delay_25;
-  reg                 fsm_M_Fifo_Valid_delay_26;
   reg                 fsm_First_Complete;
   wire                when_compute_ctrl_l178;
   wire                when_compute_ctrl_l179;
@@ -144,8 +142,6 @@ module compute_ctrl (
   reg                 fsm_First_Complete_delay_21;
   reg                 fsm_First_Complete_delay_22;
   reg                 fsm_First_Complete_delay_23;
-  reg                 fsm_First_Complete_delay_24;
-  reg                 fsm_First_Complete_delay_25;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateReg;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateNext;
   `ifndef SYNTHESIS
@@ -278,9 +274,9 @@ module compute_ctrl (
   assign when_compute_ctrl_l155 = ((_zz_when_compute_ctrl_l155 == _zz_when_compute_ctrl_l155_1) && (_zz_when_compute_ctrl_l155_2 == _zz_when_compute_ctrl_l155_3));
   assign weight_addrb = _zz_weight_addrb_1;
   assign when_compute_ctrl_l167 = (_zz_when_compute_ctrl_l167 == _zz_when_compute_ctrl_l167_1);
-  assign M_Valid = fsm_M_Fifo_Valid_delay_26;
+  assign M_Valid = fsm_M_Fifo_Valid_delay_24;
   assign when_compute_ctrl_l179 = (fsm_Cnt_Channel_In_Num == 10'h0);
-  assign First_Compute_Complete = fsm_First_Complete_delay_25;
+  assign First_Compute_Complete = fsm_First_Complete_delay_23;
   always @(*) begin
     fsm_stateNext = fsm_stateReg;
     case(fsm_stateReg)
@@ -470,8 +466,6 @@ module compute_ctrl (
     fsm_M_Fifo_Valid_delay_22 <= fsm_M_Fifo_Valid_delay_21;
     fsm_M_Fifo_Valid_delay_23 <= fsm_M_Fifo_Valid_delay_22;
     fsm_M_Fifo_Valid_delay_24 <= fsm_M_Fifo_Valid_delay_23;
-    fsm_M_Fifo_Valid_delay_25 <= fsm_M_Fifo_Valid_delay_24;
-    fsm_M_Fifo_Valid_delay_26 <= fsm_M_Fifo_Valid_delay_25;
     if(when_compute_ctrl_l178) begin
       if(when_compute_ctrl_l179) begin
         fsm_First_Complete <= 1'b1;
@@ -504,8 +498,6 @@ module compute_ctrl (
     fsm_First_Complete_delay_21 <= fsm_First_Complete_delay_20;
     fsm_First_Complete_delay_22 <= fsm_First_Complete_delay_21;
     fsm_First_Complete_delay_23 <= fsm_First_Complete_delay_22;
-    fsm_First_Complete_delay_24 <= fsm_First_Complete_delay_23;
-    fsm_First_Complete_delay_25 <= fsm_First_Complete_delay_24;
   end
 
   always @(posedge clk) begin

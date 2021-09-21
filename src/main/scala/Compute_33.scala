@@ -11,6 +11,7 @@ class Compute_33(
                     ROW_COL_DATA_COUNT_WIDTH: Int,
                     CHANNEL_NUM_WIDTH: Int,
                     ZERO_NUM_WIDTH: Int,
+                    ZERO_DATA_WIDTH: Int,
                     DATA_GENERATE_MEM_DEPTH: Int,
                     WEIGHT_ADDR_WIDTH: Int,
                     WEIGHT_NUM_WIDTH: Int,
@@ -23,12 +24,13 @@ class Compute_33(
                     WIDTH_TEMP_RAM_ADDR: Int,
                     FEATURE_FIFO_DEPTH: Int,
                     WEIGHT_MEM_WRITE_DEPTH: Int,
-                    QUAN_DATA_GENERATE_MEM_WRITE_DEPTH: Int
+                    QUAN_DATA_GENERATE_MEM_WRITE_DEPTH: Int,
+                    QUAN_BIAS_FIFO_DEPTH: Int
                 ) extends Component {
 
     val io = new Bundle {
         val Conv_Complete = out Bool()
-//        val Stride_Complete = out Bool()
+        //        val Stride_Complete = out Bool()
         val Write_Block_Complete = out Bool()
         val Sign = in Bits (3 bits)
         val Reg_4 = in Bits (REG_WIDTH bits)
@@ -40,7 +42,7 @@ class Compute_33(
         val M_DATA = master Stream Bits(M_DATA_WIDTH bits)
         val Start_Pa = in Bool()
         val Start_Cu = in Bool()
-//        val Last_33 = out Bool()
+        //        val Last_33 = out Bool()
 
     }
     noIoPrefix()
@@ -89,7 +91,8 @@ class Compute_33(
     //    data_generate.io.M_DATA_Valid <> io.M_DATA_Valid
     data_generate.io.Start <> io.Start_Cu
     //data_generate.io.RowNum_After_Padding
-    val conv_norm = new Conv_Norm(KERNEL_NUM, PARA_DATA_WIDTH, AFTER_DATA_GENERATE_WIDTH, M_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, WEIGHT_ADDR_WIDTH, WEIGHT_NUM_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, CHANNEL_IN_NUM, CHANNEL_OUT_NUM, WIDTH_TEMP_RAM_ADDR, FEATURE_FIFO_DEPTH, WEIGHT_MEM_WRITE_DEPTH, QUAN_DATA_GENERATE_MEM_WRITE_DEPTH, DATA_WIDTH)
+    val AFTER_CONV_NORM_WIDTH = 32 * CHANNEL_OUT_NUM
+    val conv_norm = new Conv_Norm(KERNEL_NUM, PARA_DATA_WIDTH, AFTER_DATA_GENERATE_WIDTH, AFTER_CONV_NORM_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, WEIGHT_ADDR_WIDTH, WEIGHT_NUM_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, CHANNEL_IN_NUM, CHANNEL_OUT_NUM, WIDTH_TEMP_RAM_ADDR, FEATURE_FIFO_DEPTH, WEIGHT_MEM_WRITE_DEPTH, QUAN_DATA_GENERATE_MEM_WRITE_DEPTH, DATA_WIDTH)
     conv_norm.io.S_DATA <> data_generate.io.M_DATA
     conv_norm.io.S_DATA_Ready <> data_generate.io.M_DATA_Ready
     conv_norm.io.S_DATA_Valid <> data_generate.io.M_DATA_Valid
@@ -104,8 +107,20 @@ class Compute_33(
     conv_norm.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
     conv_norm.io.Weight_Single_Num_REG <> Weight_Num_REG
     conv_norm.io.Bias_Num_REG <> Bias_Num_REG
-    conv_norm.io.Bias_Addrb <> 0
-    conv_norm.io.M_DATA <> io.M_DATA
+//    conv_norm.io.Bias_Addrb <> 0
+    //    conv_norm.io.M_DATA <> io.M_DATA
+
+    val conv_quan = new Conv_quan(AFTER_CONV_NORM_WIDTH, M_DATA_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, ZERO_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_OUT_NUM, CHANNEL_NUM_WIDTH, QUAN_BIAS_FIFO_DEPTH)
+    conv_quan.io.S_DATA <> conv_norm.io.M_DATA
+    conv_quan.io.Strat <> io.Start_Cu
+    conv_quan.io.bias_data_in <> conv_norm.io.Data_Out_Bias
+    conv_quan.io.scale_data_in <> conv_norm.io.Data_Out_Scale
+    conv_quan.io.shift_data_in <> conv_norm.io.Data_Out_Shift
+    conv_quan.io.Zero_Point_REG3 <> Zero_Point_REG3
+    conv_quan.io.bias_addrb <> conv_norm.io.Bias_Addrb
+    conv_quan.io.M_DATA <> io.M_DATA
+    conv_quan.io.Row_Num_Out_REG <> Row_Num_Out_REG
+    conv_quan.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
 }
 
 object Compute_33 {
@@ -116,6 +131,12 @@ object Compute_33 {
             headerWithDate = true,
             targetDirectory = "verilog"
 
-        ) generateVerilog (new Compute_33(9,32, 64, 64, 256, 8, 11, 10, 3, 2048,13,15,8,256,256,256,16,8,11,2048,8192,128))
+        ) generateVerilog (new Compute_33(9, 32, 64, 64, 64, 8, 11, 10, 3, 8, 2048, 13, 15, 8, 256, 256, 256, 16, 8, 11, 2048, 8192, 128, 4096))
+        SpinalConfig(
+            defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
+            headerWithDate = true,
+            targetDirectory = "verilog"
+
+        ) generateVerilog (new leaky_relu(8, 8, 8))
     }
 }

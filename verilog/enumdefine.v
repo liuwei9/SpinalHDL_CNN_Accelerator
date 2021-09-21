@@ -45,3 +45,12 @@
 `define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Scale 3'b100
 `define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Shift 3'b101
 
+`define fsm_enumDefinition_2_binary_sequential_type [2:0]
+`define fsm_enumDefinition_2_binary_sequential_fsm_BOOT 3'b000
+`define fsm_enumDefinition_2_binary_sequential_fsm_IDLE 3'b001
+`define fsm_enumDefinition_2_binary_sequential_fsm_WAIT 3'b010
+`define fsm_enumDefinition_2_binary_sequential_fsm_Judge_Before_FIFO 3'b011
+`define fsm_enumDefinition_2_binary_sequential_fsm_Judge_After_FIFO 3'b100
+`define fsm_enumDefinition_2_binary_sequential_fsm_Compute 3'b101
+`define fsm_enumDefinition_2_binary_sequential_fsm_Judge 3'b110
+

@@ -12,7 +12,7 @@ class Conv_quan_ctrl(
     val io = new Bundle {
         val Start = in Bool()
         val bias_addrb = out Bits (BIAS_NUM_WIDTH bits)
-        val EN_Rd_Fifo = out Bool() setAsReg()
+        val EN_Rd_Fifo = out Bool()
         val Fifo_Ready = in Bool()
         val M_Ready = in Bool()
         val M_Valid = out Bool()
@@ -24,7 +24,7 @@ class Conv_quan_ctrl(
     val Channel_Times = io.Channel_Out_Num_REG >> log2Up(CHANNEL_OUT_NUM)
     val count_mult = new mul(ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, ROW_COL_DATA_COUNT_WIDTH, false)
     count_mult.io.A := io.Row_Num_Out_REG
-    count_mult.io.B := Channel_Times
+    count_mult.io.B := Channel_Times.resized
     count_mult.io.P <> io.S_Count_Fifo
     val fsm = new StateMachine {
         val IDLE = new State() with EntryPoint
@@ -64,6 +64,22 @@ class Conv_quan_ctrl(
         } otherwise {
             Cnt_Cout := 0
         }
+
+        io.bias_addrb := Cnt_Cout.asBits.resized
+        val fifo_rd_en_temp = Bool()
+        when(isActive(Compute)) {
+            fifo_rd_en_temp := True
+        } otherwise {
+            fifo_rd_en_temp := False
+        }
+        io.EN_Rd_Fifo := RegNext(fifo_rd_en_temp)
+        val M_Valid_temp = Bool()
+        when(isActive(Compute)) {
+            M_Valid_temp := True
+        } otherwise {
+            M_Valid_temp := False
+        }
+        io.M_Valid := Delay(M_Valid_temp, 20) //数据从 ram 进来 : 1个时钟周期  bias : 两个时钟周期     scale : 三个时钟周期  shift : 一个时钟周期   zero_point : 三个时钟周期    leaky_relu : 十个时钟周期
         val Cnt_Column = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg()
         val En_Col = Bool()
         when(EN_Last_Cout && (Cnt_Column === io.Row_Num_Out_REG.asUInt - 1)) {
@@ -82,14 +98,14 @@ class Conv_quan_ctrl(
         }
         val Cnt_Row = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg()
         val En_Row = Bool()
-        when(Cnt_Row === io.Row_Num_Out_REG) {
+        when(Cnt_Row === io.Row_Num_Out_REG.asUInt) {
             En_Row := True
         } otherwise {
-            Cnt_Row := False
+            En_Row := False
         }
         when(isEntering(Judge)) {
             Cnt_Row := Cnt_Row + 1
-        } elsewhen (isActive(Judge) && isEntering(IDLE)) {
+        } elsewhen (isActive(IDLE)) {
             Cnt_Row := 0
         } otherwise {
             Cnt_Row := Cnt_Row

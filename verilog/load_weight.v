@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : load_weight
-// Git hash  : 166ad749a20f55503ea9181f2b02d7a1ff2d73c3
-// Date      : 20/09/2021, 12:49:40
+// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
+// Date      : 21/09/2021, 23:40:44
 
 
 module load_weight (

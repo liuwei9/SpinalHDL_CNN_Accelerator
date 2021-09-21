@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : sprom
-// Git hash  : 166ad749a20f55503ea9181f2b02d7a1ff2d73c3
+// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
 
 
 
@@ -30,7 +30,7 @@ module sprom (
     .MEMORY_INIT_PARAM(""),
     .MEMORY_OPTIMIZATION("true"),
     .MEMORY_PRIMITIVE("distributed"),
-    .MEMORY_SIZE(147456),
+    .MEMORY_SIZE(153600),
     .MESSAGE_CONTROL(0),
     .READ_DATA_WIDTH_A(64),
     .READ_LATENCY_A(0),

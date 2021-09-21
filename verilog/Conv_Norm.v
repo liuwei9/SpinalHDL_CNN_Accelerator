@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_Norm
-// Git hash  : 166ad749a20f55503ea9181f2b02d7a1ff2d73c3
-// Date      : 20/09/2021, 12:49:42
+// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
+// Date      : 21/09/2021, 23:40:45
 
 
 module Conv_Norm (
@@ -35,10 +35,6 @@ module Conv_Norm (
   wire       [10:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG;
   wire       [10:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG_8;
   wire       [10:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_OUT_REG;
-  wire       [63:0]   general_fifo_sync_10_data_in;
-  wire                general_fifo_sync_10_wr_en;
-  wire       [10:0]   general_fifo_sync_10_m_data_count;
-  wire       [10:0]   general_fifo_sync_10_s_data_count;
   wire       [63:0]   general_fifo_sync_11_data_in;
   wire                general_fifo_sync_11_wr_en;
   wire       [10:0]   general_fifo_sync_11_m_data_count;
@@ -71,6 +67,10 @@ module Conv_Norm (
   wire                general_fifo_sync_18_wr_en;
   wire       [10:0]   general_fifo_sync_18_m_data_count;
   wire       [10:0]   general_fifo_sync_18_s_data_count;
+  wire       [63:0]   general_fifo_sync_19_data_in;
+  wire                general_fifo_sync_19_wr_en;
+  wire       [10:0]   general_fifo_sync_19_m_data_count;
+  wire       [10:0]   general_fifo_sync_19_s_data_count;
   wire       [0:0]    Configurable_RAM_Norm_wea;
   wire       [71:0]   mul_add_simd_128_weightIn;
   wire       [71:0]   mul_add_simd_129_weightIn;
@@ -223,12 +223,6 @@ module Conv_Norm (
   wire       [255:0]  load_weight_1_Data_Out_Bias;
   wire       [255:0]  load_weight_1_Data_Out_Scale;
   wire       [255:0]  load_weight_1_Data_Out_Shift;
-  wire                general_fifo_sync_10_data_in_ready;
-  wire       [127:0]  general_fifo_sync_10_data_out;
-  wire                general_fifo_sync_10_data_out_valid;
-  wire                general_fifo_sync_10_data_valid;
-  wire                general_fifo_sync_10_full;
-  wire                general_fifo_sync_10_empty;
   wire                general_fifo_sync_11_data_in_ready;
   wire       [127:0]  general_fifo_sync_11_data_out;
   wire                general_fifo_sync_11_data_out_valid;
@@ -277,6 +271,12 @@ module Conv_Norm (
   wire                general_fifo_sync_18_data_valid;
   wire                general_fifo_sync_18_full;
   wire                general_fifo_sync_18_empty;
+  wire                general_fifo_sync_19_data_in_ready;
+  wire       [127:0]  general_fifo_sync_19_data_out;
+  wire                general_fifo_sync_19_data_out_valid;
+  wire                general_fifo_sync_19_data_valid;
+  wire                general_fifo_sync_19_full;
+  wire                general_fifo_sync_19_empty;
   wire       [1151:0] Configurable_RAM_Norm_doutb;
   wire       [19:0]   mul_add_simd_128_dataOut;
   wire       [19:0]   mul_add_simd_129_dataOut;
@@ -531,22 +531,7 @@ module Conv_Norm (
     .clk                      (clk                                 ), //i
     .reset                    (reset                               )  //i
   );
-  general_fifo_sync_1 general_fifo_sync_10 (
-    .reset             (reset                                ), //i
-    .clk               (clk                                  ), //i
-    .data_in           (general_fifo_sync_10_data_in         ), //i
-    .wr_en             (general_fifo_sync_10_wr_en           ), //i
-    .data_in_ready     (general_fifo_sync_10_data_in_ready   ), //o
-    .data_out          (general_fifo_sync_10_data_out        ), //o
-    .rd_en             (compute_ctrl_1_rd_en_fifo            ), //i
-    .data_out_valid    (general_fifo_sync_10_data_out_valid  ), //o
-    .m_data_count      (general_fifo_sync_10_m_data_count    ), //i
-    .s_data_count      (general_fifo_sync_10_s_data_count    ), //i
-    .data_valid        (general_fifo_sync_10_data_valid      ), //o
-    .full              (general_fifo_sync_10_full            ), //o
-    .empty             (general_fifo_sync_10_empty           )  //o
-  );
-  general_fifo_sync_1 general_fifo_sync_11 (
+  general_fifo_sync_2 general_fifo_sync_11 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_11_data_in         ), //i
@@ -561,7 +546,7 @@ module Conv_Norm (
     .full              (general_fifo_sync_11_full            ), //o
     .empty             (general_fifo_sync_11_empty           )  //o
   );
-  general_fifo_sync_1 general_fifo_sync_12 (
+  general_fifo_sync_2 general_fifo_sync_12 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_12_data_in         ), //i
@@ -576,7 +561,7 @@ module Conv_Norm (
     .full              (general_fifo_sync_12_full            ), //o
     .empty             (general_fifo_sync_12_empty           )  //o
   );
-  general_fifo_sync_1 general_fifo_sync_13 (
+  general_fifo_sync_2 general_fifo_sync_13 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_13_data_in         ), //i
@@ -591,7 +576,7 @@ module Conv_Norm (
     .full              (general_fifo_sync_13_full            ), //o
     .empty             (general_fifo_sync_13_empty           )  //o
   );
-  general_fifo_sync_1 general_fifo_sync_14 (
+  general_fifo_sync_2 general_fifo_sync_14 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_14_data_in         ), //i
@@ -606,7 +591,7 @@ module Conv_Norm (
     .full              (general_fifo_sync_14_full            ), //o
     .empty             (general_fifo_sync_14_empty           )  //o
   );
-  general_fifo_sync_1 general_fifo_sync_15 (
+  general_fifo_sync_2 general_fifo_sync_15 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_15_data_in         ), //i
@@ -621,7 +606,7 @@ module Conv_Norm (
     .full              (general_fifo_sync_15_full            ), //o
     .empty             (general_fifo_sync_15_empty           )  //o
   );
-  general_fifo_sync_1 general_fifo_sync_16 (
+  general_fifo_sync_2 general_fifo_sync_16 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_16_data_in         ), //i
@@ -636,7 +621,7 @@ module Conv_Norm (
     .full              (general_fifo_sync_16_full            ), //o
     .empty             (general_fifo_sync_16_empty           )  //o
   );
-  general_fifo_sync_1 general_fifo_sync_17 (
+  general_fifo_sync_2 general_fifo_sync_17 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_17_data_in         ), //i
@@ -651,7 +636,7 @@ module Conv_Norm (
     .full              (general_fifo_sync_17_full            ), //o
     .empty             (general_fifo_sync_17_empty           )  //o
   );
-  general_fifo_sync_1 general_fifo_sync_18 (
+  general_fifo_sync_2 general_fifo_sync_18 (
     .reset             (reset                                ), //i
     .clk               (clk                                  ), //i
     .data_in           (general_fifo_sync_18_data_in         ), //i
@@ -665,6 +650,21 @@ module Conv_Norm (
     .data_valid        (general_fifo_sync_18_data_valid      ), //o
     .full              (general_fifo_sync_18_full            ), //o
     .empty             (general_fifo_sync_18_empty           )  //o
+  );
+  general_fifo_sync_2 general_fifo_sync_19 (
+    .reset             (reset                                ), //i
+    .clk               (clk                                  ), //i
+    .data_in           (general_fifo_sync_19_data_in         ), //i
+    .wr_en             (general_fifo_sync_19_wr_en           ), //i
+    .data_in_ready     (general_fifo_sync_19_data_in_ready   ), //o
+    .data_out          (general_fifo_sync_19_data_out        ), //o
+    .rd_en             (compute_ctrl_1_rd_en_fifo            ), //i
+    .data_out_valid    (general_fifo_sync_19_data_out_valid  ), //o
+    .m_data_count      (general_fifo_sync_19_m_data_count    ), //i
+    .s_data_count      (general_fifo_sync_19_s_data_count    ), //i
+    .data_valid        (general_fifo_sync_19_data_valid      ), //o
+    .full              (general_fifo_sync_19_full            ), //o
+    .empty             (general_fifo_sync_19_empty           )  //o
   );
   sdpram_16 Configurable_RAM_Norm (
     .doutb    (Configurable_RAM_Norm_doutb            ), //o
@@ -1681,56 +1681,56 @@ module Conv_Norm (
   assign Data_Out_Bias = load_weight_1_Data_Out_Bias;
   assign Data_Out_Scale = load_weight_1_Data_Out_Scale;
   assign Data_Out_Shift = load_weight_1_Data_Out_Shift;
-  assign general_fifo_sync_10_wr_en = S_DATA_Valid[0];
-  assign general_fifo_sync_10_data_in = S_DATA[63 : 0];
-  assign general_fifo_sync_10_m_data_count = compute_ctrl_1_M_Count_Fifo;
-  assign general_fifo_sync_10_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  always @(*) begin
-    data_fifo_out[127 : 0] = general_fifo_sync_10_data_out;
-    data_fifo_out[255 : 128] = general_fifo_sync_11_data_out;
-    data_fifo_out[383 : 256] = general_fifo_sync_12_data_out;
-    data_fifo_out[511 : 384] = general_fifo_sync_13_data_out;
-    data_fifo_out[639 : 512] = general_fifo_sync_14_data_out;
-    data_fifo_out[767 : 640] = general_fifo_sync_15_data_out;
-    data_fifo_out[895 : 768] = general_fifo_sync_16_data_out;
-    data_fifo_out[1023 : 896] = general_fifo_sync_17_data_out;
-    data_fifo_out[1151 : 1024] = general_fifo_sync_18_data_out;
-  end
-
-  assign general_fifo_sync_11_wr_en = S_DATA_Valid[1];
-  assign general_fifo_sync_11_data_in = S_DATA[127 : 64];
+  assign general_fifo_sync_11_wr_en = S_DATA_Valid[0];
+  assign general_fifo_sync_11_data_in = S_DATA[63 : 0];
   assign general_fifo_sync_11_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_11_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign general_fifo_sync_12_wr_en = S_DATA_Valid[2];
-  assign general_fifo_sync_12_data_in = S_DATA[191 : 128];
+  always @(*) begin
+    data_fifo_out[127 : 0] = general_fifo_sync_11_data_out;
+    data_fifo_out[255 : 128] = general_fifo_sync_12_data_out;
+    data_fifo_out[383 : 256] = general_fifo_sync_13_data_out;
+    data_fifo_out[511 : 384] = general_fifo_sync_14_data_out;
+    data_fifo_out[639 : 512] = general_fifo_sync_15_data_out;
+    data_fifo_out[767 : 640] = general_fifo_sync_16_data_out;
+    data_fifo_out[895 : 768] = general_fifo_sync_17_data_out;
+    data_fifo_out[1023 : 896] = general_fifo_sync_18_data_out;
+    data_fifo_out[1151 : 1024] = general_fifo_sync_19_data_out;
+  end
+
+  assign general_fifo_sync_12_wr_en = S_DATA_Valid[1];
+  assign general_fifo_sync_12_data_in = S_DATA[127 : 64];
   assign general_fifo_sync_12_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_12_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign general_fifo_sync_13_wr_en = S_DATA_Valid[3];
-  assign general_fifo_sync_13_data_in = S_DATA[255 : 192];
+  assign general_fifo_sync_13_wr_en = S_DATA_Valid[2];
+  assign general_fifo_sync_13_data_in = S_DATA[191 : 128];
   assign general_fifo_sync_13_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_13_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign general_fifo_sync_14_wr_en = S_DATA_Valid[4];
-  assign general_fifo_sync_14_data_in = S_DATA[319 : 256];
+  assign general_fifo_sync_14_wr_en = S_DATA_Valid[3];
+  assign general_fifo_sync_14_data_in = S_DATA[255 : 192];
   assign general_fifo_sync_14_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_14_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign general_fifo_sync_15_wr_en = S_DATA_Valid[5];
-  assign general_fifo_sync_15_data_in = S_DATA[383 : 320];
+  assign general_fifo_sync_15_wr_en = S_DATA_Valid[4];
+  assign general_fifo_sync_15_data_in = S_DATA[319 : 256];
   assign general_fifo_sync_15_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_15_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign general_fifo_sync_16_wr_en = S_DATA_Valid[6];
-  assign general_fifo_sync_16_data_in = S_DATA[447 : 384];
+  assign general_fifo_sync_16_wr_en = S_DATA_Valid[5];
+  assign general_fifo_sync_16_data_in = S_DATA[383 : 320];
   assign general_fifo_sync_16_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_16_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign general_fifo_sync_17_wr_en = S_DATA_Valid[7];
-  assign general_fifo_sync_17_data_in = S_DATA[511 : 448];
+  assign general_fifo_sync_17_wr_en = S_DATA_Valid[6];
+  assign general_fifo_sync_17_data_in = S_DATA[447 : 384];
   assign general_fifo_sync_17_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_17_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign general_fifo_sync_18_wr_en = S_DATA_Valid[8];
-  assign general_fifo_sync_18_data_in = S_DATA[575 : 512];
+  assign general_fifo_sync_18_wr_en = S_DATA_Valid[7];
+  assign general_fifo_sync_18_data_in = S_DATA[511 : 448];
   assign general_fifo_sync_18_m_data_count = compute_ctrl_1_M_Count_Fifo;
   assign general_fifo_sync_18_s_data_count = compute_ctrl_1_S_Count_Fifo;
-  assign S_DATA_Ready = ((general_fifo_sync_10_data_in_ready && general_fifo_sync_11_data_in_ready) && general_fifo_sync_12_data_in_ready);
-  assign compute_ctrl_1_compute_fifo_ready = ((general_fifo_sync_10_data_out_valid && general_fifo_sync_11_data_out_valid) && general_fifo_sync_12_data_out_valid);
+  assign general_fifo_sync_19_wr_en = S_DATA_Valid[8];
+  assign general_fifo_sync_19_data_in = S_DATA[575 : 512];
+  assign general_fifo_sync_19_m_data_count = compute_ctrl_1_M_Count_Fifo;
+  assign general_fifo_sync_19_s_data_count = compute_ctrl_1_S_Count_Fifo;
+  assign S_DATA_Ready = ((general_fifo_sync_11_data_in_ready && general_fifo_sync_12_data_in_ready) && general_fifo_sync_13_data_in_ready);
+  assign compute_ctrl_1_compute_fifo_ready = ((general_fifo_sync_11_data_out_valid && general_fifo_sync_12_data_out_valid) && general_fifo_sync_13_data_out_valid);
   assign Configurable_RAM_Norm_wea = compute_ctrl_1_rd_en_fifo;
   assign ram_temp_output_data = Configurable_RAM_Norm_doutb;
   always @(*) begin

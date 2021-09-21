@@ -17,7 +17,7 @@ class Conv_Bias(
         val bias_data_in = in Bits (BIAS_DATA_WIDTH bits)
         val M_Data = out Bits (M_DATA_WIDTH bits)
         val Channel_Out_Num_REG = in Bits (CHANNEL_NUM_WIDTH bits)
-        val S_Count_Fifo = out Bits (ROW_COL_DATA_COUNT_WIDTH bits)
+        val S_Count_Fifo = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
     }
     noIoPrefix()
     val Channel_Times = io.Channel_Out_Num_REG >> log2Up(CHANNEL_OUT_NUM)
@@ -27,8 +27,8 @@ class Conv_Bias(
     fifo.io.wr_en <> io.S_DATA.valid
     fifo.io.rd_en <> io.rd_en_fifo
     fifo.io.data_out <> data_fifo_out
-    fifo.io.m_data_count <> io.S_Count_Fifo.resized
-    fifo.io.s_data_count <> io.S_Count_Fifo.resized
+    fifo.io.m_data_count <> io.S_Count_Fifo.asUInt.resized
+    fifo.io.s_data_count <> io.S_Count_Fifo.asUInt.resized
     fifo.io.data_in_ready <> io.S_DATA.ready
     fifo.io.data_out_valid <> io.fifo_ready
 

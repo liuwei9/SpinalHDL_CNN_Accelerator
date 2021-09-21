@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Compute_33
-// Git hash  : 166ad749a20f55503ea9181f2b02d7a1ff2d73c3
-// Date      : 20/09/2021, 12:49:42
+// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
+// Date      : 21/09/2021, 23:40:46
 
 
 module Compute_33 (
@@ -20,7 +20,7 @@ module Compute_33 (
   input      [63:0]   para_data_payload,
   output              M_DATA_valid,
   input               M_DATA_ready,
-  output     [255:0]  M_DATA_payload,
+  output     [63:0]   M_DATA_payload,
   input               Start_Pa,
   input               Start_Cu,
   input               reset,
@@ -39,6 +39,10 @@ module Compute_33 (
   wire       [255:0]  conv_norm_1_Data_Out_Bias;
   wire       [255:0]  conv_norm_1_Data_Out_Scale;
   wire       [255:0]  conv_norm_1_Data_Out_Shift;
+  wire                conv_quan_1_S_DATA_ready;
+  wire       [7:0]    conv_quan_1_bias_addrb;
+  wire                conv_quan_1_M_DATA_valid;
+  wire       [63:0]   conv_quan_1_M_DATA_payload;
   reg        [127:0]  Cu_Instruction_reg;
   reg        [127:0]  Cu_Instruction;
   reg        [127:0]  _zz_Cu_Instruction_reg;
@@ -88,7 +92,7 @@ module Compute_33 (
     .S_DATA_Valid             (data_generate_1_M_DATA_Valid          ), //i
     .S_DATA_Ready             (conv_norm_1_S_DATA_Ready              ), //o
     .M_DATA_valid             (conv_norm_1_M_DATA_valid              ), //o
-    .M_DATA_ready             (M_DATA_ready                          ), //i
+    .M_DATA_ready             (conv_quan_1_S_DATA_ready              ), //i
     .M_DATA_payload           (conv_norm_1_M_DATA_payload            ), //o
     .Row_Num_Out_REG          (Row_Num_Out_REG                       ), //i
     .RowNum_After_Padding     (data_generate_1_RowNum_After_Padding  ), //i
@@ -96,12 +100,30 @@ module Compute_33 (
     .Channel_Out_Num_REG      (Channel_Out_Num_REG                   ), //i
     .Weight_Single_Num_REG    (Weight_Num_REG                        ), //i
     .Bias_Num_REG             (Bias_Num_REG                          ), //i
-    .Bias_Addrb               (8'h0                                  ), //i
+    .Bias_Addrb               (conv_quan_1_bias_addrb                ), //i
     .Data_Out_Bias            (conv_norm_1_Data_Out_Bias             ), //o
     .Data_Out_Scale           (conv_norm_1_Data_Out_Scale            ), //o
     .Data_Out_Shift           (conv_norm_1_Data_Out_Shift            ), //o
     .clk                      (clk                                   ), //i
     .reset                    (reset                                 )  //i
+  );
+  Conv_quan conv_quan_1 (
+    .Strat                  (Start_Cu                    ), //i
+    .S_DATA_valid           (conv_norm_1_M_DATA_valid    ), //i
+    .S_DATA_ready           (conv_quan_1_S_DATA_ready    ), //o
+    .S_DATA_payload         (conv_norm_1_M_DATA_payload  ), //i
+    .bias_data_in           (conv_norm_1_Data_Out_Bias   ), //i
+    .scale_data_in          (conv_norm_1_Data_Out_Scale  ), //i
+    .shift_data_in          (conv_norm_1_Data_Out_Shift  ), //i
+    .Zero_Point_REG3        (Zero_Point_REG3             ), //i
+    .bias_addrb             (conv_quan_1_bias_addrb      ), //o
+    .M_DATA_valid           (conv_quan_1_M_DATA_valid    ), //o
+    .M_DATA_ready           (M_DATA_ready                ), //i
+    .M_DATA_payload         (conv_quan_1_M_DATA_payload  ), //o
+    .Row_Num_Out_REG        (Row_Num_Out_REG             ), //i
+    .Channel_Out_Num_REG    (Channel_Out_Num_REG         ), //i
+    .reset                  (reset                       ), //i
+    .clk                    (clk                         )  //i
   );
   assign Zero_Point_REG1 = Cu_Instruction[127 : 120];
   assign Zero_Point_REG3 = Cu_Instruction[119 : 112];
@@ -119,8 +141,8 @@ module Compute_33 (
   assign para_data_ready = conv_norm_1_para_data_ready;
   assign Write_Block_Complete = conv_norm_1_Write_Block_Complete;
   assign Conv_Complete = conv_norm_1_Compute_Complete;
-  assign M_DATA_valid = conv_norm_1_M_DATA_valid;
-  assign M_DATA_payload = conv_norm_1_M_DATA_payload;
+  assign M_DATA_valid = conv_quan_1_M_DATA_valid;
+  assign M_DATA_payload = conv_quan_1_M_DATA_payload;
   always @(posedge clk) begin
     _zz_Cu_Instruction_reg <= {{{Reg_7,Reg_6},Reg_5},Reg_4};
     Cu_Instruction_reg <= _zz_Cu_Instruction_reg;

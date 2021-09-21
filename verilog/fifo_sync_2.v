@@ -1,18 +1,18 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : fifo_sync_2
-// Git hash  : 166ad749a20f55503ea9181f2b02d7a1ff2d73c3
-// Date      : 20/09/2021, 12:49:39
+// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
+// Date      : 21/09/2021, 23:40:41
 
 
 module fifo_sync_2 (
   output              full,
   input               wr_en,
-  input      [63:0]   din,
+  input      [255:0]  din,
   output              empty,
-  output     [127:0]  dout,
+  output     [255:0]  dout,
   input               rd_en,
-  output     [11:0]   wr_data_count,
-  output     [10:0]   rd_data_count,
+  output     [12:0]   wr_data_count,
+  output     [12:0]   rd_data_count,
   output              data_valid,
   output              rd_rst_busy,
   output              wr_rst_busy,
@@ -23,18 +23,18 @@ module fifo_sync_2 (
   wire                temp_almost_full;
   wire                temp_data_valid;
   wire                temp_dbiterr;
-  wire       [127:0]  temp_dout;
+  wire       [255:0]  temp_dout;
   wire                temp_empty;
   wire                temp_full;
   wire                temp_overflow;
   wire                temp_prog_empty;
   wire                temp_prog_full;
-  wire       [10:0]   temp_rd_data_count;
+  wire       [12:0]   temp_rd_data_count;
   wire                temp_rd_rst_busy;
   wire                temp_sbiterr;
   wire                temp_underflow;
   wire                temp_wr_ack;
-  wire       [11:0]   temp_wr_data_count;
+  wire       [12:0]   temp_wr_data_count;
   wire                temp_wr_rst_busy;
   wire                almost_empty;
   wire                almost_full;
@@ -54,18 +54,18 @@ module fifo_sync_2 (
     .ECC_MODE("no_ecc"),
     .FIFO_MEMORY_TYPE("block"),
     .FIFO_READ_LATENCY(0),
-    .FIFO_WRITE_DEPTH(2048),
+    .FIFO_WRITE_DEPTH(4096),
     .FULL_RESET_VALUE(0),
     .PROG_EMPTY_THRESH(5),
-    .PROG_FULL_THRESH(2041),
-    .RD_DATA_COUNT_WIDTH(11),
-    .READ_DATA_WIDTH(128),
+    .PROG_FULL_THRESH(4091),
+    .RD_DATA_COUNT_WIDTH(13),
+    .READ_DATA_WIDTH(256),
     .READ_MODE("fwft"),
     .SIM_ASSERT_CHK(0),
     .USE_ADV_FEATURES("1404"),
     .WAKEUP_TIME(0),
-    .WRITE_DATA_WIDTH(64),
-    .WR_DATA_COUNT_WIDTH(12) 
+    .WRITE_DATA_WIDTH(256),
+    .WR_DATA_COUNT_WIDTH(13) 
   ) temp (
     .almost_empty     (temp_almost_empty   ), //o
     .almost_full      (temp_almost_full    ), //o

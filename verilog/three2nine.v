@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : three2nine
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:44
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:36
 
 
 module three2nine (
@@ -9,8 +9,8 @@ module three2nine (
   input      [191:0]  S_DATA,
   input               S_DATA_Valid,
   output reg          S_DATA_Ready,
-  output reg [10:0]   S_DATA_Addr,
-  input      [10:0]   Row_Num_After_Padding,
+  output reg [11:0]   S_DATA_Addr,
+  input      [11:0]   Row_Num_After_Padding,
   input      [9:0]    Channel_In_Num_REG,
   input               Row_Compute_Sign,
   output reg [575:0]  M_Data,
@@ -22,10 +22,10 @@ module three2nine (
 );
   wire       [9:0]    _zz_when_three2nine_l39;
   wire       [6:0]    _zz_when_three2nine_l39_1;
-  wire       [10:0]   _zz_when_three2nine_l56;
-  wire       [10:0]   _zz_when_three2nine_l71;
-  wire       [10:0]   _zz_when_three2nine_l105;
-  wire       [10:0]   _zz_when_three2nine_l114;
+  wire       [11:0]   _zz_when_three2nine_l56;
+  wire       [11:0]   _zz_when_three2nine_l71;
+  wire       [11:0]   _zz_when_three2nine_l105;
+  wire       [11:0]   _zz_when_three2nine_l114;
   wire       [6:0]    Channel_Times;
   wire                t2n_fsm_wantExit;
   reg                 t2n_fsm_wantStart;
@@ -34,11 +34,11 @@ module three2nine (
   reg                 t2n_fsm_EN_Last_Cin;
   wire                when_three2nine_l39;
   wire                when_three2nine_l44;
-  reg        [10:0]   t2n_fsm_Cnt_Column;
+  reg        [11:0]   t2n_fsm_Cnt_Column;
   reg                 t2n_fsm_EN_ComputeRow_Read;
   wire                when_three2nine_l56;
   wire                when_three2nine_l59;
-  reg        [10:0]   t2n_fsm_Cnt_Row;
+  reg        [11:0]   t2n_fsm_Cnt_Row;
   reg                 t2n_fsm_EN_Judge_LastRow;
   wire                when_three2nine_l71;
   wire                when_three2nine_l77;
@@ -60,10 +60,10 @@ module three2nine (
 
   assign _zz_when_three2nine_l39_1 = (Channel_Times - 7'h01);
   assign _zz_when_three2nine_l39 = {3'd0, _zz_when_three2nine_l39_1};
-  assign _zz_when_three2nine_l56 = (Row_Num_After_Padding - 11'h001);
-  assign _zz_when_three2nine_l71 = (Row_Num_After_Padding - 11'h002);
-  assign _zz_when_three2nine_l105 = (Row_Num_After_Padding - 11'h002);
-  assign _zz_when_three2nine_l114 = (Row_Num_After_Padding - 11'h001);
+  assign _zz_when_three2nine_l56 = (Row_Num_After_Padding - 12'h001);
+  assign _zz_when_three2nine_l71 = (Row_Num_After_Padding - 12'h002);
+  assign _zz_when_three2nine_l105 = (Row_Num_After_Padding - 12'h002);
+  assign _zz_when_three2nine_l114 = (Row_Num_After_Padding - 12'h001);
   `ifndef SYNTHESIS
   always @(*) begin
     case(t2n_fsm_stateReg)
@@ -161,8 +161,8 @@ module three2nine (
   end
 
   assign when_three2nine_l105 = (t2n_fsm_Cnt_Column < _zz_when_three2nine_l105);
-  assign when_three2nine_l114 = ((11'h0 < t2n_fsm_Cnt_Column) && (t2n_fsm_Cnt_Column < _zz_when_three2nine_l114));
-  assign when_three2nine_l123 = ((11'h001 < t2n_fsm_Cnt_Column) && (t2n_fsm_Cnt_Column < Row_Num_After_Padding));
+  assign when_three2nine_l114 = ((12'h0 < t2n_fsm_Cnt_Column) && (t2n_fsm_Cnt_Column < _zz_when_three2nine_l114));
+  assign when_three2nine_l123 = ((12'h001 < t2n_fsm_Cnt_Column) && (t2n_fsm_Cnt_Column < Row_Num_After_Padding));
   always @(*) begin
     t2n_fsm_stateNext = t2n_fsm_stateReg;
     case(t2n_fsm_stateReg)
@@ -222,14 +222,14 @@ module three2nine (
   assign when_three2nine_l103 = (t2n_fsm_stateReg == `t2n_fsm_enumDefinition_binary_sequential_t2n_fsm_ComputeRow_Read);
   always @(posedge clk) begin
     if(reset) begin
-      S_DATA_Addr <= 11'h0;
+      S_DATA_Addr <= 12'h0;
       M_Valid <= 9'h0;
       t2n_fsm_stateReg <= `t2n_fsm_enumDefinition_binary_sequential_t2n_fsm_BOOT;
     end else begin
       if(S_DATA_Ready) begin
-        S_DATA_Addr <= (S_DATA_Addr + 11'h001);
+        S_DATA_Addr <= (S_DATA_Addr + 12'h001);
       end else begin
-        S_DATA_Addr <= 11'h0;
+        S_DATA_Addr <= 12'h0;
       end
       if(when_three2nine_l103) begin
         if(when_three2nine_l105) begin
@@ -278,18 +278,18 @@ module three2nine (
     end
     if(when_three2nine_l59) begin
       if(t2n_fsm_EN_Last_Cin) begin
-        t2n_fsm_Cnt_Column <= (t2n_fsm_Cnt_Column + 11'h001);
+        t2n_fsm_Cnt_Column <= (t2n_fsm_Cnt_Column + 12'h001);
       end else begin
         t2n_fsm_Cnt_Column <= t2n_fsm_Cnt_Column;
       end
     end else begin
-      t2n_fsm_Cnt_Column <= 11'h0;
+      t2n_fsm_Cnt_Column <= 12'h0;
     end
     if(when_three2nine_l77) begin
-      t2n_fsm_Cnt_Row <= (t2n_fsm_Cnt_Row + 11'h001);
+      t2n_fsm_Cnt_Row <= (t2n_fsm_Cnt_Row + 12'h001);
     end else begin
       if(when_three2nine_l79) begin
-        t2n_fsm_Cnt_Row <= 11'h0;
+        t2n_fsm_Cnt_Row <= 12'h0;
       end else begin
         t2n_fsm_Cnt_Row <= t2n_fsm_Cnt_Row;
       end

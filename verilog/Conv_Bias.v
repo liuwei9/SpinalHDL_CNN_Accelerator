@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_Bias
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:45
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:37
 
 
 module Conv_Bias (
@@ -13,12 +13,12 @@ module Conv_Bias (
   input      [255:0]  bias_data_in,
   output reg [255:0]  M_Data,
   input      [9:0]    Channel_Out_Num_REG,
-  input      [10:0]   S_Count_Fifo,
+  input      [11:0]   S_Count_Fifo,
   input               reset,
   input               clk
 );
-  wire       [10:0]   fifo_m_data_count;
-  wire       [10:0]   fifo_s_data_count;
+  wire       [11:0]   fifo_m_data_count;
+  wire       [11:0]   fifo_s_data_count;
   wire       [31:0]   add_simd_1032_A;
   wire       [31:0]   add_simd_1032_B;
   wire       [31:0]   add_simd_1033_A;

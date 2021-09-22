@@ -10,7 +10,7 @@ class Conv_zero(
     val io = new Bundle {
         val data_in = in Bits (S_DATA_WIDTH bits)
         val zero_data_in = in Bits (ZERO_DATA_WIDTH bits)
-        val data_out = out Bits (M_DATA_WIDTH bits)
+        val data_out = out Bits (M_DATA_WIDTH bits) setAsReg()
     }
     noIoPrefix()
 

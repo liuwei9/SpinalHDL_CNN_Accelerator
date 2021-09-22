@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_scale
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:45
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:38
 
 
 module Conv_scale (

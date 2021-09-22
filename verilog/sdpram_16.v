@@ -1,13 +1,13 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : sdpram_16
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:44
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:36
 
 
 module sdpram_16 (
   output     [1151:0] doutb,
-  input      [10:0]   addra,
-  input      [10:0]   addrb,
+  input      [11:0]   addra,
+  input      [11:0]   addrb,
   input      [1151:0] dina,
   input               ena,
   input               enb,
@@ -26,8 +26,8 @@ module sdpram_16 (
   wire                sleep;
 
   xpm_memory_sdpram #(
-    .ADDR_WIDTH_A(11),
-    .ADDR_WIDTH_B(11),
+    .ADDR_WIDTH_A(12),
+    .ADDR_WIDTH_B(12),
     .AUTO_SLEEP_TIME(0),
     .BYTE_WRITE_WIDTH_A(1152),
     .CASCADE_HEIGHT(0),
@@ -37,7 +37,7 @@ module sdpram_16 (
     .MEMORY_INIT_PARAM("0"),
     .MEMORY_OPTIMIZATION("true"),
     .MEMORY_PRIMITIVE("distributed"),
-    .MEMORY_SIZE(2359296),
+    .MEMORY_SIZE(4718592),
     .MESSAGE_CONTROL(0),
     .READ_DATA_WIDTH_B(1152),
     .READ_LATENCY_B(0),

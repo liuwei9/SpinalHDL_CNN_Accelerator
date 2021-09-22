@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : general_fifo_sync_1
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:43
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:35
 
 
 module general_fifo_sync_1 (
@@ -13,8 +13,8 @@ module general_fifo_sync_1 (
   output     [255:0]  data_out,
   input               rd_en,
   output reg          data_out_valid,
-  input      [10:0]   m_data_count,
-  input      [10:0]   s_data_count,
+  input      [11:0]   m_data_count,
+  input      [11:0]   s_data_count,
   output              data_valid,
   output              full,
   output              empty
@@ -34,8 +34,8 @@ module general_fifo_sync_1 (
   wire                when_general_fifo_sync_l49;
 
   assign _zz_when_general_fifo_sync_l39 = (fifo_wr_data_count + _zz_when_general_fifo_sync_l39_1);
-  assign _zz_when_general_fifo_sync_l39_1 = {2'd0, s_data_count};
-  assign _zz_when_general_fifo_sync_l49 = {2'd0, m_data_count};
+  assign _zz_when_general_fifo_sync_l39_1 = {1'd0, s_data_count};
+  assign _zz_when_general_fifo_sync_l49 = {1'd0, m_data_count};
   fifo_sync_2 fifo (
     .full             (fifo_full           ), //o
     .wr_en            (wr_en               ), //i

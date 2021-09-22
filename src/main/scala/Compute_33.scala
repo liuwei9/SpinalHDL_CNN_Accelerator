@@ -80,7 +80,7 @@ class Compute_33(
     val AFTER_DATA_GENERATE_WIDTH = S_DATA_WIDTH * 9
     val data_generate = new data_generate(S_DATA_WIDTH, AFTER_DATA_GENERATE_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, DATA_WIDTH, ZERO_NUM_WIDTH, DATA_GENERATE_MEM_DEPTH)
     data_generate.io.S_DATA <> io.S_DATA
-    data_generate.io.Row_Num_In_REG <> Row_Num_In_REG
+    data_generate.io.Row_Num_In_REG <> Row_Num_In_REG.resized
     data_generate.io.Padding_REG <> Padding_REG
     data_generate.io.Zero_Point_REG <> Zero_Point_REG1
     data_generate.io.Zero_Num_REG <> Zero_Num_REG
@@ -102,7 +102,7 @@ class Compute_33(
     conv_norm.io.Write_Block_Complete <> io.Write_Block_Complete
     conv_norm.io.Compute_Complete <> io.Conv_Complete
     conv_norm.io.RowNum_After_Padding <> data_generate.io.RowNum_After_Padding
-    conv_norm.io.Row_Num_Out_REG <> Row_Num_Out_REG
+    conv_norm.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
     conv_norm.io.Channel_In_Num_REG <> Channel_In_Num_REG
     conv_norm.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
     conv_norm.io.Weight_Single_Num_REG <> Weight_Num_REG
@@ -119,7 +119,7 @@ class Compute_33(
     conv_quan.io.Zero_Point_REG3 <> Zero_Point_REG3
     conv_quan.io.bias_addrb <> conv_norm.io.Bias_Addrb
     conv_quan.io.M_DATA <> io.M_DATA
-    conv_quan.io.Row_Num_Out_REG <> Row_Num_Out_REG
+    conv_quan.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
     conv_quan.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
 }
 
@@ -131,7 +131,7 @@ object Compute_33 {
             headerWithDate = true,
             targetDirectory = "verilog"
 
-        ) generateVerilog (new Compute_33(9, 32, 64, 64, 64, 8, 11, 10, 3, 8, 2048, 13, 15, 8, 256, 256, 256, 16, 8, 11, 2048, 8192, 128, 4096))
+        ) generateVerilog (new Compute_33(9, 32, 64, 64, 64, 8, 12, 10, 3, 8, 2048, 13, 15, 8, 256, 256, 256, 16, 8, 12, 2048, 8192, 128, 4096))
         SpinalConfig(
             defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
             headerWithDate = true,

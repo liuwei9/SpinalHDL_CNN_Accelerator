@@ -1,13 +1,13 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : four2three
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:44
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:36
 
 
 module four2three (
   input               Start,
   output reg          StartRow,
-  input      [10:0]   Row_Num_After_Padding,
+  input      [11:0]   Row_Num_After_Padding,
   input               S_DATA_valid,
   output              S_DATA_ready,
   input      [63:0]   S_DATA_payload,
@@ -15,16 +15,16 @@ module four2three (
   input               M_Ready,
   output reg          M_Valid,
   input               M_rd_en,
-  input      [10:0]   M_Addr,
+  input      [11:0]   M_Addr,
   input      [9:0]    Channel_In_Num_REG,
   input               reset,
   input               clk
 );
-  wire       [10:0]   count_mult_A;
+  wire       [11:0]   count_mult_A;
   wire       [6:0]    count_mult_B;
   reg                 fifo_rd_en;
-  wire       [10:0]   fifo_m_data_count;
-  wire       [10:0]   fifo_s_data_count;
+  wire       [11:0]   fifo_m_data_count;
+  wire       [11:0]   fifo_s_data_count;
   wire       [10:0]   ram1_addra;
   wire       [10:0]   ram1_addrb;
   reg                 ram1_ena;
@@ -45,7 +45,7 @@ module four2three (
   reg                 ram4_ena;
   reg                 ram4_enb;
   reg        [0:0]    ram4_wea;
-  wire       [10:0]   count_mult_P;
+  wire       [11:0]   count_mult_P;
   wire                fifo_data_in_ready;
   wire       [63:0]   fifo_data_out;
   wire                fifo_data_out_valid;
@@ -56,16 +56,24 @@ module four2three (
   wire       [63:0]   ram2_doutb;
   wire       [63:0]   ram3_doutb;
   wire       [63:0]   ram4_doutb;
+  wire       [11:0]   _zz_addrb;
+  wire       [11:0]   _zz_addrb_1;
+  wire       [11:0]   _zz_addrb_2;
+  wire       [11:0]   _zz_addrb_3;
   wire       [9:0]    _zz_when_four2three_l72;
   wire       [6:0]    _zz_when_four2three_l72_1;
-  wire       [10:0]   _zz_when_four2three_l89;
-  wire       [10:0]   _zz_when_four2three_l110;
-  wire       [17:0]   _zz_when_four2three_l204;
-  wire       [17:0]   _zz_when_four2three_l204_1;
-  wire       [17:0]   _zz_when_four2three_l204_2;
-  wire       [17:0]   _zz_when_four2three_l304;
-  wire       [17:0]   _zz_when_four2three_l304_1;
-  wire       [17:0]   _zz_when_four2three_l304_2;
+  wire       [11:0]   _zz_when_four2three_l89;
+  wire       [11:0]   _zz_when_four2three_l110;
+  wire       [11:0]   _zz_addra;
+  wire       [11:0]   _zz_addra_1;
+  wire       [11:0]   _zz_addra_2;
+  wire       [11:0]   _zz_addra_3;
+  wire       [18:0]   _zz_when_four2three_l204;
+  wire       [18:0]   _zz_when_four2three_l204_1;
+  wire       [18:0]   _zz_when_four2three_l204_2;
+  wire       [18:0]   _zz_when_four2three_l304;
+  wire       [18:0]   _zz_when_four2three_l304_1;
+  wire       [18:0]   _zz_when_four2three_l304_2;
   wire       [6:0]    Channel_Times;
   wire                f2t_fsm_wantExit;
   reg                 f2t_fsm_wantStart;
@@ -78,11 +86,11 @@ module four2three (
   reg                 f2t_fsm_EN_Last_Cin;
   wire                when_four2three_l72;
   wire                when_four2three_l77;
-  reg        [10:0]   f2t_fsm_Cnt_Column;
+  reg        [11:0]   f2t_fsm_Cnt_Column;
   reg                 f2t_fsm_EN_Read_State;
   wire                when_four2three_l89;
   wire                when_four2three_l94;
-  reg        [10:0]   f2t_fsm_Cnt_ROW;
+  reg        [11:0]   f2t_fsm_Cnt_ROW;
   wire                when_four2three_l104;
   wire                when_four2three_l106;
   reg                 f2t_fsm_Last_Row;
@@ -92,10 +100,10 @@ module four2three (
   wire                when_four2three_l117;
   reg        [1:0]    f2t_fsm_En_Ram;
   wire                when_four2three_l122;
-  reg        [10:0]   f2t_fsm_addrRam1;
-  reg        [10:0]   f2t_fsm_addrRam2;
-  reg        [10:0]   f2t_fsm_addrRam3;
-  reg        [10:0]   f2t_fsm_addrRam4;
+  reg        [11:0]   f2t_fsm_addrRam1;
+  reg        [11:0]   f2t_fsm_addrRam2;
+  reg        [11:0]   f2t_fsm_addrRam3;
+  reg        [11:0]   f2t_fsm_addrRam4;
   wire                when_four2three_l314;
   wire                when_four2three_l314_1;
   wire                when_four2three_l314_2;
@@ -116,15 +124,23 @@ module four2three (
   `endif
 
 
+  assign _zz_addrb = M_Addr;
+  assign _zz_addrb_1 = M_Addr;
+  assign _zz_addrb_2 = M_Addr;
+  assign _zz_addrb_3 = M_Addr;
   assign _zz_when_four2three_l72_1 = (Channel_Times - 7'h01);
   assign _zz_when_four2three_l72 = {3'd0, _zz_when_four2three_l72_1};
-  assign _zz_when_four2three_l89 = (Row_Num_After_Padding - 11'h001);
-  assign _zz_when_four2three_l110 = (Row_Num_After_Padding - 11'h002);
+  assign _zz_when_four2three_l89 = (Row_Num_After_Padding - 12'h001);
+  assign _zz_when_four2three_l110 = (Row_Num_After_Padding - 12'h002);
+  assign _zz_addra = f2t_fsm_addrRam1;
+  assign _zz_addra_1 = f2t_fsm_addrRam2;
+  assign _zz_addra_2 = f2t_fsm_addrRam3;
+  assign _zz_addra_3 = f2t_fsm_addrRam4;
   assign _zz_when_four2three_l204 = {7'd0, M_Addr};
-  assign _zz_when_four2three_l204_1 = (_zz_when_four2three_l204_2 - 18'h00001);
+  assign _zz_when_four2three_l204_1 = (_zz_when_four2three_l204_2 - 19'h00001);
   assign _zz_when_four2three_l204_2 = (Row_Num_After_Padding * Channel_Times);
   assign _zz_when_four2three_l304 = {7'd0, M_Addr};
-  assign _zz_when_four2three_l304_1 = (_zz_when_four2three_l304_2 - 18'h00001);
+  assign _zz_when_four2three_l304_1 = (_zz_when_four2three_l304_2 - 19'h00001);
   assign _zz_when_four2three_l304_2 = (Row_Num_After_Padding * Channel_Times);
   mul count_mult (
     .A        (count_mult_A  ), //i
@@ -221,10 +237,10 @@ module four2three (
   assign S_DATA_ready = fifo_data_in_ready;
   assign fifo_m_data_count = count_mult_P;
   assign fifo_s_data_count = count_mult_P;
-  assign ram1_addrb = M_Addr;
-  assign ram2_addrb = M_Addr;
-  assign ram3_addrb = M_Addr;
-  assign ram4_addrb = M_Addr;
+  assign ram1_addrb = _zz_addrb[10:0];
+  assign ram2_addrb = _zz_addrb_1[10:0];
+  assign ram3_addrb = _zz_addrb_2[10:0];
+  assign ram4_addrb = _zz_addrb_3[10:0];
   assign f2t_fsm_wantExit = 1'b0;
   always @(*) begin
     f2t_fsm_wantStart = 1'b0;
@@ -352,10 +368,10 @@ module four2three (
     endcase
   end
 
-  assign ram1_addra = f2t_fsm_addrRam1;
-  assign ram2_addra = f2t_fsm_addrRam2;
-  assign ram3_addra = f2t_fsm_addrRam3;
-  assign ram4_addra = f2t_fsm_addrRam4;
+  assign ram1_addra = _zz_addra[10:0];
+  assign ram2_addra = _zz_addra_1[10:0];
+  assign ram3_addra = _zz_addra_2[10:0];
+  assign ram4_addra = _zz_addra_3[10:0];
   always @(*) begin
     if(when_four2three_l163) begin
       fifo_rd_en = 1'b1;
@@ -616,21 +632,21 @@ module four2three (
       StartRow <= 1'b0;
       M_DATA <= 192'h0;
       M_Valid <= 1'b0;
-      f2t_fsm_Cnt_ROW <= 11'h0;
+      f2t_fsm_Cnt_ROW <= 12'h0;
       f2t_fsm_Cnt_Ram <= 2'b00;
       f2t_fsm_En_Ram <= 2'b00;
-      f2t_fsm_addrRam1 <= 11'h0;
-      f2t_fsm_addrRam2 <= 11'h0;
-      f2t_fsm_addrRam3 <= 11'h0;
-      f2t_fsm_addrRam4 <= 11'h0;
+      f2t_fsm_addrRam1 <= 12'h0;
+      f2t_fsm_addrRam2 <= 12'h0;
+      f2t_fsm_addrRam3 <= 12'h0;
+      f2t_fsm_addrRam4 <= 12'h0;
       f2t_fsm_rd_ram_cnt <= 3'b000;
       f2t_fsm_stateReg <= `f2t_fsm_enumDefinition_binary_sequential_f2t_fsm_BOOT;
     end else begin
       if(when_four2three_l104) begin
-        f2t_fsm_Cnt_ROW <= (f2t_fsm_Cnt_ROW + 11'h001);
+        f2t_fsm_Cnt_ROW <= (f2t_fsm_Cnt_ROW + 12'h001);
       end else begin
         if(when_four2three_l106) begin
-          f2t_fsm_Cnt_ROW <= 11'h0;
+          f2t_fsm_Cnt_ROW <= 12'h0;
         end else begin
           f2t_fsm_Cnt_ROW <= f2t_fsm_Cnt_ROW;
         end
@@ -650,24 +666,24 @@ module four2three (
         f2t_fsm_En_Ram <= f2t_fsm_En_Ram;
       end
       if(when_four2three_l314) begin
-        f2t_fsm_addrRam1 <= (f2t_fsm_addrRam1 + 11'h001);
+        f2t_fsm_addrRam1 <= (f2t_fsm_addrRam1 + 12'h001);
       end else begin
-        f2t_fsm_addrRam1 <= 11'h0;
+        f2t_fsm_addrRam1 <= 12'h0;
       end
       if(when_four2three_l314_1) begin
-        f2t_fsm_addrRam2 <= (f2t_fsm_addrRam2 + 11'h001);
+        f2t_fsm_addrRam2 <= (f2t_fsm_addrRam2 + 12'h001);
       end else begin
-        f2t_fsm_addrRam2 <= 11'h0;
+        f2t_fsm_addrRam2 <= 12'h0;
       end
       if(when_four2three_l314_2) begin
-        f2t_fsm_addrRam3 <= (f2t_fsm_addrRam3 + 11'h001);
+        f2t_fsm_addrRam3 <= (f2t_fsm_addrRam3 + 12'h001);
       end else begin
-        f2t_fsm_addrRam3 <= 11'h0;
+        f2t_fsm_addrRam3 <= 12'h0;
       end
       if(when_four2three_l314_3) begin
-        f2t_fsm_addrRam4 <= (f2t_fsm_addrRam4 + 11'h001);
+        f2t_fsm_addrRam4 <= (f2t_fsm_addrRam4 + 12'h001);
       end else begin
-        f2t_fsm_addrRam4 <= 11'h0;
+        f2t_fsm_addrRam4 <= 12'h0;
       end
       if(when_four2three_l198) begin
         StartRow <= 1'b1;
@@ -727,12 +743,12 @@ module four2three (
     end
     if(when_four2three_l94) begin
       if(f2t_fsm_EN_Last_Cin) begin
-        f2t_fsm_Cnt_Column <= (f2t_fsm_Cnt_Column + 11'h001);
+        f2t_fsm_Cnt_Column <= (f2t_fsm_Cnt_Column + 12'h001);
       end else begin
         f2t_fsm_Cnt_Column <= f2t_fsm_Cnt_Column;
       end
     end else begin
-      f2t_fsm_Cnt_Column <= 11'h0;
+      f2t_fsm_Cnt_Column <= 12'h0;
     end
   end
 

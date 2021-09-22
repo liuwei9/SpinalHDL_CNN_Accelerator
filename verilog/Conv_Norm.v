@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_Norm
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:45
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:38
 
 
 module Conv_Norm (
@@ -18,8 +18,8 @@ module Conv_Norm (
   output              M_DATA_valid,
   input               M_DATA_ready,
   output reg [255:0]  M_DATA_payload,
-  input      [10:0]   Row_Num_Out_REG,
-  input      [10:0]   RowNum_After_Padding,
+  input      [11:0]   Row_Num_Out_REG,
+  input      [11:0]   RowNum_After_Padding,
   input      [9:0]    Channel_In_Num_REG,
   input      [9:0]    Channel_Out_Num_REG,
   input      [14:0]   Weight_Single_Num_REG,
@@ -32,45 +32,45 @@ module Conv_Norm (
   input               reset
 );
   wire                compute_ctrl_1_compute_fifo_ready;
-  wire       [10:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG;
-  wire       [10:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG_8;
-  wire       [10:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_OUT_REG;
+  wire       [11:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG;
+  wire       [11:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG_8;
+  wire       [11:0]   compute_ctrl_1_COMPUTE_TIMES_CHANNEL_OUT_REG;
   wire       [63:0]   general_fifo_sync_11_data_in;
   wire                general_fifo_sync_11_wr_en;
-  wire       [10:0]   general_fifo_sync_11_m_data_count;
-  wire       [10:0]   general_fifo_sync_11_s_data_count;
+  wire       [11:0]   general_fifo_sync_11_m_data_count;
+  wire       [11:0]   general_fifo_sync_11_s_data_count;
   wire       [63:0]   general_fifo_sync_12_data_in;
   wire                general_fifo_sync_12_wr_en;
-  wire       [10:0]   general_fifo_sync_12_m_data_count;
-  wire       [10:0]   general_fifo_sync_12_s_data_count;
+  wire       [11:0]   general_fifo_sync_12_m_data_count;
+  wire       [11:0]   general_fifo_sync_12_s_data_count;
   wire       [63:0]   general_fifo_sync_13_data_in;
   wire                general_fifo_sync_13_wr_en;
-  wire       [10:0]   general_fifo_sync_13_m_data_count;
-  wire       [10:0]   general_fifo_sync_13_s_data_count;
+  wire       [11:0]   general_fifo_sync_13_m_data_count;
+  wire       [11:0]   general_fifo_sync_13_s_data_count;
   wire       [63:0]   general_fifo_sync_14_data_in;
   wire                general_fifo_sync_14_wr_en;
-  wire       [10:0]   general_fifo_sync_14_m_data_count;
-  wire       [10:0]   general_fifo_sync_14_s_data_count;
+  wire       [11:0]   general_fifo_sync_14_m_data_count;
+  wire       [11:0]   general_fifo_sync_14_s_data_count;
   wire       [63:0]   general_fifo_sync_15_data_in;
   wire                general_fifo_sync_15_wr_en;
-  wire       [10:0]   general_fifo_sync_15_m_data_count;
-  wire       [10:0]   general_fifo_sync_15_s_data_count;
+  wire       [11:0]   general_fifo_sync_15_m_data_count;
+  wire       [11:0]   general_fifo_sync_15_s_data_count;
   wire       [63:0]   general_fifo_sync_16_data_in;
   wire                general_fifo_sync_16_wr_en;
-  wire       [10:0]   general_fifo_sync_16_m_data_count;
-  wire       [10:0]   general_fifo_sync_16_s_data_count;
+  wire       [11:0]   general_fifo_sync_16_m_data_count;
+  wire       [11:0]   general_fifo_sync_16_s_data_count;
   wire       [63:0]   general_fifo_sync_17_data_in;
   wire                general_fifo_sync_17_wr_en;
-  wire       [10:0]   general_fifo_sync_17_m_data_count;
-  wire       [10:0]   general_fifo_sync_17_s_data_count;
+  wire       [11:0]   general_fifo_sync_17_m_data_count;
+  wire       [11:0]   general_fifo_sync_17_s_data_count;
   wire       [63:0]   general_fifo_sync_18_data_in;
   wire                general_fifo_sync_18_wr_en;
-  wire       [10:0]   general_fifo_sync_18_m_data_count;
-  wire       [10:0]   general_fifo_sync_18_s_data_count;
+  wire       [11:0]   general_fifo_sync_18_m_data_count;
+  wire       [11:0]   general_fifo_sync_18_s_data_count;
   wire       [63:0]   general_fifo_sync_19_data_in;
   wire                general_fifo_sync_19_wr_en;
-  wire       [10:0]   general_fifo_sync_19_m_data_count;
-  wire       [10:0]   general_fifo_sync_19_s_data_count;
+  wire       [11:0]   general_fifo_sync_19_m_data_count;
+  wire       [11:0]   general_fifo_sync_19_s_data_count;
   wire       [0:0]    Configurable_RAM_Norm_wea;
   wire       [71:0]   mul_add_simd_128_weightIn;
   wire       [71:0]   mul_add_simd_129_weightIn;
@@ -205,10 +205,10 @@ module Conv_Norm (
   wire                compute_ctrl_1_rd_en_fifo;
   wire                compute_ctrl_1_M_Valid;
   wire       [12:0]   compute_ctrl_1_weight_addrb;
-  wire       [10:0]   compute_ctrl_1_ram_temp_read_address;
-  wire       [10:0]   compute_ctrl_1_ram_temp_write_address;
-  wire       [10:0]   compute_ctrl_1_S_Count_Fifo;
-  wire       [10:0]   compute_ctrl_1_M_Count_Fifo;
+  wire       [11:0]   compute_ctrl_1_ram_temp_read_address;
+  wire       [11:0]   compute_ctrl_1_ram_temp_write_address;
+  wire       [11:0]   compute_ctrl_1_S_Count_Fifo;
+  wire       [11:0]   compute_ctrl_1_M_Count_Fifo;
   wire                load_weight_1_Write_Block_Complete;
   wire                load_weight_1_S_Para_Data_ready;
   wire       [1023:0] load_weight_1_Data_Out_Weight_0;
@@ -1672,9 +1672,9 @@ module Conv_Norm (
   assign COMPUTE_TIMES_CHANNEL_IN_REG_8 = (Channel_In_Num_REG >>> 3);
   assign COMPUTE_TIMES_CHANNEL_OUT_REG = (Channel_Out_Num_REG >>> 3);
   assign M_DATA_valid = compute_ctrl_1_M_Valid;
-  assign compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG = {5'd0, COMPUTE_TIMES_CHANNEL_IN_REG};
-  assign compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG_8 = {4'd0, COMPUTE_TIMES_CHANNEL_IN_REG_8};
-  assign compute_ctrl_1_COMPUTE_TIMES_CHANNEL_OUT_REG = {4'd0, COMPUTE_TIMES_CHANNEL_OUT_REG};
+  assign compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG = {6'd0, COMPUTE_TIMES_CHANNEL_IN_REG};
+  assign compute_ctrl_1_COMPUTE_TIMES_CHANNEL_IN_REG_8 = {5'd0, COMPUTE_TIMES_CHANNEL_IN_REG_8};
+  assign compute_ctrl_1_COMPUTE_TIMES_CHANNEL_OUT_REG = {5'd0, COMPUTE_TIMES_CHANNEL_OUT_REG};
   assign Compute_Complete = compute_ctrl_1_Compute_Complete;
   assign Write_Block_Complete = load_weight_1_Write_Block_Complete;
   assign para_data_ready = load_weight_1_S_Para_Data_ready;

@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : data_generate
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:45
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:38
 
 
 module data_generate (
@@ -12,31 +12,31 @@ module data_generate (
   output     [575:0]  M_DATA,
   output     [8:0]    M_DATA_Valid,
   input               M_DATA_Ready,
-  input      [10:0]   Row_Num_In_REG,
+  input      [11:0]   Row_Num_In_REG,
   input               Padding_REG,
   input      [7:0]    Zero_Point_REG,
   input      [2:0]    Zero_Num_REG,
   input      [9:0]    Channel_In_Num_REG,
   input               EN_Cin_Select_REG,
-  output     [10:0]   RowNum_After_Padding,
+  output     [11:0]   RowNum_After_Padding,
   input               reset,
   input               clk
 );
-  wire       [10:0]   f2t_Row_Num_After_Padding;
-  wire       [10:0]   t2n_Row_Num_After_Padding;
+  wire       [11:0]   f2t_Row_Num_After_Padding;
+  wire       [11:0]   t2n_Row_Num_After_Padding;
   wire                cin_convert_1_S_DATA_ready;
   wire                cin_convert_1_M_DATA_valid;
   wire       [63:0]   cin_convert_1_M_DATA_payload;
   wire                padding_1_S_DATA_ready;
   wire                padding_1_M_DATA_valid;
   wire       [63:0]   padding_1_M_DATA_payload;
-  wire       [10:0]   padding_1_RowNum_After_Padding;
+  wire       [11:0]   padding_1_RowNum_After_Padding;
   wire                f2t_StartRow;
   wire                f2t_S_DATA_ready;
   wire       [191:0]  f2t_M_DATA;
   wire                f2t_M_Valid;
   wire                t2n_S_DATA_Ready;
-  wire       [10:0]   t2n_S_DATA_Addr;
+  wire       [11:0]   t2n_S_DATA_Addr;
   wire       [575:0]  t2n_M_Data;
   wire       [8:0]    t2n_M_Valid;
   wire                t2n_S_Ready;

@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_quan
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:46
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:38
 
 
 module Conv_quan (
@@ -17,7 +17,7 @@ module Conv_quan (
   output              M_DATA_valid,
   input               M_DATA_ready,
   output     [63:0]   M_DATA_payload,
-  input      [10:0]   Row_Num_Out_REG,
+  input      [11:0]   Row_Num_Out_REG,
   input      [9:0]    Channel_Out_Num_REG,
   input               reset,
   input               clk
@@ -25,7 +25,7 @@ module Conv_quan (
   wire       [7:0]    quan_ctrl_bias_addrb;
   wire                quan_ctrl_EN_Rd_Fifo;
   wire                quan_ctrl_M_Valid;
-  wire       [10:0]   quan_ctrl_S_Count_Fifo;
+  wire       [11:0]   quan_ctrl_S_Count_Fifo;
   wire                bias_S_DATA_ready;
   wire                bias_fifo_ready;
   wire       [255:0]  bias_M_Data;
@@ -84,7 +84,8 @@ module Conv_quan (
     .data_in         (shift_8_data_out  ), //i
     .zero_data_in    (Zero_Point_REG3   ), //i
     .data_out        (zero_data_out     ), //o
-    .clk             (clk               )  //i
+    .clk             (clk               ), //i
+    .reset           (reset             )  //i
   );
   Conv_leaky_relu leaky (
     .data_in       (zero_data_out    ), //i

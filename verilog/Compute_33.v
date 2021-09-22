@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Compute_33
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:46
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:38
 
 
 module Compute_33 (
@@ -26,10 +26,13 @@ module Compute_33 (
   input               reset,
   input               clk
 );
+  wire       [11:0]   data_generate_1_Row_Num_In_REG;
+  wire       [11:0]   conv_norm_1_Row_Num_Out_REG;
+  wire       [11:0]   conv_quan_1_Row_Num_Out_REG;
   wire                data_generate_1_S_DATA_ready;
   wire       [575:0]  data_generate_1_M_DATA;
   wire       [8:0]    data_generate_1_M_DATA_Valid;
-  wire       [10:0]   data_generate_1_RowNum_After_Padding;
+  wire       [11:0]   data_generate_1_RowNum_After_Padding;
   wire                conv_norm_1_para_data_ready;
   wire                conv_norm_1_Write_Block_Complete;
   wire                conv_norm_1_Compute_Complete;
@@ -70,7 +73,7 @@ module Compute_33 (
     .M_DATA                  (data_generate_1_M_DATA                ), //o
     .M_DATA_Valid            (data_generate_1_M_DATA_Valid          ), //o
     .M_DATA_Ready            (conv_norm_1_S_DATA_Ready              ), //i
-    .Row_Num_In_REG          (Row_Num_In_REG                        ), //i
+    .Row_Num_In_REG          (data_generate_1_Row_Num_In_REG        ), //i
     .Padding_REG             (Padding_REG                           ), //i
     .Zero_Point_REG          (Zero_Point_REG1                       ), //i
     .Zero_Num_REG            (Zero_Num_REG                          ), //i
@@ -94,7 +97,7 @@ module Compute_33 (
     .M_DATA_valid             (conv_norm_1_M_DATA_valid              ), //o
     .M_DATA_ready             (conv_quan_1_S_DATA_ready              ), //i
     .M_DATA_payload           (conv_norm_1_M_DATA_payload            ), //o
-    .Row_Num_Out_REG          (Row_Num_Out_REG                       ), //i
+    .Row_Num_Out_REG          (conv_norm_1_Row_Num_Out_REG           ), //i
     .RowNum_After_Padding     (data_generate_1_RowNum_After_Padding  ), //i
     .Channel_In_Num_REG       (Channel_In_Num_REG                    ), //i
     .Channel_Out_Num_REG      (Channel_Out_Num_REG                   ), //i
@@ -108,22 +111,22 @@ module Compute_33 (
     .reset                    (reset                                 )  //i
   );
   Conv_quan conv_quan_1 (
-    .Strat                  (Start_Cu                    ), //i
-    .S_DATA_valid           (conv_norm_1_M_DATA_valid    ), //i
-    .S_DATA_ready           (conv_quan_1_S_DATA_ready    ), //o
-    .S_DATA_payload         (conv_norm_1_M_DATA_payload  ), //i
-    .bias_data_in           (conv_norm_1_Data_Out_Bias   ), //i
-    .scale_data_in          (conv_norm_1_Data_Out_Scale  ), //i
-    .shift_data_in          (conv_norm_1_Data_Out_Shift  ), //i
-    .Zero_Point_REG3        (Zero_Point_REG3             ), //i
-    .bias_addrb             (conv_quan_1_bias_addrb      ), //o
-    .M_DATA_valid           (conv_quan_1_M_DATA_valid    ), //o
-    .M_DATA_ready           (M_DATA_ready                ), //i
-    .M_DATA_payload         (conv_quan_1_M_DATA_payload  ), //o
-    .Row_Num_Out_REG        (Row_Num_Out_REG             ), //i
-    .Channel_Out_Num_REG    (Channel_Out_Num_REG         ), //i
-    .reset                  (reset                       ), //i
-    .clk                    (clk                         )  //i
+    .Strat                  (Start_Cu                     ), //i
+    .S_DATA_valid           (conv_norm_1_M_DATA_valid     ), //i
+    .S_DATA_ready           (conv_quan_1_S_DATA_ready     ), //o
+    .S_DATA_payload         (conv_norm_1_M_DATA_payload   ), //i
+    .bias_data_in           (conv_norm_1_Data_Out_Bias    ), //i
+    .scale_data_in          (conv_norm_1_Data_Out_Scale   ), //i
+    .shift_data_in          (conv_norm_1_Data_Out_Shift   ), //i
+    .Zero_Point_REG3        (Zero_Point_REG3              ), //i
+    .bias_addrb             (conv_quan_1_bias_addrb       ), //o
+    .M_DATA_valid           (conv_quan_1_M_DATA_valid     ), //o
+    .M_DATA_ready           (M_DATA_ready                 ), //i
+    .M_DATA_payload         (conv_quan_1_M_DATA_payload   ), //o
+    .Row_Num_Out_REG        (conv_quan_1_Row_Num_Out_REG  ), //i
+    .Channel_Out_Num_REG    (Channel_Out_Num_REG          ), //i
+    .reset                  (reset                        ), //i
+    .clk                    (clk                          )  //i
   );
   assign Zero_Point_REG1 = Cu_Instruction[127 : 120];
   assign Zero_Point_REG3 = Cu_Instruction[119 : 112];
@@ -138,11 +141,14 @@ module Compute_33 (
   assign Weight_Num_REG = Para_Instruction[62 : 48];
   assign Bias_Num_REG = Para_Instruction[47 : 40];
   assign S_DATA_ready = data_generate_1_S_DATA_ready;
+  assign data_generate_1_Row_Num_In_REG = {1'd0, Row_Num_In_REG};
   assign para_data_ready = conv_norm_1_para_data_ready;
   assign Write_Block_Complete = conv_norm_1_Write_Block_Complete;
   assign Conv_Complete = conv_norm_1_Compute_Complete;
+  assign conv_norm_1_Row_Num_Out_REG = {1'd0, Row_Num_Out_REG};
   assign M_DATA_valid = conv_quan_1_M_DATA_valid;
   assign M_DATA_payload = conv_quan_1_M_DATA_payload;
+  assign conv_quan_1_Row_Num_Out_REG = {1'd0, Row_Num_Out_REG};
   always @(posedge clk) begin
     _zz_Cu_Instruction_reg <= {{{Reg_7,Reg_6},Reg_5},Reg_4};
     Cu_Instruction_reg <= _zz_Cu_Instruction_reg;

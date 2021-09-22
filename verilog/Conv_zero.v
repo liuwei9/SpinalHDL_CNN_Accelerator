@@ -1,14 +1,15 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_zero
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:45
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:38
 
 
 module Conv_zero (
   input      [127:0]  data_in,
   input      [7:0]    zero_data_in,
   output reg [63:0]   data_out,
-  input               clk
+  input               clk,
+  input               reset
 );
   wire       [15:0]   xadd_A;
   wire       [15:0]   xadd_1_A;
@@ -116,81 +117,6 @@ module Conv_zero (
   assign xadd_7_A = data_in[127 : 112];
   assign add_out_temp_7 = xadd_7_S;
   assign when_Conv_zero_l32 = add_out_temp_0[15];
-  always @(*) begin
-    if(when_Conv_zero_l32) begin
-      data_out[7 : 0] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34) begin
-        data_out[7 : 0] = 8'hff;
-      end else begin
-        data_out[7 : 0] = add_out_temp_0[7 : 0];
-      end
-    end
-    if(when_Conv_zero_l32_1) begin
-      data_out[15 : 8] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34_1) begin
-        data_out[15 : 8] = 8'hff;
-      end else begin
-        data_out[15 : 8] = add_out_temp_1[7 : 0];
-      end
-    end
-    if(when_Conv_zero_l32_2) begin
-      data_out[23 : 16] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34_2) begin
-        data_out[23 : 16] = 8'hff;
-      end else begin
-        data_out[23 : 16] = add_out_temp_2[7 : 0];
-      end
-    end
-    if(when_Conv_zero_l32_3) begin
-      data_out[31 : 24] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34_3) begin
-        data_out[31 : 24] = 8'hff;
-      end else begin
-        data_out[31 : 24] = add_out_temp_3[7 : 0];
-      end
-    end
-    if(when_Conv_zero_l32_4) begin
-      data_out[39 : 32] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34_4) begin
-        data_out[39 : 32] = 8'hff;
-      end else begin
-        data_out[39 : 32] = add_out_temp_4[7 : 0];
-      end
-    end
-    if(when_Conv_zero_l32_5) begin
-      data_out[47 : 40] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34_5) begin
-        data_out[47 : 40] = 8'hff;
-      end else begin
-        data_out[47 : 40] = add_out_temp_5[7 : 0];
-      end
-    end
-    if(when_Conv_zero_l32_6) begin
-      data_out[55 : 48] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34_6) begin
-        data_out[55 : 48] = 8'hff;
-      end else begin
-        data_out[55 : 48] = add_out_temp_6[7 : 0];
-      end
-    end
-    if(when_Conv_zero_l32_7) begin
-      data_out[63 : 56] = 8'h0;
-    end else begin
-      if(when_Conv_zero_l34_7) begin
-        data_out[63 : 56] = 8'hff;
-      end else begin
-        data_out[63 : 56] = add_out_temp_7[7 : 0];
-      end
-    end
-  end
-
   assign when_Conv_zero_l34 = (add_out_temp_0[14 : 8] != 7'h0);
   assign when_Conv_zero_l32_1 = add_out_temp_1[15];
   assign when_Conv_zero_l34_1 = (add_out_temp_1[14 : 8] != 7'h0);
@@ -206,5 +132,80 @@ module Conv_zero (
   assign when_Conv_zero_l34_6 = (add_out_temp_6[14 : 8] != 7'h0);
   assign when_Conv_zero_l32_7 = add_out_temp_7[15];
   assign when_Conv_zero_l34_7 = (add_out_temp_7[14 : 8] != 7'h0);
+  always @(posedge clk) begin
+    if(when_Conv_zero_l32) begin
+      data_out[7 : 0] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34) begin
+        data_out[7 : 0] <= 8'hff;
+      end else begin
+        data_out[7 : 0] <= add_out_temp_0[7 : 0];
+      end
+    end
+    if(when_Conv_zero_l32_1) begin
+      data_out[15 : 8] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34_1) begin
+        data_out[15 : 8] <= 8'hff;
+      end else begin
+        data_out[15 : 8] <= add_out_temp_1[7 : 0];
+      end
+    end
+    if(when_Conv_zero_l32_2) begin
+      data_out[23 : 16] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34_2) begin
+        data_out[23 : 16] <= 8'hff;
+      end else begin
+        data_out[23 : 16] <= add_out_temp_2[7 : 0];
+      end
+    end
+    if(when_Conv_zero_l32_3) begin
+      data_out[31 : 24] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34_3) begin
+        data_out[31 : 24] <= 8'hff;
+      end else begin
+        data_out[31 : 24] <= add_out_temp_3[7 : 0];
+      end
+    end
+    if(when_Conv_zero_l32_4) begin
+      data_out[39 : 32] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34_4) begin
+        data_out[39 : 32] <= 8'hff;
+      end else begin
+        data_out[39 : 32] <= add_out_temp_4[7 : 0];
+      end
+    end
+    if(when_Conv_zero_l32_5) begin
+      data_out[47 : 40] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34_5) begin
+        data_out[47 : 40] <= 8'hff;
+      end else begin
+        data_out[47 : 40] <= add_out_temp_5[7 : 0];
+      end
+    end
+    if(when_Conv_zero_l32_6) begin
+      data_out[55 : 48] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34_6) begin
+        data_out[55 : 48] <= 8'hff;
+      end else begin
+        data_out[55 : 48] <= add_out_temp_6[7 : 0];
+      end
+    end
+    if(when_Conv_zero_l32_7) begin
+      data_out[63 : 56] <= 8'h0;
+    end else begin
+      if(when_Conv_zero_l34_7) begin
+        data_out[63 : 56] <= 8'hff;
+      end else begin
+        data_out[63 : 56] <= add_out_temp_7[7 : 0];
+      end
+    end
+  end
+
 
 endmodule

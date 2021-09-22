@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : compute_ctrl
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:44
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:36
 
 
 module compute_ctrl (
@@ -13,44 +13,44 @@ module compute_ctrl (
   input               M_ready,
   output              M_Valid,
   output     [12:0]   weight_addrb,
-  output     [10:0]   ram_temp_read_address,
-  output reg [10:0]   ram_temp_write_address,
-  input      [10:0]   COMPUTE_TIMES_CHANNEL_IN_REG,
-  input      [10:0]   COMPUTE_TIMES_CHANNEL_IN_REG_8,
-  input      [10:0]   COMPUTE_TIMES_CHANNEL_OUT_REG,
-  input      [10:0]   ROW_NUM_CHANNEL_OUT_REG,
-  output     [10:0]   S_Count_Fifo,
-  output     [10:0]   M_Count_Fifo,
+  output     [11:0]   ram_temp_read_address,
+  output reg [11:0]   ram_temp_write_address,
+  input      [11:0]   COMPUTE_TIMES_CHANNEL_IN_REG,
+  input      [11:0]   COMPUTE_TIMES_CHANNEL_IN_REG_8,
+  input      [11:0]   COMPUTE_TIMES_CHANNEL_OUT_REG,
+  input      [11:0]   ROW_NUM_CHANNEL_OUT_REG,
+  output     [11:0]   S_Count_Fifo,
+  output     [11:0]   M_Count_Fifo,
   input               clk,
   input               reset
 );
-  wire       [10:0]   count_mult_P;
-  wire       [9:0]    _zz_M_Count_Fifo;
-  wire       [10:0]   _zz_when_compute_ctrl_l67;
-  wire       [10:0]   _zz_when_compute_ctrl_l67_1;
-  wire       [10:0]   _zz_when_compute_ctrl_l76;
-  wire       [10:0]   _zz_when_compute_ctrl_l76_1;
-  wire       [10:0]   _zz_when_compute_ctrl_l77;
-  wire       [10:0]   _zz_when_compute_ctrl_l77_1;
-  wire       [10:0]   _zz_when_compute_ctrl_l91;
-  wire       [10:0]   _zz_when_compute_ctrl_l91_1;
-  wire       [10:0]   _zz_when_compute_ctrl_l91_2;
-  wire       [10:0]   _zz_when_compute_ctrl_l91_3;
-  wire       [10:0]   _zz_when_compute_ctrl_l108;
-  wire       [10:0]   _zz_when_compute_ctrl_l108_1;
-  wire       [10:0]   _zz_when_compute_ctrl_l108_2;
-  wire       [10:0]   _zz_when_compute_ctrl_l108_3;
-  wire       [10:0]   _zz_when_compute_ctrl_l108_4;
-  wire       [10:0]   _zz_when_compute_ctrl_l114;
-  wire       [10:0]   _zz_ram_temp_write_address;
-  wire       [10:0]   _zz_when_compute_ctrl_l143;
-  wire       [10:0]   _zz_when_compute_ctrl_l143_1;
-  wire       [10:0]   _zz_when_compute_ctrl_l155;
-  wire       [10:0]   _zz_when_compute_ctrl_l155_1;
-  wire       [10:0]   _zz_when_compute_ctrl_l155_2;
-  wire       [10:0]   _zz_when_compute_ctrl_l155_3;
-  wire       [10:0]   _zz_when_compute_ctrl_l167;
-  wire       [10:0]   _zz_when_compute_ctrl_l167_1;
+  wire       [11:0]   count_mult_P;
+  wire       [10:0]   _zz_M_Count_Fifo;
+  wire       [11:0]   _zz_when_compute_ctrl_l67;
+  wire       [11:0]   _zz_when_compute_ctrl_l67_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l76;
+  wire       [11:0]   _zz_when_compute_ctrl_l76_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l77;
+  wire       [11:0]   _zz_when_compute_ctrl_l77_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l91;
+  wire       [11:0]   _zz_when_compute_ctrl_l91_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l91_2;
+  wire       [11:0]   _zz_when_compute_ctrl_l91_3;
+  wire       [11:0]   _zz_when_compute_ctrl_l108;
+  wire       [11:0]   _zz_when_compute_ctrl_l108_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l108_2;
+  wire       [11:0]   _zz_when_compute_ctrl_l108_3;
+  wire       [11:0]   _zz_when_compute_ctrl_l108_4;
+  wire       [11:0]   _zz_when_compute_ctrl_l114;
+  wire       [11:0]   _zz_ram_temp_write_address;
+  wire       [11:0]   _zz_when_compute_ctrl_l143;
+  wire       [11:0]   _zz_when_compute_ctrl_l143_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l155;
+  wire       [11:0]   _zz_when_compute_ctrl_l155_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l155_2;
+  wire       [11:0]   _zz_when_compute_ctrl_l155_3;
+  wire       [11:0]   _zz_when_compute_ctrl_l167;
+  wire       [11:0]   _zz_when_compute_ctrl_l167_1;
   wire                fsm_wantExit;
   reg                 fsm_wantStart;
   wire                fsm_wantKill;
@@ -65,10 +65,10 @@ module compute_ctrl (
   wire                when_compute_ctrl_l75;
   wire                when_compute_ctrl_l76;
   wire                when_compute_ctrl_l77;
-  reg        [10:0]   fsm_Cnt_Column;
+  reg        [11:0]   fsm_Cnt_Column;
   wire                when_compute_ctrl_l90;
   wire                when_compute_ctrl_l91;
-  reg        [10:0]   fsm_Cnt_Row;
+  reg        [11:0]   fsm_Cnt_Row;
   wire                when_compute_ctrl_l100;
   wire                when_compute_ctrl_l102;
   reg                 fsm_En_Compute_Column;
@@ -79,11 +79,11 @@ module compute_ctrl (
   wire                when_compute_ctrl_l126;
   wire                when_compute_ctrl_l127;
   wire                when_compute_ctrl_l135;
-  reg        [10:0]   fsm_ram_temp_read_address_temp;
+  reg        [11:0]   fsm_ram_temp_read_address_temp;
   wire                when_compute_ctrl_l142;
   wire                when_compute_ctrl_l143;
-  reg        [10:0]   _zz_ram_temp_read_address;
-  reg        [10:0]   _zz_ram_temp_read_address_1;
+  reg        [11:0]   _zz_ram_temp_read_address;
+  reg        [11:0]   _zz_ram_temp_read_address_1;
   reg        [12:0]   fsm_weight_addrb_temp;
   wire                when_compute_ctrl_l154;
   wire                when_compute_ctrl_l155;
@@ -151,31 +151,31 @@ module compute_ctrl (
 
 
   assign _zz_M_Count_Fifo = (count_mult_P >>> 1);
-  assign _zz_when_compute_ctrl_l67 = {1'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l67_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l76 = {1'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l76_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l77 = {1'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l77_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l91 = {1'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l91_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l91_2 = {1'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l91_3 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l108 = (ROW_NUM_CHANNEL_OUT_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l108_1 = {1'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l108_2 = (COMPUTE_TIMES_CHANNEL_IN_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l108_3 = {1'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l108_4 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l114 = (ROW_NUM_CHANNEL_OUT_REG - 11'h001);
-  assign _zz_ram_temp_write_address = (ram_temp_write_address + 11'h001);
-  assign _zz_when_compute_ctrl_l143 = {1'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l143_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l155 = {1'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l155_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l155_2 = {1'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l155_3 = (COMPUTE_TIMES_CHANNEL_IN_REG - 11'h001);
-  assign _zz_when_compute_ctrl_l167 = {1'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l167_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 11'h001);
+  assign _zz_when_compute_ctrl_l67 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l67_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l76 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l76_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l77 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l77_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l91 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l91_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l91_2 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l91_3 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l108 = (ROW_NUM_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l108_1 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l108_2 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l108_3 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l108_4 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l114 = (ROW_NUM_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_ram_temp_write_address = (ram_temp_write_address + 12'h001);
+  assign _zz_when_compute_ctrl_l143 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l143_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l155 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l155_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l155_2 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l155_3 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l167 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l167_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
   mul_2 count_mult (
     .A        (ROW_NUM_CHANNEL_OUT_REG         ), //i
     .B        (COMPUTE_TIMES_CHANNEL_IN_REG_8  ), //i
@@ -374,18 +374,18 @@ module compute_ctrl (
     end
     if(when_compute_ctrl_l90) begin
       if(when_compute_ctrl_l91) begin
-        fsm_Cnt_Column <= (fsm_Cnt_Column + 11'h001);
+        fsm_Cnt_Column <= (fsm_Cnt_Column + 12'h001);
       end else begin
         fsm_Cnt_Column <= fsm_Cnt_Column;
       end
     end else begin
-      fsm_Cnt_Column <= 11'h0;
+      fsm_Cnt_Column <= 12'h0;
     end
     if(when_compute_ctrl_l100) begin
-      fsm_Cnt_Row <= (fsm_Cnt_Row + 11'h001);
+      fsm_Cnt_Row <= (fsm_Cnt_Row + 12'h001);
     end else begin
       if(when_compute_ctrl_l102) begin
-        fsm_Cnt_Row <= 11'h0;
+        fsm_Cnt_Row <= 12'h0;
       end else begin
         fsm_Cnt_Row <= fsm_Cnt_Row;
       end
@@ -405,7 +405,7 @@ module compute_ctrl (
       rd_en_fifo <= 1'b0;
     end
     if(when_compute_ctrl_l135) begin
-      ram_temp_write_address <= 11'h0;
+      ram_temp_write_address <= 12'h0;
     end else begin
       if(rd_en_fifo) begin
         ram_temp_write_address <= _zz_ram_temp_write_address;
@@ -413,12 +413,12 @@ module compute_ctrl (
     end
     if(when_compute_ctrl_l142) begin
       if(when_compute_ctrl_l143) begin
-        fsm_ram_temp_read_address_temp <= 11'h0;
+        fsm_ram_temp_read_address_temp <= 12'h0;
       end else begin
-        fsm_ram_temp_read_address_temp <= (fsm_ram_temp_read_address_temp + 11'h001);
+        fsm_ram_temp_read_address_temp <= (fsm_ram_temp_read_address_temp + 12'h001);
       end
     end else begin
-      fsm_ram_temp_read_address_temp <= 11'h0;
+      fsm_ram_temp_read_address_temp <= 12'h0;
     end
     _zz_ram_temp_read_address <= fsm_ram_temp_read_address_temp;
     _zz_ram_temp_read_address_1 <= _zz_ram_temp_read_address;

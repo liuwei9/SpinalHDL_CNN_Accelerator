@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_quan_ctrl
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:45
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:37
 
 
 module Conv_quan_ctrl (
@@ -11,18 +11,18 @@ module Conv_quan_ctrl (
   input               Fifo_Ready,
   input               M_Ready,
   output              M_Valid,
-  input      [10:0]   Row_Num_Out_REG,
+  input      [11:0]   Row_Num_Out_REG,
   input      [9:0]    Channel_Out_Num_REG,
-  output     [10:0]   S_Count_Fifo,
+  output     [11:0]   S_Count_Fifo,
   input               clk,
   input               reset
 );
-  wire       [10:0]   count_mult_B;
-  wire       [10:0]   count_mult_P;
+  wire       [11:0]   count_mult_B;
+  wire       [11:0]   count_mult_P;
   wire       [9:0]    _zz_when_Conv_quan_ctrl_l53;
   wire       [6:0]    _zz_when_Conv_quan_ctrl_l53_1;
   wire       [9:0]    _zz_bias_addrb;
-  wire       [10:0]   _zz_when_Conv_quan_ctrl_l85;
+  wire       [11:0]   _zz_when_Conv_quan_ctrl_l85;
   wire       [6:0]    Channel_Times;
   wire                fsm_wantExit;
   reg                 fsm_wantStart;
@@ -60,11 +60,11 @@ module Conv_quan_ctrl (
   reg                 fsm_M_Valid_temp_delay_18;
   reg                 fsm_M_Valid_temp_delay_19;
   reg                 fsm_M_Valid_temp_delay_20;
-  reg        [10:0]   fsm_Cnt_Column;
+  reg        [11:0]   fsm_Cnt_Column;
   reg                 fsm_En_Col;
   wire                when_Conv_quan_ctrl_l85;
   wire                when_Conv_quan_ctrl_l90;
-  reg        [10:0]   fsm_Cnt_Row;
+  reg        [11:0]   fsm_Cnt_Row;
   reg                 fsm_En_Row;
   wire                when_Conv_quan_ctrl_l101;
   wire                when_Conv_quan_ctrl_l106;
@@ -80,7 +80,7 @@ module Conv_quan_ctrl (
   assign _zz_when_Conv_quan_ctrl_l53_1 = (Channel_Times - 7'h01);
   assign _zz_when_Conv_quan_ctrl_l53 = {3'd0, _zz_when_Conv_quan_ctrl_l53_1};
   assign _zz_bias_addrb = fsm_Cnt_Cout;
-  assign _zz_when_Conv_quan_ctrl_l85 = (Row_Num_Out_REG - 11'h001);
+  assign _zz_when_Conv_quan_ctrl_l85 = (Row_Num_Out_REG - 12'h001);
   mul_2 count_mult (
     .A        (Row_Num_Out_REG  ), //i
     .B        (count_mult_B     ), //i
@@ -116,7 +116,7 @@ module Conv_quan_ctrl (
   `endif
 
   assign Channel_Times = (Channel_Out_Num_REG >>> 3);
-  assign count_mult_B = {4'd0, Channel_Times};
+  assign count_mult_B = {5'd0, Channel_Times};
   assign S_Count_Fifo = count_mult_P;
   assign fsm_wantExit = 1'b0;
   always @(*) begin
@@ -297,18 +297,18 @@ module Conv_quan_ctrl (
     fsm_M_Valid_temp_delay_20 <= fsm_M_Valid_temp_delay_19;
     if(when_Conv_quan_ctrl_l90) begin
       if(fsm_EN_Last_Cout) begin
-        fsm_Cnt_Column <= (fsm_Cnt_Column + 11'h001);
+        fsm_Cnt_Column <= (fsm_Cnt_Column + 12'h001);
       end else begin
         fsm_Cnt_Column <= fsm_Cnt_Column;
       end
     end else begin
-      fsm_Cnt_Column <= 11'h0;
+      fsm_Cnt_Column <= 12'h0;
     end
     if(when_Conv_quan_ctrl_l106) begin
-      fsm_Cnt_Row <= (fsm_Cnt_Row + 11'h001);
+      fsm_Cnt_Row <= (fsm_Cnt_Row + 12'h001);
     end else begin
       if(when_Conv_quan_ctrl_l108) begin
-        fsm_Cnt_Row <= 11'h0;
+        fsm_Cnt_Row <= 12'h0;
       end else begin
         fsm_Cnt_Row <= fsm_Cnt_Row;
       end

@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : padding
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:43
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:36
 
 
 module padding (
@@ -12,46 +12,46 @@ module padding (
   output reg          M_DATA_valid,
   input               M_DATA_ready,
   output reg [63:0]   M_DATA_payload,
-  input      [10:0]   Row_Num_In_REG,
+  input      [11:0]   Row_Num_In_REG,
   input      [9:0]    Channel_In_Num_REG,
   input               Padding_REG,
   input      [7:0]    Zero_Point_REG,
   input      [2:0]    Zero_Num_REG,
-  output     [10:0]   RowNum_After_Padding,
+  output     [11:0]   RowNum_After_Padding,
   input               reset,
   input               clk
 );
   wire       [6:0]    count_mult_B;
   reg                 fifo_rd_en;
-  wire       [10:0]   fifo_m_data_count;
-  wire       [10:0]   count_mult_P;
+  wire       [11:0]   fifo_m_data_count;
+  wire       [11:0]   count_mult_P;
   wire                fifo_data_in_ready;
   wire       [63:0]   fifo_data_out;
   wire                fifo_data_out_valid;
   wire                fifo_data_valid;
   wire                fifo_full;
   wire                fifo_empty;
-  wire       [10:0]   _zz_Out_Size;
+  wire       [11:0]   _zz_Out_Size;
   wire       [4:0]    _zz_Out_Size_1;
-  wire       [10:0]   _zz_when_padding_l103;
+  wire       [11:0]   _zz_when_padding_l103;
   wire       [2:0]    _zz_when_padding_l103_1;
-  wire       [10:0]   _zz_when_padding_l103_2;
-  wire       [10:0]   _zz_when_padding_l103_3;
-  wire       [10:0]   _zz_when_padding_l103_4;
+  wire       [11:0]   _zz_when_padding_l103_2;
+  wire       [11:0]   _zz_when_padding_l103_3;
+  wire       [11:0]   _zz_when_padding_l103_4;
   wire       [2:0]    _zz_when_padding_l103_5;
   wire       [9:0]    _zz_when_padding_l111;
   wire       [6:0]    _zz_when_padding_l111_1;
-  wire       [10:0]   _zz_when_padding_l129;
-  wire       [10:0]   _zz_when_padding_l145;
+  wire       [11:0]   _zz_when_padding_l129;
+  wire       [11:0]   _zz_when_padding_l145;
   wire       [6:0]    Channel_Times;
   reg        [63:0]   Zero_Point;
   reg                 EN_Row0;
   reg                 EN_Row1;
   reg                 EN_Col0;
   reg                 EN_Col1;
-  reg        [10:0]   Row_Num_In_REG_regNext;
-  wire       [10:0]   In_Size;
-  reg        [10:0]   Out_Size;
+  reg        [11:0]   Row_Num_In_REG_regNext;
+  wire       [11:0]   In_Size;
+  reg        [11:0]   Out_Size;
   wire                padding_fsm_wantExit;
   reg                 padding_fsm_wantStart;
   wire                padding_fsm_wantKill;
@@ -59,7 +59,7 @@ module padding (
   wire                when_padding_l82;
   reg                 padding_fsm_init_en;
   wire                when_padding_l88;
-  reg        [10:0]   padding_fsm_Cnt_Row;
+  reg        [11:0]   padding_fsm_Cnt_Row;
   wire                when_padding_l95;
   wire                when_padding_l97;
   reg                 padding_fsm_EN_Left_Padding;
@@ -68,7 +68,7 @@ module padding (
   reg                 padding_fsm_EN_Last_Cin;
   wire                when_padding_l111;
   wire                when_padding_l116;
-  reg        [10:0]   padding_fsm_Cnt_Column;
+  reg        [11:0]   padding_fsm_Cnt_Column;
   reg                 padding_fsm_EN_Row_Read;
   wire                when_padding_l129;
   wire                when_padding_l134;
@@ -89,17 +89,17 @@ module padding (
 
 
   assign _zz_Out_Size_1 = (2'b10 * Zero_Num_REG);
-  assign _zz_Out_Size = {6'd0, _zz_Out_Size_1};
+  assign _zz_Out_Size = {7'd0, _zz_Out_Size_1};
   assign _zz_when_padding_l103_1 = Zero_Num_REG;
-  assign _zz_when_padding_l103 = {8'd0, _zz_when_padding_l103_1};
-  assign _zz_when_padding_l103_2 = (_zz_when_padding_l103_3 - 11'h001);
+  assign _zz_when_padding_l103 = {9'd0, _zz_when_padding_l103_1};
+  assign _zz_when_padding_l103_2 = (_zz_when_padding_l103_3 - 12'h001);
   assign _zz_when_padding_l103_3 = (Out_Size - _zz_when_padding_l103_4);
   assign _zz_when_padding_l103_5 = Zero_Num_REG;
-  assign _zz_when_padding_l103_4 = {8'd0, _zz_when_padding_l103_5};
+  assign _zz_when_padding_l103_4 = {9'd0, _zz_when_padding_l103_5};
   assign _zz_when_padding_l111_1 = (Channel_Times - 7'h01);
   assign _zz_when_padding_l111 = {3'd0, _zz_when_padding_l111_1};
-  assign _zz_when_padding_l129 = (In_Size - 11'h001);
-  assign _zz_when_padding_l145 = (Out_Size - 11'h001);
+  assign _zz_when_padding_l129 = (In_Size - 12'h001);
+  assign _zz_when_padding_l145 = (Out_Size - 12'h001);
   mul count_mult (
     .A        (Row_Num_In_REG  ), //i
     .B        (count_mult_B    ), //i
@@ -429,10 +429,10 @@ module padding (
       padding_fsm_wait_cnt <= 6'h0;
     end
     if(when_padding_l95) begin
-      padding_fsm_Cnt_Row <= (padding_fsm_Cnt_Row + 11'h001);
+      padding_fsm_Cnt_Row <= (padding_fsm_Cnt_Row + 12'h001);
     end else begin
       if(when_padding_l97) begin
-        padding_fsm_Cnt_Row <= 11'h0;
+        padding_fsm_Cnt_Row <= 12'h0;
       end else begin
         padding_fsm_Cnt_Row <= padding_fsm_Cnt_Row;
       end
@@ -448,12 +448,12 @@ module padding (
     end
     if(when_padding_l134) begin
       if(padding_fsm_EN_Last_Cin) begin
-        padding_fsm_Cnt_Column <= (padding_fsm_Cnt_Column + 11'h001);
+        padding_fsm_Cnt_Column <= (padding_fsm_Cnt_Column + 12'h001);
       end else begin
         padding_fsm_Cnt_Column <= padding_fsm_Cnt_Column;
       end
     end else begin
-      padding_fsm_Cnt_Column <= 11'h0;
+      padding_fsm_Cnt_Column <= 12'h0;
     end
   end
 

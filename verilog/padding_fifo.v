@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : padding_fifo
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
-// Date      : 21/09/2021, 23:40:42
+// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
+// Date      : 22/09/2021, 16:16:34
 
 
 module padding_fifo (
@@ -13,7 +13,7 @@ module padding_fifo (
   output     [63:0]   data_out,
   input               rd_en,
   output reg          data_out_valid,
-  input      [10:0]   m_data_count,
+  input      [11:0]   m_data_count,
   output              data_valid,
   output              full,
   output              empty
@@ -26,11 +26,9 @@ module padding_fifo (
   wire                fifo_data_valid;
   wire                fifo_rd_rst_busy;
   wire                fifo_wr_rst_busy;
-  wire       [11:0]   _zz_when_padding_fifo_l47;
   wire                when_padding_fifo_l42;
   wire                when_padding_fifo_l47;
 
-  assign _zz_when_padding_fifo_l47 = {1'd0, m_data_count};
   fifo_sync fifo (
     .full             (fifo_full           ), //o
     .wr_en            (wr_en               ), //i
@@ -59,7 +57,7 @@ module padding_fifo (
     end
   end
 
-  assign when_padding_fifo_l47 = ((! fifo_rd_rst_busy) && (_zz_when_padding_fifo_l47 <= fifo_rd_data_count));
+  assign when_padding_fifo_l47 = ((! fifo_rd_rst_busy) && (m_data_count <= fifo_rd_data_count));
   always @(*) begin
     if(when_padding_fifo_l47) begin
       data_out_valid = 1'b1;

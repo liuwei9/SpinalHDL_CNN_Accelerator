@@ -1,7 +1,7 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : leaky_relu
-// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
-// Date      : 22/09/2021, 16:16:39
+// Git hash  : 6a036d116ed8ed37e64ac312cea61447972676ed
+// Date      : 23/09/2021, 15:30:17
 
 
 

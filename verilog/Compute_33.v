@@ -1,11 +1,11 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Compute_33
-// Git hash  : 038b51e1758bac70ab39881905296db1cc09842a
-// Date      : 22/09/2021, 16:16:38
+// Git hash  : 6a036d116ed8ed37e64ac312cea61447972676ed
 
 
 module Compute_33 (
   output              Conv_Complete,
+  output              Stride_Complete,
   output              Write_Block_Complete,
   input      [2:0]    Sign,
   input      [31:0]   Reg_4,
@@ -23,12 +23,14 @@ module Compute_33 (
   output     [63:0]   M_DATA_payload,
   input               Start_Pa,
   input               Start_Cu,
+  output              Last_33,
   input               reset,
   input               clk
 );
   wire       [11:0]   data_generate_1_Row_Num_In_REG;
   wire       [11:0]   conv_norm_1_Row_Num_Out_REG;
   wire       [11:0]   conv_quan_1_Row_Num_Out_REG;
+  wire       [63:0]   conv_stride_1_Row_Num_Out_REG;
   wire                data_generate_1_S_DATA_ready;
   wire       [575:0]  data_generate_1_M_DATA;
   wire       [8:0]    data_generate_1_M_DATA_Valid;
@@ -46,6 +48,11 @@ module Compute_33 (
   wire       [7:0]    conv_quan_1_bias_addrb;
   wire                conv_quan_1_M_DATA_valid;
   wire       [63:0]   conv_quan_1_M_DATA_payload;
+  wire                conv_stride_1_S_DATA_ready;
+  wire                conv_stride_1_M_DATA_valid;
+  wire       [63:0]   conv_stride_1_M_DATA_payload;
+  wire                conv_stride_1_Last;
+  wire                conv_stride_1_Stride_Complete;
   reg        [127:0]  Cu_Instruction_reg;
   reg        [127:0]  Cu_Instruction;
   reg        [127:0]  _zz_Cu_Instruction_reg;
@@ -121,12 +128,28 @@ module Compute_33 (
     .Zero_Point_REG3        (Zero_Point_REG3              ), //i
     .bias_addrb             (conv_quan_1_bias_addrb       ), //o
     .M_DATA_valid           (conv_quan_1_M_DATA_valid     ), //o
-    .M_DATA_ready           (M_DATA_ready                 ), //i
+    .M_DATA_ready           (conv_stride_1_S_DATA_ready   ), //i
     .M_DATA_payload         (conv_quan_1_M_DATA_payload   ), //o
     .Row_Num_Out_REG        (conv_quan_1_Row_Num_Out_REG  ), //i
     .Channel_Out_Num_REG    (Channel_Out_Num_REG          ), //i
     .reset                  (reset                        ), //i
     .clk                    (clk                          )  //i
+  );
+  Conv_Stride conv_stride_1 (
+    .Start                  (Start_Cu                       ), //i
+    .EN_Stride_REG          (Stride_REG                     ), //i
+    .S_DATA_valid           (conv_quan_1_M_DATA_valid       ), //i
+    .S_DATA_ready           (conv_stride_1_S_DATA_ready     ), //o
+    .S_DATA_payload         (conv_quan_1_M_DATA_payload     ), //i
+    .M_DATA_valid           (conv_stride_1_M_DATA_valid     ), //o
+    .M_DATA_ready           (M_DATA_ready                   ), //i
+    .M_DATA_payload         (conv_stride_1_M_DATA_payload   ), //o
+    .Row_Num_Out_REG        (conv_stride_1_Row_Num_Out_REG  ), //i
+    .Channel_Out_Num_REG    (Channel_Out_Num_REG            ), //i
+    .Last                   (conv_stride_1_Last             ), //o
+    .Stride_Complete        (conv_stride_1_Stride_Complete  ), //o
+    .reset                  (reset                          ), //i
+    .clk                    (clk                            )  //i
   );
   assign Zero_Point_REG1 = Cu_Instruction[127 : 120];
   assign Zero_Point_REG3 = Cu_Instruction[119 : 112];
@@ -146,9 +169,12 @@ module Compute_33 (
   assign Write_Block_Complete = conv_norm_1_Write_Block_Complete;
   assign Conv_Complete = conv_norm_1_Compute_Complete;
   assign conv_norm_1_Row_Num_Out_REG = {1'd0, Row_Num_Out_REG};
-  assign M_DATA_valid = conv_quan_1_M_DATA_valid;
-  assign M_DATA_payload = conv_quan_1_M_DATA_payload;
   assign conv_quan_1_Row_Num_Out_REG = {1'd0, Row_Num_Out_REG};
+  assign M_DATA_valid = conv_stride_1_M_DATA_valid;
+  assign M_DATA_payload = conv_stride_1_M_DATA_payload;
+  assign conv_stride_1_Row_Num_Out_REG = {53'd0, Row_Num_Out_REG};
+  assign Last_33 = conv_stride_1_Last;
+  assign Stride_Complete = conv_stride_1_Stride_Complete;
   always @(posedge clk) begin
     _zz_Cu_Instruction_reg <= {{{Reg_7,Reg_6},Reg_5},Reg_4};
     Cu_Instruction_reg <= _zz_Cu_Instruction_reg;

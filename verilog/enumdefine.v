@@ -54,3 +54,9 @@
 `define fsm_enumDefinition_2_binary_sequential_fsm_Compute 3'b101
 `define fsm_enumDefinition_2_binary_sequential_fsm_Judge 3'b110
 
+`define fsm_enumDefinition_3_binary_sequential_type [1:0]
+`define fsm_enumDefinition_3_binary_sequential_fsm_BOOT 2'b00
+`define fsm_enumDefinition_3_binary_sequential_fsm_IDLE 2'b01
+`define fsm_enumDefinition_3_binary_sequential_fsm_WAIT 2'b10
+`define fsm_enumDefinition_3_binary_sequential_fsm_Stride 2'b11
+

@@ -35,7 +35,10 @@ verilog/Conv_scale.v
 verilog/Conv_shift.v
 verilog/Conv_zero.v
 verilog/Conv_leaky_relu.v
+verilog/mul_4.v
+verilog/general_fifo_sync_11.v
 verilog/data_generate.v
 verilog/Conv_Norm.v
 verilog/Conv_quan.v
+verilog/Conv_Stride.v
 verilog/Compute_33.v

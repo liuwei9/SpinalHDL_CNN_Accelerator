@@ -1,9 +1,9 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : padding_fifo
+// Component : general_fifo_sync_11
 // Git hash  : 6a036d116ed8ed37e64ac312cea61447972676ed
 
 
-module padding_fifo (
+module general_fifo_sync_11 (
   input               reset,
   input               clk,
   input      [63:0]   data_in,
@@ -12,7 +12,8 @@ module padding_fifo (
   output     [63:0]   data_out,
   input               rd_en,
   output reg          data_out_valid,
-  input      [11:0]   m_data_count,
+  input      [63:0]   m_data_count,
+  input      [63:0]   s_data_count,
   output              data_valid,
   output              full,
   output              empty
@@ -25,9 +26,19 @@ module padding_fifo (
   wire                fifo_data_valid;
   wire                fifo_rd_rst_busy;
   wire                fifo_wr_rst_busy;
-  wire                when_padding_fifo_l42;
-  wire                when_padding_fifo_l47;
+  wire       [63:0]   _zz_when_general_fifo_sync_l39;
+  wire       [63:0]   _zz_when_general_fifo_sync_l39_1;
+  wire       [11:0]   _zz_when_general_fifo_sync_l39_2;
+  wire       [63:0]   _zz_when_general_fifo_sync_l49;
+  wire       [11:0]   _zz_when_general_fifo_sync_l49_1;
+  wire                when_general_fifo_sync_l39;
+  wire                when_general_fifo_sync_l49;
 
+  assign _zz_when_general_fifo_sync_l39 = (_zz_when_general_fifo_sync_l39_1 + s_data_count);
+  assign _zz_when_general_fifo_sync_l39_2 = fifo_wr_data_count;
+  assign _zz_when_general_fifo_sync_l39_1 = {52'd0, _zz_when_general_fifo_sync_l39_2};
+  assign _zz_when_general_fifo_sync_l49_1 = fifo_rd_data_count;
+  assign _zz_when_general_fifo_sync_l49 = {52'd0, _zz_when_general_fifo_sync_l49_1};
   fifo_sync fifo (
     .full             (fifo_full           ), //o
     .wr_en            (wr_en               ), //i
@@ -47,18 +58,18 @@ module padding_fifo (
   assign full = fifo_full;
   assign empty = fifo_empty;
   assign data_out = fifo_dout;
-  assign when_padding_fifo_l42 = (((! fifo_wr_rst_busy) && (! fifo_full)) && (fifo_wr_data_count < 12'h7f6));
+  assign when_general_fifo_sync_l39 = (((! fifo_wr_rst_busy) && (_zz_when_general_fifo_sync_l39 < 64'h0000000000000800)) && (! fifo_full));
   always @(*) begin
-    if(when_padding_fifo_l42) begin
+    if(when_general_fifo_sync_l39) begin
       data_in_ready = 1'b1;
     end else begin
       data_in_ready = 1'b0;
     end
   end
 
-  assign when_padding_fifo_l47 = ((! fifo_rd_rst_busy) && (m_data_count <= fifo_rd_data_count));
+  assign when_general_fifo_sync_l49 = ((! fifo_rd_rst_busy) && (m_data_count <= _zz_when_general_fifo_sync_l49));
   always @(*) begin
-    if(when_padding_fifo_l47) begin
+    if(when_general_fifo_sync_l49) begin
       data_out_valid = 1'b1;
     end else begin
       data_out_valid = 1'b0;

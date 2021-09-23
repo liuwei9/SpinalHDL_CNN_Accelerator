@@ -25,12 +25,13 @@ class Compute_33(
                     FEATURE_FIFO_DEPTH: Int,
                     WEIGHT_MEM_WRITE_DEPTH: Int,
                     QUAN_DATA_GENERATE_MEM_WRITE_DEPTH: Int,
-                    QUAN_BIAS_FIFO_DEPTH: Int
+                    QUAN_BIAS_FIFO_DEPTH: Int,
+                    STRIDE_MEM_DEPTH: Int
                 ) extends Component {
 
     val io = new Bundle {
         val Conv_Complete = out Bool()
-        //        val Stride_Complete = out Bool()
+        val Stride_Complete = out Bool()
         val Write_Block_Complete = out Bool()
         val Sign = in Bits (3 bits)
         val Reg_4 = in Bits (REG_WIDTH bits)
@@ -42,7 +43,7 @@ class Compute_33(
         val M_DATA = master Stream Bits(M_DATA_WIDTH bits)
         val Start_Pa = in Bool()
         val Start_Cu = in Bool()
-        //        val Last_33 = out Bool()
+        val Last_33 = out Bool()
 
     }
     noIoPrefix()
@@ -107,7 +108,7 @@ class Compute_33(
     conv_norm.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
     conv_norm.io.Weight_Single_Num_REG <> Weight_Num_REG
     conv_norm.io.Bias_Num_REG <> Bias_Num_REG
-//    conv_norm.io.Bias_Addrb <> 0
+    //    conv_norm.io.Bias_Addrb <> 0
     //    conv_norm.io.M_DATA <> io.M_DATA
 
     val conv_quan = new Conv_quan(AFTER_CONV_NORM_WIDTH, M_DATA_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, ZERO_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_OUT_NUM, CHANNEL_NUM_WIDTH, QUAN_BIAS_FIFO_DEPTH)
@@ -118,9 +119,20 @@ class Compute_33(
     conv_quan.io.shift_data_in <> conv_norm.io.Data_Out_Shift
     conv_quan.io.Zero_Point_REG3 <> Zero_Point_REG3
     conv_quan.io.bias_addrb <> conv_norm.io.Bias_Addrb
-    conv_quan.io.M_DATA <> io.M_DATA
+    //    conv_quan.io.M_DATA <> io.M_DATA
     conv_quan.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
     conv_quan.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
+
+    val conv_stride = new Conv_Stride(M_DATA_WIDTH, M_DATA_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_OUT_NUM, STRIDE_MEM_DEPTH)
+    conv_stride.io.Start <> io.Start_Cu
+    conv_stride.io.S_DATA <> conv_quan.io.M_DATA
+    conv_stride.io.EN_Stride_REG <> Stride_REG
+    conv_stride.io.M_DATA <> io.M_DATA
+    conv_stride.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
+    conv_stride.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
+    conv_stride.io.Last <> io.Last_33
+    conv_stride.io.Stride_Complete <> io.Stride_Complete
+
 }
 
 object Compute_33 {
@@ -128,10 +140,11 @@ object Compute_33 {
         SpinalConfig(
             defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
             oneFilePerComponent = true,
-            headerWithDate = true,
+
+            //            headerWithDate = true,
             targetDirectory = "verilog"
 
-        ) generateVerilog (new Compute_33(9, 32, 64, 64, 64, 8, 12, 10, 3, 8, 2048, 13, 15, 8, 256, 256, 256, 16, 8, 12, 2048, 8192, 128, 4096))
+        ) generateVerilog (new Compute_33(9, 32, 64, 64, 64, 8, 12, 10, 3, 8, 2048, 13, 15, 8, 256, 256, 256, 16, 8, 12, 2048, 8192, 128, 4096, 2048))
         SpinalConfig(
             defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
             headerWithDate = true,

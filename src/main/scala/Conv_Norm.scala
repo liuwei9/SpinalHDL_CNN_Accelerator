@@ -20,7 +20,7 @@ class Conv_Norm(
                    WIDTH_TEMP_RAM_ADDR: Int,
                    FEATURE_FIFO_DEPTH: Int,
                    WEIGHT_MEM_WRITE_DEPTH: Int,
-                   QUAN_MEM_WRITE_DEPTH: Int,
+                   LOAD_BIAS_MEM_WRITE_DEPTH: Int,
                    DATA_WIDTH: Int
                ) extends Component {
     val io = new Bundle {
@@ -63,7 +63,7 @@ class Conv_Norm(
 
 
     val WEIGHT_DATA_WIDTH = CHANNEL_IN_NUM * CHANNEL_OUT_NUM * 8
-    val load_weight = new load_weight(KERNEL_NUM, WEIGHT_NUM_WIDTH, WEIGHT_ADDR_WIDTH, BIAS_NUM_WIDTH, PARA_DATA_WIDTH, WEIGHT_DATA_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, WEIGHT_MEM_WRITE_DEPTH, QUAN_MEM_WRITE_DEPTH)
+    val load_weight = new load_weight(KERNEL_NUM, WEIGHT_NUM_WIDTH, WEIGHT_ADDR_WIDTH, BIAS_NUM_WIDTH, PARA_DATA_WIDTH, WEIGHT_DATA_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, WEIGHT_MEM_WRITE_DEPTH, LOAD_BIAS_MEM_WRITE_DEPTH)
     load_weight.io.Start_Pa <> io.Start_Pa
     load_weight.io.Weight_Single_Num_REG <> io.Weight_Single_Num_REG
     load_weight.io.Weight_Addrb <> compute_ctrl.io.weight_addrb
@@ -96,8 +96,14 @@ class Conv_Norm(
         //data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := reverseData(fifo_list(i).io.data_out, 64)
         data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := fifo_list(i).io.data_out
     }
-    (fifo_list(0).io.data_in_ready & fifo_list(1).io.data_in_ready & fifo_list(2).io.data_in_ready) <> io.S_DATA_Ready
-    compute_ctrl.io.compute_fifo_ready <> (fifo_list(0).io.data_out_valid & fifo_list(1).io.data_out_valid & fifo_list(2).io.data_out_valid)
+    if(KERNEL_NUM >= 3){
+        (fifo_list(0).io.data_in_ready & fifo_list(1).io.data_in_ready & fifo_list(2).io.data_in_ready) <> io.S_DATA_Ready
+        compute_ctrl.io.compute_fifo_ready <> (fifo_list(0).io.data_out_valid & fifo_list(1).io.data_out_valid & fifo_list(2).io.data_out_valid)
+    } else {
+        fifo_list(0).io.data_in_ready <> io.S_DATA_Ready
+        compute_ctrl.io.compute_fifo_ready <> fifo_list(0).io.data_out_valid
+    }
+
 
     val FEATURE_MEM_DEPTH = scala.math.pow(2, WIDTH_TEMP_RAM_ADDR).toInt
     val Configurable_RAM_Norm = new sdpram(FIFO_DATA_OUT_WIDTH, FEATURE_MEM_DEPTH, FIFO_DATA_OUT_WIDTH, FEATURE_MEM_DEPTH, "distributed", 0, "common_clock", this.clockDomain, this.clockDomain)
@@ -169,6 +175,13 @@ class Conv_Norm(
             out((i + 1) * width - 1 downto i * width) := temp(i)
         }
         out
+    }
+
+}
+
+object Conv_Norm{
+    def main(args: Array[String]): Unit = {
+        SpinalVerilog(new Conv_Norm(1,64,64,256,12,10,15,15,8,256,256,256,32,8,12,2048,2048,2048,8))
     }
 
 }

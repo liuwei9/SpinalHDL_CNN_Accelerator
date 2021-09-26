@@ -83,8 +83,9 @@ class Conv_Norm(
     val data_fifo_out = Bits(FIFO_DATA_OUT_WIDTH bits)
 
     var fifo_list: List[general_fifo_sync] = Nil
+    val is_first = if(KERNEL_NUM ==1) true else false
     for (_ <- 0 until KERNEL_NUM) {
-        fifo_list = new general_fifo_sync(FIFO_W_DATA_WIDTH, FEATURE_DATA_WIDTH, FEATURE_FIFO_DEPTH, ROW_COL_DATA_COUNT_WIDTH) :: fifo_list
+        fifo_list = new general_fifo_sync(FIFO_W_DATA_WIDTH, FEATURE_DATA_WIDTH, FEATURE_FIFO_DEPTH, ROW_COL_DATA_COUNT_WIDTH,is_first) :: fifo_list
     }
     fifo_list = fifo_list.reverse
     for (i <- 0 until KERNEL_NUM) {
@@ -130,7 +131,8 @@ class Conv_Norm(
     for (i <- 0 until CHANNEL_OUT_NUM) {
         compute_weight_in_delay(i) := RegNext(compute_weight_in(i))
     }
-    val AFTER_CONV_WIDTH: Int = DATA_WIDTH * 2 + (KERNEL_NUM - 1) / 2
+    //val AFTER_CONV_WIDTH: Int = DATA_WIDTH * 2 + (KERNEL_NUM - 1) / 2
+    val AFTER_CONV_WIDTH: Int = 20
     val AFTER_CIN_ACC_WIDTH = 32
     val compute_data_out = Vec(Bits(CHANNEL_IN_NUM * AFTER_CONV_WIDTH bits), CHANNEL_OUT_NUM)
     var mul_add_list: List[mul_add_simd] = Nil

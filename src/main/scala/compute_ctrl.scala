@@ -173,6 +173,7 @@ class compute_ctrl(
             M_Fifo_Valid := False
         }
         //先测试计算，测试没问题后增加适配
+       // io.M_Valid := Delay(M_Fifo_Valid, 24)
         io.M_Valid := Delay(M_Fifo_Valid, 24)
         val First_Complete = Bool() setAsReg()
         when(isActive(Compute)) {
@@ -184,7 +185,8 @@ class compute_ctrl(
         } otherwise {
             First_Complete := False
         }
-        io.First_Compute_Complete := Delay(First_Complete, 23)
+        //io.First_Compute_Complete := Delay(First_Complete, 23)
+        io.First_Compute_Complete := Delay(First_Complete, 22)
         IDLE
             .whenIsActive {
                 when(io.Start_Cu) {

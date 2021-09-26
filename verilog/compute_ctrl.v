@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : compute_ctrl
-// Git hash  : 6a036d116ed8ed37e64ac312cea61447972676ed
+// Git hash  : b694a57c8f5c199d7fd0af5809d5f7d2954eb351
 
 
 module compute_ctrl (
@@ -11,7 +11,7 @@ module compute_ctrl (
   output reg          rd_en_fifo,
   input               M_ready,
   output              M_Valid,
-  output     [12:0]   weight_addrb,
+  output     [14:0]   weight_addrb,
   output     [11:0]   ram_temp_read_address,
   output reg [11:0]   ram_temp_write_address,
   input      [11:0]   COMPUTE_TIMES_CHANNEL_IN_REG,
@@ -24,7 +24,7 @@ module compute_ctrl (
   input               reset
 );
   wire       [11:0]   count_mult_P;
-  wire       [10:0]   _zz_M_Count_Fifo;
+  wire       [9:0]    _zz_M_Count_Fifo;
   wire       [11:0]   _zz_when_compute_ctrl_l67;
   wire       [11:0]   _zz_when_compute_ctrl_l67_1;
   wire       [11:0]   _zz_when_compute_ctrl_l76;
@@ -83,11 +83,11 @@ module compute_ctrl (
   wire                when_compute_ctrl_l143;
   reg        [11:0]   _zz_ram_temp_read_address;
   reg        [11:0]   _zz_ram_temp_read_address_1;
-  reg        [12:0]   fsm_weight_addrb_temp;
+  reg        [14:0]   fsm_weight_addrb_temp;
   wire                when_compute_ctrl_l154;
   wire                when_compute_ctrl_l155;
-  reg        [12:0]   _zz_weight_addrb;
-  reg        [12:0]   _zz_weight_addrb_1;
+  reg        [14:0]   _zz_weight_addrb;
+  reg        [14:0]   _zz_weight_addrb_1;
   reg                 fsm_M_Fifo_Valid;
   wire                when_compute_ctrl_l166;
   wire                when_compute_ctrl_l167;
@@ -116,8 +116,8 @@ module compute_ctrl (
   reg                 fsm_M_Fifo_Valid_delay_23;
   reg                 fsm_M_Fifo_Valid_delay_24;
   reg                 fsm_First_Complete;
-  wire                when_compute_ctrl_l178;
   wire                when_compute_ctrl_l179;
+  wire                when_compute_ctrl_l180;
   reg                 fsm_First_Complete_delay_1;
   reg                 fsm_First_Complete_delay_2;
   reg                 fsm_First_Complete_delay_3;
@@ -140,7 +140,6 @@ module compute_ctrl (
   reg                 fsm_First_Complete_delay_20;
   reg                 fsm_First_Complete_delay_21;
   reg                 fsm_First_Complete_delay_22;
-  reg                 fsm_First_Complete_delay_23;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateReg;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateNext;
   `ifndef SYNTHESIS
@@ -149,7 +148,7 @@ module compute_ctrl (
   `endif
 
 
-  assign _zz_M_Count_Fifo = (count_mult_P >>> 1);
+  assign _zz_M_Count_Fifo = (count_mult_P >>> 2);
   assign _zz_when_compute_ctrl_l67 = {2'd0, fsm_Cnt_Channel_In_Num};
   assign _zz_when_compute_ctrl_l67_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
   assign _zz_when_compute_ctrl_l76 = {2'd0, fsm_Cnt_Channel_In_Num};
@@ -175,7 +174,7 @@ module compute_ctrl (
   assign _zz_when_compute_ctrl_l155_3 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
   assign _zz_when_compute_ctrl_l167 = {2'd0, fsm_Cnt_Channel_In_Num};
   assign _zz_when_compute_ctrl_l167_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  mul_2 count_mult (
+  mul count_mult (
     .A        (ROW_NUM_CHANNEL_OUT_REG         ), //i
     .B        (COMPUTE_TIMES_CHANNEL_IN_REG_8  ), //i
     .P        (count_mult_P                    ), //o
@@ -210,7 +209,7 @@ module compute_ctrl (
   `endif
 
   assign S_Count_Fifo = count_mult_P;
-  assign M_Count_Fifo = {1'd0, _zz_M_Count_Fifo};
+  assign M_Count_Fifo = {2'd0, _zz_M_Count_Fifo};
   assign fsm_wantExit = 1'b0;
   always @(*) begin
     fsm_wantStart = 1'b0;
@@ -274,8 +273,8 @@ module compute_ctrl (
   assign weight_addrb = _zz_weight_addrb_1;
   assign when_compute_ctrl_l167 = (_zz_when_compute_ctrl_l167 == _zz_when_compute_ctrl_l167_1);
   assign M_Valid = fsm_M_Fifo_Valid_delay_24;
-  assign when_compute_ctrl_l179 = (fsm_Cnt_Channel_In_Num == 10'h0);
-  assign First_Compute_Complete = fsm_First_Complete_delay_23;
+  assign when_compute_ctrl_l180 = (fsm_Cnt_Channel_In_Num == 10'h0);
+  assign First_Compute_Complete = fsm_First_Complete_delay_22;
   always @(*) begin
     fsm_stateNext = fsm_stateReg;
     case(fsm_stateReg)
@@ -342,7 +341,7 @@ module compute_ctrl (
   assign when_compute_ctrl_l142 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
   assign when_compute_ctrl_l154 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
   assign when_compute_ctrl_l166 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l178 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l179 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
   always @(posedge clk) begin
     if(when_compute_ctrl_l58) begin
       fsm_wait_cnt <= (fsm_wait_cnt + 5'h01);
@@ -423,12 +422,12 @@ module compute_ctrl (
     _zz_ram_temp_read_address_1 <= _zz_ram_temp_read_address;
     if(when_compute_ctrl_l154) begin
       if(when_compute_ctrl_l155) begin
-        fsm_weight_addrb_temp <= 13'h0;
+        fsm_weight_addrb_temp <= 15'h0;
       end else begin
-        fsm_weight_addrb_temp <= (fsm_weight_addrb_temp + 13'h0001);
+        fsm_weight_addrb_temp <= (fsm_weight_addrb_temp + 15'h0001);
       end
     end else begin
-      fsm_weight_addrb_temp <= 13'h0;
+      fsm_weight_addrb_temp <= 15'h0;
     end
     _zz_weight_addrb <= fsm_weight_addrb_temp;
     _zz_weight_addrb_1 <= _zz_weight_addrb;
@@ -465,8 +464,8 @@ module compute_ctrl (
     fsm_M_Fifo_Valid_delay_22 <= fsm_M_Fifo_Valid_delay_21;
     fsm_M_Fifo_Valid_delay_23 <= fsm_M_Fifo_Valid_delay_22;
     fsm_M_Fifo_Valid_delay_24 <= fsm_M_Fifo_Valid_delay_23;
-    if(when_compute_ctrl_l178) begin
-      if(when_compute_ctrl_l179) begin
+    if(when_compute_ctrl_l179) begin
+      if(when_compute_ctrl_l180) begin
         fsm_First_Complete <= 1'b1;
       end else begin
         fsm_First_Complete <= 1'b0;
@@ -496,7 +495,6 @@ module compute_ctrl (
     fsm_First_Complete_delay_20 <= fsm_First_Complete_delay_19;
     fsm_First_Complete_delay_21 <= fsm_First_Complete_delay_20;
     fsm_First_Complete_delay_22 <= fsm_First_Complete_delay_21;
-    fsm_First_Complete_delay_23 <= fsm_First_Complete_delay_22;
   end
 
   always @(posedge clk) begin

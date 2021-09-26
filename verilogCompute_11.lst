@@ -1,0 +1,17 @@
+verilog/enumdefine.v
+verilog/sdpram.v
+verilog/mul.v
+verilog/Compute_33Weight.v
+verilog/sdpram_1.v
+verilog/fifo_sync.v
+verilog/mul_simd.v
+verilog/channel_in_thirty_two_times_acc.v
+verilog/compute_ctrl.v
+verilog/load_weight.v
+verilog/general_fifo_sync.v
+verilog/sdpram_4.v
+verilog/mul_add_simd.v
+verilog/channel_in_acc.v
+verilog/channel_out_acc.v
+verilog/Conv_Norm.v
+verilog/Compute_11.v

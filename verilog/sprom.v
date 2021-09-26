@@ -1,11 +1,11 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : sprom
-// Git hash  : 9280a3666f54ba2ee3d8bf18d251133191d332e6
+// Git hash  : b694a57c8f5c199d7fd0af5809d5f7d2954eb351
 
 
 
 module sprom (
-  input      [11:0]   addra,
+  input      [16:0]   addra,
   output     [63:0]   douta,
   input               ena,
   input               clk
@@ -22,15 +22,15 @@ module sprom (
   wire                sleep;
 
   xpm_memory_sprom #(
-    .ADDR_WIDTH_A(12),
+    .ADDR_WIDTH_A(17),
     .AUTO_SLEEP_TIME(0),
     .CASCADE_HEIGHT(0),
     .ECC_MODE("no_ecc"),
-    .MEMORY_INIT_FILE("weight_conv2.mem"),
+    .MEMORY_INIT_FILE("feature_real825_640_rs3_conv4_leak.mem"),
     .MEMORY_INIT_PARAM(""),
     .MEMORY_OPTIMIZATION("true"),
     .MEMORY_PRIMITIVE("distributed"),
-    .MEMORY_SIZE(153600),
+    .MEMORY_SIZE(6553600),
     .MESSAGE_CONTROL(0),
     .READ_DATA_WIDTH_A(64),
     .READ_LATENCY_A(0),

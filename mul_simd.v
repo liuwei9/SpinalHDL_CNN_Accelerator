@@ -3,11 +3,13 @@
 // Git hash  : b694a57c8f5c199d7fd0af5809d5f7d2954eb351
 
 
+
 module mul_simd (
   input      [7:0]    data_in,
   input      [7:0]    weight_in,
   output     [19:0]   data_out,
-  input               clk
+  input               clk,
+  input               reset
 );
   wire       [15:0]   mult_8_8_16_1_P;
   wire       [15:0]   _zz_data_out_q;

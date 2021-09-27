@@ -51,7 +51,7 @@ class Conv_Norm(
     val COMPUTE_TIMES_CHANNEL_IN_REG_8 = io.Channel_In_Num_REG >> log2Up(8)
     val COMPUTE_TIMES_CHANNEL_OUT_REG = io.Channel_Out_Num_REG >> log2Up(CHANNEL_OUT_NUM)
 
-    val compute_ctrl = new compute_ctrl(WEIGHT_ADDR_WIDTH, WIDTH_TEMP_RAM_ADDR, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_IN_NUM)
+    val compute_ctrl = new compute_ctrl(KERNEL_NUM, WEIGHT_ADDR_WIDTH, WIDTH_TEMP_RAM_ADDR, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_IN_NUM)
     compute_ctrl.io.Start_Cu <> io.Start_Cu
     compute_ctrl.io.M_ready <> io.M_DATA.ready
     compute_ctrl.io.M_Valid <> io.M_DATA.valid
@@ -83,9 +83,9 @@ class Conv_Norm(
     val data_fifo_out = Bits(FIFO_DATA_OUT_WIDTH bits)
 
     var fifo_list: List[general_fifo_sync] = Nil
-    val is_first = if(KERNEL_NUM ==1) true else false
+    val is_first = if (KERNEL_NUM == 1) true else false
     for (_ <- 0 until KERNEL_NUM) {
-        fifo_list = new general_fifo_sync(FIFO_W_DATA_WIDTH, FEATURE_DATA_WIDTH, FEATURE_FIFO_DEPTH, ROW_COL_DATA_COUNT_WIDTH,is_first) :: fifo_list
+        fifo_list = new general_fifo_sync(FIFO_W_DATA_WIDTH, FEATURE_DATA_WIDTH, FEATURE_FIFO_DEPTH, ROW_COL_DATA_COUNT_WIDTH, is_first) :: fifo_list
     }
     fifo_list = fifo_list.reverse
     for (i <- 0 until KERNEL_NUM) {
@@ -97,7 +97,7 @@ class Conv_Norm(
         //data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := reverseData(fifo_list(i).io.data_out, 64)
         data_fifo_out((i + 1) * FEATURE_DATA_WIDTH - 1 downto (i * FEATURE_DATA_WIDTH)) := fifo_list(i).io.data_out
     }
-    if(KERNEL_NUM >= 3){
+    if (KERNEL_NUM >= 3) {
         (fifo_list(0).io.data_in_ready & fifo_list(1).io.data_in_ready & fifo_list(2).io.data_in_ready) <> io.S_DATA_Ready
         compute_ctrl.io.compute_fifo_ready <> (fifo_list(0).io.data_out_valid & fifo_list(1).io.data_out_valid & fifo_list(2).io.data_out_valid)
     } else {
@@ -181,9 +181,9 @@ class Conv_Norm(
 
 }
 
-object Conv_Norm{
+object Conv_Norm {
     def main(args: Array[String]): Unit = {
-        SpinalVerilog(new Conv_Norm(1,64,64,256,12,10,15,15,8,256,256,256,32,8,12,2048,2048,2048,8))
+        SpinalVerilog(new Conv_Norm(1, 64, 64, 256, 12, 10, 15, 15, 8, 256, 256, 256, 32, 8, 12, 2048, 2048, 2048, 8))
     }
 
 }

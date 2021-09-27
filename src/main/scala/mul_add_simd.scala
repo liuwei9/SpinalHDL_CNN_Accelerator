@@ -56,7 +56,10 @@ class mul_add_simd(
         add_list(7).io.B := mul_data_out_delay4(1)
         add_list(7).io.P <> io.dataOut
     } else if (KERNEL_NUM == 1) {
-        io.dataOut := Delay(mul_data_out(0), 8)
+        //io.dataOut := Delay(mul_data_out(0),8)
+        io.dataOut := mul_data_out(0)
+    } else {
+        assert(false,"暂只支持3x3和1x1卷积")
     }
 
 }

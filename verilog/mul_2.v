@@ -1,22 +1,22 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : mul
+// Component : mul_2
 // Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
 
 
-module mul (
+module mul_2 (
   input      [11:0]   A,
-  input      [6:0]    B,
+  input      [11:0]   B,
   output     [11:0]   P,
   input               clk,
   input               reset
 );
-  wire       [18:0]   _zz_P_6;
+  wire       [23:0]   _zz_P_6;
   (* use_dsp = "yes" *) wire       [11:0]   _zz_P;
-  (* use_dsp = "yes" *) wire       [6:0]    _zz_P_1;
+  (* use_dsp = "yes" *) wire       [11:0]   _zz_P_1;
   (* use_dsp = "yes" *) reg        [11:0]   _zz_P_2;
-  (* use_dsp = "yes" *) reg        [6:0]    _zz_P_3;
-  (* use_dsp = "yes" *) reg        [18:0]   _zz_P_4;
-  (* use_dsp = "yes" *) reg        [18:0]   _zz_P_5;
+  (* use_dsp = "yes" *) reg        [11:0]   _zz_P_3;
+  (* use_dsp = "yes" *) reg        [23:0]   _zz_P_4;
+  (* use_dsp = "yes" *) reg        [23:0]   _zz_P_5;
 
   assign _zz_P_6 = _zz_P_5;
   assign _zz_P = A;

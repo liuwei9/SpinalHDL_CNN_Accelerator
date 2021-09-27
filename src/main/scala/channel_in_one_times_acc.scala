@@ -11,6 +11,6 @@ class channel_in_one_times_acc(
         val data_out = out Bits (M_DATA_WIDTH bits)
     }
     noIoPrefix()
-    io.data_out := RegNext(io.data_in.asSInt.resize(M_DATA_WIDTH bits).asBits)
+    io.data_out := io.data_in.asSInt.resize(M_DATA_WIDTH bits).asBits
 
 }

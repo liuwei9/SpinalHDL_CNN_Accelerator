@@ -1,12 +1,12 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : sdpram_1
-// Git hash  : b694a57c8f5c199d7fd0af5809d5f7d2954eb351
+// Component : sdpram_9
+// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
 
 
-module sdpram_1 (
-  output     [255:0]  doutb,
-  input      [7:0]    addra,
-  input      [5:0]    addrb,
+module sdpram_9 (
+  output     [63:0]   doutb,
+  input      [10:0]   addra,
+  input      [10:0]   addrb,
   input      [63:0]   dina,
   input               ena,
   input               enb,
@@ -14,7 +14,7 @@ module sdpram_1 (
   input               clk
 );
   wire                temp_dbiterrb;
-  wire       [255:0]  temp_doutb;
+  wire       [63:0]   temp_doutb;
   wire                temp_sbiterrb;
   wire                dbiterrb;
   wire                sbiterrb;
@@ -25,8 +25,8 @@ module sdpram_1 (
   wire                sleep;
 
   xpm_memory_sdpram #(
-    .ADDR_WIDTH_A(8),
-    .ADDR_WIDTH_B(6),
+    .ADDR_WIDTH_A(11),
+    .ADDR_WIDTH_B(11),
     .AUTO_SLEEP_TIME(0),
     .BYTE_WRITE_WIDTH_A(64),
     .CASCADE_HEIGHT(0),
@@ -35,11 +35,11 @@ module sdpram_1 (
     .MEMORY_INIT_FILE("none"),
     .MEMORY_INIT_PARAM("0"),
     .MEMORY_OPTIMIZATION("true"),
-    .MEMORY_PRIMITIVE("block"),
-    .MEMORY_SIZE(16384),
+    .MEMORY_PRIMITIVE("distributed"),
+    .MEMORY_SIZE(131072),
     .MESSAGE_CONTROL(0),
-    .READ_DATA_WIDTH_B(256),
-    .READ_LATENCY_B(1),
+    .READ_DATA_WIDTH_B(64),
+    .READ_LATENCY_B(0),
     .READ_RESET_VALUE_B("0"),
     .RST_MODE_A("SYNC"),
     .RST_MODE_B("SYNC"),

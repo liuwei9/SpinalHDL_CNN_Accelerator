@@ -4,6 +4,7 @@ import spinal.lib.fsm._
 import xip._
 
 class compute_ctrl(
+                      KERNEL_NUM: Int,
                       WEIGHT_ADDR_WIDTH: Int,
                       WIDTH_TEMP_ADDR_SIZE: Int,
                       ROW_COL_DATA_COUNT_WIDTH: Int,
@@ -172,9 +173,14 @@ class compute_ctrl(
         } otherwise {
             M_Fifo_Valid := False
         }
+
+        //卷积的乘法器要设置3个延迟，加法器2个延迟
+        //addr 2个，数据2个，乘法3个，加法取决与KERNEL_NUM，取决与CHANNEL_IN_NUM，累加一个
+        var DELAY_CYCLE = 2 + 2 + 3 + (if (KERNEL_NUM == 9) 8 else 0) + 2 * (scala.math.log(CHANNEL_IN_NUM) / scala.math.log(2)).toInt + 1
         //先测试计算，测试没问题后增加适配
-       // io.M_Valid := Delay(M_Fifo_Valid, 24)
-        io.M_Valid := Delay(M_Fifo_Valid, 24)
+        // io.M_Valid := Delay(M_Fifo_Valid, 24)
+        //io.M_Valid := Delay(M_Fifo_Valid, 26)
+        io.M_Valid := Delay(M_Fifo_Valid, DELAY_CYCLE)
         val First_Complete = Bool() setAsReg()
         when(isActive(Compute)) {
             when(Cnt_Channel_In_Num === 0) {
@@ -186,7 +192,8 @@ class compute_ctrl(
             First_Complete := False
         }
         //io.First_Compute_Complete := Delay(First_Complete, 23)
-        io.First_Compute_Complete := Delay(First_Complete, 22)
+        //io.First_Compute_Complete := Delay(First_Complete, 25)
+        io.First_Compute_Complete := Delay(First_Complete, DELAY_CYCLE - 1)
         IDLE
             .whenIsActive {
                 when(io.Start_Cu) {

@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : compute_ctrl
-// Git hash  : b694a57c8f5c199d7fd0af5809d5f7d2954eb351
+// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
 
 
 module compute_ctrl (
@@ -11,7 +11,7 @@ module compute_ctrl (
   output reg          rd_en_fifo,
   input               M_ready,
   output              M_Valid,
-  output     [14:0]   weight_addrb,
+  output     [12:0]   weight_addrb,
   output     [11:0]   ram_temp_read_address,
   output reg [11:0]   ram_temp_write_address,
   input      [11:0]   COMPUTE_TIMES_CHANNEL_IN_REG,
@@ -24,73 +24,73 @@ module compute_ctrl (
   input               reset
 );
   wire       [11:0]   count_mult_P;
-  wire       [9:0]    _zz_M_Count_Fifo;
-  wire       [11:0]   _zz_when_compute_ctrl_l67;
-  wire       [11:0]   _zz_when_compute_ctrl_l67_1;
-  wire       [11:0]   _zz_when_compute_ctrl_l76;
-  wire       [11:0]   _zz_when_compute_ctrl_l76_1;
+  wire       [10:0]   _zz_M_Count_Fifo;
+  wire       [11:0]   _zz_when_compute_ctrl_l68;
+  wire       [11:0]   _zz_when_compute_ctrl_l68_1;
   wire       [11:0]   _zz_when_compute_ctrl_l77;
   wire       [11:0]   _zz_when_compute_ctrl_l77_1;
-  wire       [11:0]   _zz_when_compute_ctrl_l91;
-  wire       [11:0]   _zz_when_compute_ctrl_l91_1;
-  wire       [11:0]   _zz_when_compute_ctrl_l91_2;
-  wire       [11:0]   _zz_when_compute_ctrl_l91_3;
-  wire       [11:0]   _zz_when_compute_ctrl_l108;
-  wire       [11:0]   _zz_when_compute_ctrl_l108_1;
-  wire       [11:0]   _zz_when_compute_ctrl_l108_2;
-  wire       [11:0]   _zz_when_compute_ctrl_l108_3;
-  wire       [11:0]   _zz_when_compute_ctrl_l108_4;
-  wire       [11:0]   _zz_when_compute_ctrl_l114;
+  wire       [11:0]   _zz_when_compute_ctrl_l78;
+  wire       [11:0]   _zz_when_compute_ctrl_l78_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l92;
+  wire       [11:0]   _zz_when_compute_ctrl_l92_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l92_2;
+  wire       [11:0]   _zz_when_compute_ctrl_l92_3;
+  wire       [11:0]   _zz_when_compute_ctrl_l109;
+  wire       [11:0]   _zz_when_compute_ctrl_l109_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l109_2;
+  wire       [11:0]   _zz_when_compute_ctrl_l109_3;
+  wire       [11:0]   _zz_when_compute_ctrl_l109_4;
+  wire       [11:0]   _zz_when_compute_ctrl_l115;
   wire       [11:0]   _zz_ram_temp_write_address;
-  wire       [11:0]   _zz_when_compute_ctrl_l143;
-  wire       [11:0]   _zz_when_compute_ctrl_l143_1;
-  wire       [11:0]   _zz_when_compute_ctrl_l155;
-  wire       [11:0]   _zz_when_compute_ctrl_l155_1;
-  wire       [11:0]   _zz_when_compute_ctrl_l155_2;
-  wire       [11:0]   _zz_when_compute_ctrl_l155_3;
-  wire       [11:0]   _zz_when_compute_ctrl_l167;
-  wire       [11:0]   _zz_when_compute_ctrl_l167_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l144;
+  wire       [11:0]   _zz_when_compute_ctrl_l144_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l156;
+  wire       [11:0]   _zz_when_compute_ctrl_l156_1;
+  wire       [11:0]   _zz_when_compute_ctrl_l156_2;
+  wire       [11:0]   _zz_when_compute_ctrl_l156_3;
+  wire       [11:0]   _zz_when_compute_ctrl_l168;
+  wire       [11:0]   _zz_when_compute_ctrl_l168_1;
   wire                fsm_wantExit;
   reg                 fsm_wantStart;
   wire                fsm_wantKill;
   reg        [4:0]    fsm_wait_cnt;
   reg                 fsm_wait_en;
-  wire                when_compute_ctrl_l53;
-  wire                when_compute_ctrl_l58;
+  wire                when_compute_ctrl_l54;
+  wire                when_compute_ctrl_l59;
   reg        [9:0]    fsm_Cnt_Channel_In_Num;
   reg        [9:0]    fsm_Cnt_Channel_Out_Num;
-  wire                when_compute_ctrl_l66;
   wire                when_compute_ctrl_l67;
-  wire                when_compute_ctrl_l75;
+  wire                when_compute_ctrl_l68;
   wire                when_compute_ctrl_l76;
   wire                when_compute_ctrl_l77;
+  wire                when_compute_ctrl_l78;
   reg        [11:0]   fsm_Cnt_Column;
-  wire                when_compute_ctrl_l90;
   wire                when_compute_ctrl_l91;
+  wire                when_compute_ctrl_l92;
   reg        [11:0]   fsm_Cnt_Row;
-  wire                when_compute_ctrl_l100;
-  wire                when_compute_ctrl_l102;
+  wire                when_compute_ctrl_l101;
+  wire                when_compute_ctrl_l103;
   reg                 fsm_En_Compute_Column;
-  wire                when_compute_ctrl_l108;
+  wire                when_compute_ctrl_l109;
   reg                 fsm_En_Compute_Row;
-  wire                when_compute_ctrl_l114;
-  wire                when_compute_ctrl_l120;
-  wire                when_compute_ctrl_l126;
+  wire                when_compute_ctrl_l115;
+  wire                when_compute_ctrl_l121;
   wire                when_compute_ctrl_l127;
-  wire                when_compute_ctrl_l135;
+  wire                when_compute_ctrl_l128;
+  wire                when_compute_ctrl_l136;
   reg        [11:0]   fsm_ram_temp_read_address_temp;
-  wire                when_compute_ctrl_l142;
   wire                when_compute_ctrl_l143;
+  wire                when_compute_ctrl_l144;
   reg        [11:0]   _zz_ram_temp_read_address;
   reg        [11:0]   _zz_ram_temp_read_address_1;
-  reg        [14:0]   fsm_weight_addrb_temp;
-  wire                when_compute_ctrl_l154;
+  reg        [12:0]   fsm_weight_addrb_temp;
   wire                when_compute_ctrl_l155;
-  reg        [14:0]   _zz_weight_addrb;
-  reg        [14:0]   _zz_weight_addrb_1;
+  wire                when_compute_ctrl_l156;
+  reg        [12:0]   _zz_weight_addrb;
+  reg        [12:0]   _zz_weight_addrb_1;
   reg                 fsm_M_Fifo_Valid;
-  wire                when_compute_ctrl_l166;
   wire                when_compute_ctrl_l167;
+  wire                when_compute_ctrl_l168;
   reg                 fsm_M_Fifo_Valid_delay_1;
   reg                 fsm_M_Fifo_Valid_delay_2;
   reg                 fsm_M_Fifo_Valid_delay_3;
@@ -116,8 +116,8 @@ module compute_ctrl (
   reg                 fsm_M_Fifo_Valid_delay_23;
   reg                 fsm_M_Fifo_Valid_delay_24;
   reg                 fsm_First_Complete;
-  wire                when_compute_ctrl_l179;
-  wire                when_compute_ctrl_l180;
+  wire                when_compute_ctrl_l185;
+  wire                when_compute_ctrl_l186;
   reg                 fsm_First_Complete_delay_1;
   reg                 fsm_First_Complete_delay_2;
   reg                 fsm_First_Complete_delay_3;
@@ -140,6 +140,7 @@ module compute_ctrl (
   reg                 fsm_First_Complete_delay_20;
   reg                 fsm_First_Complete_delay_21;
   reg                 fsm_First_Complete_delay_22;
+  reg                 fsm_First_Complete_delay_23;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateReg;
   reg        `fsm_enumDefinition_binary_sequential_type fsm_stateNext;
   `ifndef SYNTHESIS
@@ -148,33 +149,33 @@ module compute_ctrl (
   `endif
 
 
-  assign _zz_M_Count_Fifo = (count_mult_P >>> 2);
-  assign _zz_when_compute_ctrl_l67 = {2'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l67_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l76 = {2'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l76_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l77 = {2'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l77_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l91 = {2'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l91_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l91_2 = {2'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l91_3 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l108 = (ROW_NUM_CHANNEL_OUT_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l108_1 = {2'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l108_2 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l108_3 = {2'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l108_4 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l114 = (ROW_NUM_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_M_Count_Fifo = (count_mult_P >>> 1);
+  assign _zz_when_compute_ctrl_l68 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l68_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l77 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l77_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l78 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l78_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l92 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l92_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l92_2 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l92_3 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l109 = (ROW_NUM_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l109_1 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l109_2 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l109_3 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l109_4 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l115 = (ROW_NUM_CHANNEL_OUT_REG - 12'h001);
   assign _zz_ram_temp_write_address = (ram_temp_write_address + 12'h001);
-  assign _zz_when_compute_ctrl_l143 = {2'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l143_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l155 = {2'd0, fsm_Cnt_Channel_Out_Num};
-  assign _zz_when_compute_ctrl_l155_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l155_2 = {2'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l155_3 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  assign _zz_when_compute_ctrl_l167 = {2'd0, fsm_Cnt_Channel_In_Num};
-  assign _zz_when_compute_ctrl_l167_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
-  mul count_mult (
+  assign _zz_when_compute_ctrl_l144 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l144_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l156 = {2'd0, fsm_Cnt_Channel_Out_Num};
+  assign _zz_when_compute_ctrl_l156_1 = (COMPUTE_TIMES_CHANNEL_OUT_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l156_2 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l156_3 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  assign _zz_when_compute_ctrl_l168 = {2'd0, fsm_Cnt_Channel_In_Num};
+  assign _zz_when_compute_ctrl_l168_1 = (COMPUTE_TIMES_CHANNEL_IN_REG - 12'h001);
+  mul_2 count_mult (
     .A        (ROW_NUM_CHANNEL_OUT_REG         ), //i
     .B        (COMPUTE_TIMES_CHANNEL_IN_REG_8  ), //i
     .P        (count_mult_P                    ), //o
@@ -209,7 +210,7 @@ module compute_ctrl (
   `endif
 
   assign S_Count_Fifo = count_mult_P;
-  assign M_Count_Fifo = {2'd0, _zz_M_Count_Fifo};
+  assign M_Count_Fifo = {1'd0, _zz_M_Count_Fifo};
   assign fsm_wantExit = 1'b0;
   always @(*) begin
     fsm_wantStart = 1'b0;
@@ -233,48 +234,48 @@ module compute_ctrl (
   end
 
   assign fsm_wantKill = 1'b0;
-  assign when_compute_ctrl_l53 = (fsm_wait_cnt == 5'h05);
+  assign when_compute_ctrl_l54 = (fsm_wait_cnt == 5'h05);
   always @(*) begin
-    if(when_compute_ctrl_l53) begin
+    if(when_compute_ctrl_l54) begin
       fsm_wait_en = 1'b1;
     end else begin
       fsm_wait_en = 1'b0;
     end
   end
 
-  assign when_compute_ctrl_l67 = (_zz_when_compute_ctrl_l67 == _zz_when_compute_ctrl_l67_1);
-  assign when_compute_ctrl_l76 = (_zz_when_compute_ctrl_l76 == _zz_when_compute_ctrl_l76_1);
+  assign when_compute_ctrl_l68 = (_zz_when_compute_ctrl_l68 == _zz_when_compute_ctrl_l68_1);
   assign when_compute_ctrl_l77 = (_zz_when_compute_ctrl_l77 == _zz_when_compute_ctrl_l77_1);
-  assign when_compute_ctrl_l91 = ((_zz_when_compute_ctrl_l91 == _zz_when_compute_ctrl_l91_1) && (_zz_when_compute_ctrl_l91_2 == _zz_when_compute_ctrl_l91_3));
-  assign when_compute_ctrl_l108 = (((fsm_Cnt_Column == _zz_when_compute_ctrl_l108) && (_zz_when_compute_ctrl_l108_1 == _zz_when_compute_ctrl_l108_2)) && (_zz_when_compute_ctrl_l108_3 == _zz_when_compute_ctrl_l108_4));
+  assign when_compute_ctrl_l78 = (_zz_when_compute_ctrl_l78 == _zz_when_compute_ctrl_l78_1);
+  assign when_compute_ctrl_l92 = ((_zz_when_compute_ctrl_l92 == _zz_when_compute_ctrl_l92_1) && (_zz_when_compute_ctrl_l92_2 == _zz_when_compute_ctrl_l92_3));
+  assign when_compute_ctrl_l109 = (((fsm_Cnt_Column == _zz_when_compute_ctrl_l109) && (_zz_when_compute_ctrl_l109_1 == _zz_when_compute_ctrl_l109_2)) && (_zz_when_compute_ctrl_l109_3 == _zz_when_compute_ctrl_l109_4));
   always @(*) begin
-    if(when_compute_ctrl_l108) begin
+    if(when_compute_ctrl_l109) begin
       fsm_En_Compute_Column = 1'b1;
     end else begin
       fsm_En_Compute_Column = 1'b0;
     end
   end
 
-  assign when_compute_ctrl_l114 = (fsm_Cnt_Row == _zz_when_compute_ctrl_l114);
+  assign when_compute_ctrl_l115 = (fsm_Cnt_Row == _zz_when_compute_ctrl_l115);
   always @(*) begin
-    if(when_compute_ctrl_l114) begin
+    if(when_compute_ctrl_l115) begin
       fsm_En_Compute_Row = 1'b1;
     end else begin
       fsm_En_Compute_Row = 1'b0;
     end
   end
 
-  assign when_compute_ctrl_l120 = ((fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Judge_Row) && ((fsm_stateNext == `fsm_enumDefinition_binary_sequential_fsm_IDLE) && (fsm_stateReg != `fsm_enumDefinition_binary_sequential_fsm_IDLE)));
-  assign when_compute_ctrl_l127 = (fsm_Cnt_Channel_Out_Num == 10'h0);
-  assign when_compute_ctrl_l135 = ((fsm_Cnt_Channel_Out_Num == 10'h0) && (fsm_Cnt_Channel_In_Num == 10'h0));
-  assign when_compute_ctrl_l143 = (_zz_when_compute_ctrl_l143 == _zz_when_compute_ctrl_l143_1);
+  assign when_compute_ctrl_l121 = ((fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Judge_Row) && ((fsm_stateNext == `fsm_enumDefinition_binary_sequential_fsm_IDLE) && (fsm_stateReg != `fsm_enumDefinition_binary_sequential_fsm_IDLE)));
+  assign when_compute_ctrl_l128 = (fsm_Cnt_Channel_Out_Num == 10'h0);
+  assign when_compute_ctrl_l136 = ((fsm_Cnt_Channel_Out_Num == 10'h0) && (fsm_Cnt_Channel_In_Num == 10'h0));
+  assign when_compute_ctrl_l144 = (_zz_when_compute_ctrl_l144 == _zz_when_compute_ctrl_l144_1);
   assign ram_temp_read_address = _zz_ram_temp_read_address_1;
-  assign when_compute_ctrl_l155 = ((_zz_when_compute_ctrl_l155 == _zz_when_compute_ctrl_l155_1) && (_zz_when_compute_ctrl_l155_2 == _zz_when_compute_ctrl_l155_3));
+  assign when_compute_ctrl_l156 = ((_zz_when_compute_ctrl_l156 == _zz_when_compute_ctrl_l156_1) && (_zz_when_compute_ctrl_l156_2 == _zz_when_compute_ctrl_l156_3));
   assign weight_addrb = _zz_weight_addrb_1;
-  assign when_compute_ctrl_l167 = (_zz_when_compute_ctrl_l167 == _zz_when_compute_ctrl_l167_1);
+  assign when_compute_ctrl_l168 = (_zz_when_compute_ctrl_l168 == _zz_when_compute_ctrl_l168_1);
   assign M_Valid = fsm_M_Fifo_Valid_delay_24;
-  assign when_compute_ctrl_l180 = (fsm_Cnt_Channel_In_Num == 10'h0);
-  assign First_Compute_Complete = fsm_First_Complete_delay_22;
+  assign when_compute_ctrl_l186 = (fsm_Cnt_Channel_In_Num == 10'h0);
+  assign First_Compute_Complete = fsm_First_Complete_delay_23;
   always @(*) begin
     fsm_stateNext = fsm_stateReg;
     case(fsm_stateReg)
@@ -331,25 +332,25 @@ module compute_ctrl (
     end
   end
 
-  assign when_compute_ctrl_l58 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Wait);
-  assign when_compute_ctrl_l66 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l75 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l90 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l100 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Judge_Row);
-  assign when_compute_ctrl_l102 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_IDLE);
-  assign when_compute_ctrl_l126 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l142 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l154 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l166 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
-  assign when_compute_ctrl_l179 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l59 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Wait);
+  assign when_compute_ctrl_l67 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l76 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l91 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l101 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Judge_Row);
+  assign when_compute_ctrl_l103 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_IDLE);
+  assign when_compute_ctrl_l127 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l143 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l155 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l167 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
+  assign when_compute_ctrl_l185 = (fsm_stateReg == `fsm_enumDefinition_binary_sequential_fsm_Compute);
   always @(posedge clk) begin
-    if(when_compute_ctrl_l58) begin
+    if(when_compute_ctrl_l59) begin
       fsm_wait_cnt <= (fsm_wait_cnt + 5'h01);
     end else begin
       fsm_wait_cnt <= 5'h0;
     end
-    if(when_compute_ctrl_l66) begin
-      if(when_compute_ctrl_l67) begin
+    if(when_compute_ctrl_l67) begin
+      if(when_compute_ctrl_l68) begin
         fsm_Cnt_Channel_In_Num <= 10'h0;
       end else begin
         fsm_Cnt_Channel_In_Num <= (fsm_Cnt_Channel_In_Num + 10'h001);
@@ -357,9 +358,9 @@ module compute_ctrl (
     end else begin
       fsm_Cnt_Channel_In_Num <= 10'h0;
     end
-    if(when_compute_ctrl_l75) begin
-      if(when_compute_ctrl_l76) begin
-        if(when_compute_ctrl_l77) begin
+    if(when_compute_ctrl_l76) begin
+      if(when_compute_ctrl_l77) begin
+        if(when_compute_ctrl_l78) begin
           fsm_Cnt_Channel_Out_Num <= 10'h0;
         end else begin
           fsm_Cnt_Channel_Out_Num <= (fsm_Cnt_Channel_Out_Num + 10'h001);
@@ -370,8 +371,8 @@ module compute_ctrl (
     end else begin
       fsm_Cnt_Channel_Out_Num <= 10'h0;
     end
-    if(when_compute_ctrl_l90) begin
-      if(when_compute_ctrl_l91) begin
+    if(when_compute_ctrl_l91) begin
+      if(when_compute_ctrl_l92) begin
         fsm_Cnt_Column <= (fsm_Cnt_Column + 12'h001);
       end else begin
         fsm_Cnt_Column <= fsm_Cnt_Column;
@@ -379,22 +380,22 @@ module compute_ctrl (
     end else begin
       fsm_Cnt_Column <= 12'h0;
     end
-    if(when_compute_ctrl_l100) begin
+    if(when_compute_ctrl_l101) begin
       fsm_Cnt_Row <= (fsm_Cnt_Row + 12'h001);
     end else begin
-      if(when_compute_ctrl_l102) begin
+      if(when_compute_ctrl_l103) begin
         fsm_Cnt_Row <= 12'h0;
       end else begin
         fsm_Cnt_Row <= fsm_Cnt_Row;
       end
     end
-    if(when_compute_ctrl_l120) begin
+    if(when_compute_ctrl_l121) begin
       Compute_Complete <= 1'b1;
     end else begin
       Compute_Complete <= 1'b0;
     end
-    if(when_compute_ctrl_l126) begin
-      if(when_compute_ctrl_l127) begin
+    if(when_compute_ctrl_l127) begin
+      if(when_compute_ctrl_l128) begin
         rd_en_fifo <= 1'b1;
       end else begin
         rd_en_fifo <= 1'b0;
@@ -402,15 +403,15 @@ module compute_ctrl (
     end else begin
       rd_en_fifo <= 1'b0;
     end
-    if(when_compute_ctrl_l135) begin
+    if(when_compute_ctrl_l136) begin
       ram_temp_write_address <= 12'h0;
     end else begin
       if(rd_en_fifo) begin
         ram_temp_write_address <= _zz_ram_temp_write_address;
       end
     end
-    if(when_compute_ctrl_l142) begin
-      if(when_compute_ctrl_l143) begin
+    if(when_compute_ctrl_l143) begin
+      if(when_compute_ctrl_l144) begin
         fsm_ram_temp_read_address_temp <= 12'h0;
       end else begin
         fsm_ram_temp_read_address_temp <= (fsm_ram_temp_read_address_temp + 12'h001);
@@ -420,19 +421,19 @@ module compute_ctrl (
     end
     _zz_ram_temp_read_address <= fsm_ram_temp_read_address_temp;
     _zz_ram_temp_read_address_1 <= _zz_ram_temp_read_address;
-    if(when_compute_ctrl_l154) begin
-      if(when_compute_ctrl_l155) begin
-        fsm_weight_addrb_temp <= 15'h0;
+    if(when_compute_ctrl_l155) begin
+      if(when_compute_ctrl_l156) begin
+        fsm_weight_addrb_temp <= 13'h0;
       end else begin
-        fsm_weight_addrb_temp <= (fsm_weight_addrb_temp + 15'h0001);
+        fsm_weight_addrb_temp <= (fsm_weight_addrb_temp + 13'h0001);
       end
     end else begin
-      fsm_weight_addrb_temp <= 15'h0;
+      fsm_weight_addrb_temp <= 13'h0;
     end
     _zz_weight_addrb <= fsm_weight_addrb_temp;
     _zz_weight_addrb_1 <= _zz_weight_addrb;
-    if(when_compute_ctrl_l166) begin
-      if(when_compute_ctrl_l167) begin
+    if(when_compute_ctrl_l167) begin
+      if(when_compute_ctrl_l168) begin
         fsm_M_Fifo_Valid <= 1'b1;
       end else begin
         fsm_M_Fifo_Valid <= 1'b0;
@@ -464,8 +465,8 @@ module compute_ctrl (
     fsm_M_Fifo_Valid_delay_22 <= fsm_M_Fifo_Valid_delay_21;
     fsm_M_Fifo_Valid_delay_23 <= fsm_M_Fifo_Valid_delay_22;
     fsm_M_Fifo_Valid_delay_24 <= fsm_M_Fifo_Valid_delay_23;
-    if(when_compute_ctrl_l179) begin
-      if(when_compute_ctrl_l180) begin
+    if(when_compute_ctrl_l185) begin
+      if(when_compute_ctrl_l186) begin
         fsm_First_Complete <= 1'b1;
       end else begin
         fsm_First_Complete <= 1'b0;
@@ -495,6 +496,7 @@ module compute_ctrl (
     fsm_First_Complete_delay_20 <= fsm_First_Complete_delay_19;
     fsm_First_Complete_delay_21 <= fsm_First_Complete_delay_20;
     fsm_First_Complete_delay_22 <= fsm_First_Complete_delay_21;
+    fsm_First_Complete_delay_23 <= fsm_First_Complete_delay_22;
   end
 
   always @(posedge clk) begin

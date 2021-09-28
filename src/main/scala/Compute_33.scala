@@ -11,7 +11,7 @@ class Compute_33(
                     ROW_COL_DATA_COUNT_WIDTH: Int,
                     CHANNEL_NUM_WIDTH: Int,
                     ZERO_NUM_WIDTH: Int,
-                    ZERO_DATA_WIDTH: Int,
+                    ZERO_POINT_DATA_WIDTH: Int,
                     DATA_GENERATE_MEM_DEPTH: Int,
                     WEIGHT_ADDR_WIDTH: Int,
                     WEIGHT_NUM_WIDTH: Int,
@@ -108,10 +108,8 @@ class Compute_33(
     conv_norm.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
     conv_norm.io.Weight_Single_Num_REG <> Weight_Num_REG
     conv_norm.io.Bias_Num_REG <> Bias_Num_REG
-    //    conv_norm.io.Bias_Addrb <> 0
-    //    conv_norm.io.M_DATA <> io.M_DATA
 
-    val conv_quan = new Conv_quan(AFTER_CONV_NORM_WIDTH, M_DATA_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, ZERO_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_OUT_NUM, CHANNEL_NUM_WIDTH, QUAN_BIAS_FIFO_DEPTH)
+    val conv_quan = new Conv_quan(AFTER_CONV_NORM_WIDTH, M_DATA_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, ZERO_POINT_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_OUT_NUM, CHANNEL_NUM_WIDTH, QUAN_BIAS_FIFO_DEPTH)
     conv_quan.io.S_DATA <> conv_norm.io.M_DATA
     conv_quan.io.Strat <> io.Start_Cu
     conv_quan.io.bias_data_in <> conv_norm.io.Data_Out_Bias
@@ -119,9 +117,10 @@ class Compute_33(
     conv_quan.io.shift_data_in <> conv_norm.io.Data_Out_Shift
     conv_quan.io.Zero_Point_REG3 <> Zero_Point_REG3
     conv_quan.io.bias_addrb <> conv_norm.io.Bias_Addrb
-    //    conv_quan.io.M_DATA <> io.M_DATA
     conv_quan.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
     conv_quan.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
+    //暂定为True后续添加支持 True为不做Leaky
+    conv_quan.io.Leaky_REG <> True
 
     val conv_stride = new Conv_Stride(M_DATA_WIDTH, M_DATA_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_OUT_NUM, STRIDE_MEM_DEPTH)
     conv_stride.io.Start <> io.Start_Cu

@@ -19,6 +19,7 @@ class Conv_quan_ctrl(
         val Row_Num_Out_REG = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
         val Channel_Out_Num_REG = in Bits (CHANNEL_NUM_WIDTH bits)
         val S_Count_Fifo = out Bits (ROW_COL_DATA_COUNT_WIDTH bits)
+        val Leaky_REG = in Bool()
     }
     noIoPrefix()
     val Channel_Times = io.Channel_Out_Num_REG >> log2Up(CHANNEL_OUT_NUM)
@@ -79,7 +80,12 @@ class Conv_quan_ctrl(
         } otherwise {
             M_Valid_temp := False
         }
-        io.M_Valid := Delay(M_Valid_temp, 20) //数据从 ram 进来 : 1个时钟周期  bias : 两个时钟周期     scale : 三个时钟周期  shift : 一个时钟周期   zero_point : 三个时钟周期    leaky_relu : 十个时钟周期
+        when(!io.Leaky_REG){
+            io.M_Valid := Delay(M_Valid_temp, 20) //数据从 ram 进来 : 1个时钟周期  bias : 两个时钟周期     scale : 三个时钟周期  shift : 一个时钟周期   zero_point : 三个时钟周期    leaky_relu : 十个时钟周期
+        } otherwise{
+            io.M_Valid := Delay(M_Valid_temp, 10)
+        }
+
         val Cnt_Column = UInt(ROW_COL_DATA_COUNT_WIDTH bits) setAsReg()
         val En_Col = Bool()
         when(EN_Last_Cout && (Cnt_Column === io.Row_Num_Out_REG.asUInt - 1)) {

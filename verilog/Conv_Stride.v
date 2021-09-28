@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_Stride
-// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
+// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
 
 
 module Conv_Stride (
@@ -35,11 +35,11 @@ module Conv_Stride (
   wire       [6:0]    _zz_when_Conv_Stride_l75_1;
   wire       [63:0]   _zz_when_Conv_Stride_l96;
   wire       [63:0]   _zz_when_Conv_Stride_l119;
-  wire       [63:0]   _zz_when_Conv_Stride_l137;
-  wire       [63:0]   _zz_when_Conv_Stride_l137_1;
-  wire       [9:0]    _zz_when_Conv_Stride_l150;
-  wire       [63:0]   _zz_when_Conv_Stride_l167;
-  wire       [63:0]   _zz_when_Conv_Stride_l184;
+  wire       [63:0]   _zz_when_Conv_Stride_l138;
+  wire       [63:0]   _zz_when_Conv_Stride_l138_1;
+  wire       [9:0]    _zz_when_Conv_Stride_l159;
+  wire       [63:0]   _zz_when_Conv_Stride_l176;
+  wire       [63:0]   _zz_when_Conv_Stride_l193;
   reg        [63:0]   row_num_out;
   reg        [63:0]   data_count;
   wire       [6:0]    Channel_Times;
@@ -67,25 +67,25 @@ module Conv_Stride (
   wire                when_Conv_Stride_l125;
   reg                 fsm_Valid_Out;
   wire                when_Conv_Stride_l136;
-  wire                when_Conv_Stride_l137;
+  wire                when_Conv_Stride_l138;
   reg        [9:0]    fsm_M_Cnt_Cout;
   reg                 fsm_M_En_Last_Cout;
-  wire                when_Conv_Stride_l150;
-  wire                when_Conv_Stride_l155;
+  wire                when_Conv_Stride_l159;
+  wire                when_Conv_Stride_l164;
   reg        [63:0]   fsm_M_Cnt_Column;
   reg                 fsm_M_En_Last_Col;
-  wire                when_Conv_Stride_l167;
-  wire                when_Conv_Stride_l172;
+  wire                when_Conv_Stride_l176;
+  wire                when_Conv_Stride_l181;
   reg        [63:0]   fsm_M_Cnt_Row;
   reg                 fsm_M_En_Last_Row;
-  wire                when_Conv_Stride_l184;
-  wire                when_Conv_Stride_l189;
-  wire                when_Conv_Stride_l192;
+  wire                when_Conv_Stride_l193;
+  wire                when_Conv_Stride_l198;
   wire                when_Conv_Stride_l201;
-  wire                when_Conv_Stride_l207;
+  wire                when_Conv_Stride_l210;
+  wire                when_Conv_Stride_l216;
   reg        `fsm_enumDefinition_3_binary_sequential_type fsm_stateReg;
   reg        `fsm_enumDefinition_3_binary_sequential_type fsm_stateNext;
-  wire                when_Conv_Stride_l231;
+  wire                when_Conv_Stride_l240;
   `ifndef SYNTHESIS
   reg [79:0] fsm_stateReg_string;
   reg [79:0] fsm_stateNext_string;
@@ -97,19 +97,19 @@ module Conv_Stride (
   assign _zz_when_Conv_Stride_l75 = {3'd0, _zz_when_Conv_Stride_l75_1};
   assign _zz_when_Conv_Stride_l96 = (Row_Num_Out_REG - 64'h0000000000000001);
   assign _zz_when_Conv_Stride_l119 = (Row_Num_Out_REG - 64'h0000000000000001);
-  assign _zz_when_Conv_Stride_l137 = fsm_Cnt_Col;
-  assign _zz_when_Conv_Stride_l137_1 = fsm_Cnt_Row;
-  assign _zz_when_Conv_Stride_l150 = (Channel_Out_Num_REG - 10'h001);
-  assign _zz_when_Conv_Stride_l167 = (row_num_out - 64'h0000000000000001);
-  assign _zz_when_Conv_Stride_l184 = (row_num_out - 64'h0000000000000001);
-  mul_4 count_mult (
+  assign _zz_when_Conv_Stride_l138 = fsm_Cnt_Col;
+  assign _zz_when_Conv_Stride_l138_1 = fsm_Cnt_Row;
+  assign _zz_when_Conv_Stride_l159 = (Channel_Out_Num_REG - 10'h001);
+  assign _zz_when_Conv_Stride_l176 = (row_num_out - 64'h0000000000000001);
+  assign _zz_when_Conv_Stride_l193 = (row_num_out - 64'h0000000000000001);
+  mul_2 count_mult (
     .A        (row_num_out   ), //i
     .B        (count_mult_B  ), //i
     .P        (count_mult_P  ), //o
     .clk      (clk           ), //i
     .reset    (reset         )  //i
   );
-  general_fifo_sync_11 fifo (
+  general_fifo_sync_2 fifo (
     .reset             (reset                   ), //i
     .clk               (clk                     ), //i
     .data_in           (S_DATA_payload_regNext  ), //i
@@ -208,50 +208,50 @@ module Conv_Stride (
   end
 
   assign when_Conv_Stride_l125 = (fsm_En_Col && fsm_En_Cin);
-  assign when_Conv_Stride_l137 = (((! _zz_when_Conv_Stride_l137[0]) && (! _zz_when_Conv_Stride_l137_1[0])) && S_DATA_valid);
-  assign when_Conv_Stride_l150 = (fsm_M_Cnt_Cout == _zz_when_Conv_Stride_l150);
+  assign when_Conv_Stride_l138 = (((! _zz_when_Conv_Stride_l138[0]) && (! _zz_when_Conv_Stride_l138_1[0])) && S_DATA_valid);
+  assign when_Conv_Stride_l159 = (fsm_M_Cnt_Cout == _zz_when_Conv_Stride_l159);
   always @(*) begin
-    if(when_Conv_Stride_l150) begin
+    if(when_Conv_Stride_l159) begin
       fsm_M_En_Last_Cout = 1'b1;
     end else begin
       fsm_M_En_Last_Cout = 1'b0;
     end
   end
 
-  assign when_Conv_Stride_l155 = (M_DATA_valid && M_DATA_ready);
-  assign when_Conv_Stride_l167 = (fsm_M_Cnt_Column == _zz_when_Conv_Stride_l167);
+  assign when_Conv_Stride_l164 = (M_DATA_valid && M_DATA_ready);
+  assign when_Conv_Stride_l176 = (fsm_M_Cnt_Column == _zz_when_Conv_Stride_l176);
   always @(*) begin
-    if(when_Conv_Stride_l167) begin
+    if(when_Conv_Stride_l176) begin
       fsm_M_En_Last_Col = 1'b1;
     end else begin
       fsm_M_En_Last_Col = 1'b0;
     end
   end
 
-  assign when_Conv_Stride_l172 = ((M_DATA_valid && M_DATA_ready) && fsm_M_En_Last_Cout);
-  assign when_Conv_Stride_l184 = (fsm_M_Cnt_Row == _zz_when_Conv_Stride_l184);
+  assign when_Conv_Stride_l181 = ((M_DATA_valid && M_DATA_ready) && fsm_M_En_Last_Cout);
+  assign when_Conv_Stride_l193 = (fsm_M_Cnt_Row == _zz_when_Conv_Stride_l193);
   always @(*) begin
-    if(when_Conv_Stride_l184) begin
+    if(when_Conv_Stride_l193) begin
       fsm_M_En_Last_Row = 1'b1;
     end else begin
       fsm_M_En_Last_Row = 1'b0;
     end
   end
 
-  assign when_Conv_Stride_l189 = (M_DATA_valid && M_DATA_ready);
-  assign when_Conv_Stride_l192 = (fsm_M_En_Last_Col && fsm_M_En_Last_Cout);
-  assign when_Conv_Stride_l201 = ((fsm_M_En_Last_Row && fsm_M_En_Last_Col) && fsm_M_En_Last_Cout);
+  assign when_Conv_Stride_l198 = (M_DATA_valid && M_DATA_ready);
+  assign when_Conv_Stride_l201 = (fsm_M_En_Last_Col && fsm_M_En_Last_Cout);
+  assign when_Conv_Stride_l210 = ((fsm_M_En_Last_Row && fsm_M_En_Last_Col) && fsm_M_En_Last_Cout);
   always @(*) begin
-    if(when_Conv_Stride_l201) begin
+    if(when_Conv_Stride_l210) begin
       Last = 1'b1;
     end else begin
       Last = 1'b0;
     end
   end
 
-  assign when_Conv_Stride_l207 = ((fsm_stateReg == `fsm_enumDefinition_3_binary_sequential_fsm_Stride) && ((fsm_stateNext == `fsm_enumDefinition_3_binary_sequential_fsm_IDLE) && (fsm_stateReg != `fsm_enumDefinition_3_binary_sequential_fsm_IDLE)));
+  assign when_Conv_Stride_l216 = ((fsm_stateReg == `fsm_enumDefinition_3_binary_sequential_fsm_Stride) && ((fsm_stateNext == `fsm_enumDefinition_3_binary_sequential_fsm_IDLE) && (fsm_stateReg != `fsm_enumDefinition_3_binary_sequential_fsm_IDLE)));
   always @(*) begin
-    if(when_Conv_Stride_l207) begin
+    if(when_Conv_Stride_l216) begin
       Stride_Complete = 1'b1;
     end else begin
       Stride_Complete = 1'b0;
@@ -276,7 +276,7 @@ module Conv_Stride (
         end
       end
       `fsm_enumDefinition_3_binary_sequential_fsm_Stride : begin
-        if(when_Conv_Stride_l231) begin
+        if(when_Conv_Stride_l240) begin
           fsm_stateNext = `fsm_enumDefinition_3_binary_sequential_fsm_IDLE;
         end else begin
           fsm_stateNext = `fsm_enumDefinition_3_binary_sequential_fsm_Stride;
@@ -293,7 +293,7 @@ module Conv_Stride (
     end
   end
 
-  assign when_Conv_Stride_l231 = ((fsm_En_Row && fsm_En_Col) && fsm_En_Cin);
+  assign when_Conv_Stride_l240 = ((fsm_En_Row && fsm_En_Col) && fsm_En_Cin);
   assign when_Conv_Stride_l67 = (fsm_stateReg == `fsm_enumDefinition_3_binary_sequential_fsm_WAIT);
   assign when_Conv_Stride_l80 = (fsm_stateReg == `fsm_enumDefinition_3_binary_sequential_fsm_Stride);
   assign when_Conv_Stride_l101 = (fsm_stateReg == `fsm_enumDefinition_3_binary_sequential_fsm_Stride);
@@ -352,10 +352,18 @@ module Conv_Stride (
       fsm_Cnt_Row <= 64'h0;
     end
     if(when_Conv_Stride_l136) begin
-      if(when_Conv_Stride_l137) begin
-        fsm_Valid_Out <= 1'b1;
+      if(EN_Stride_REG) begin
+        if(when_Conv_Stride_l138) begin
+          fsm_Valid_Out <= 1'b1;
+        end else begin
+          fsm_Valid_Out <= 1'b0;
+        end
       end else begin
-        fsm_Valid_Out <= 1'b0;
+        if(S_DATA_valid) begin
+          fsm_Valid_Out <= 1'b1;
+        end else begin
+          fsm_Valid_Out <= 1'b0;
+        end
       end
     end else begin
       fsm_Valid_Out <= 1'b0;
@@ -369,7 +377,7 @@ module Conv_Stride (
       fsm_M_Cnt_Row <= 64'h0;
       fsm_stateReg <= `fsm_enumDefinition_3_binary_sequential_fsm_BOOT;
     end else begin
-      if(when_Conv_Stride_l155) begin
+      if(when_Conv_Stride_l164) begin
         if(fsm_M_En_Last_Cout) begin
           fsm_M_Cnt_Cout <= 10'h0;
         end else begin
@@ -378,7 +386,7 @@ module Conv_Stride (
       end else begin
         fsm_M_Cnt_Cout <= fsm_M_Cnt_Cout;
       end
-      if(when_Conv_Stride_l172) begin
+      if(when_Conv_Stride_l181) begin
         if(fsm_M_En_Last_Col) begin
           fsm_M_Cnt_Column <= 64'h0;
         end else begin
@@ -387,11 +395,11 @@ module Conv_Stride (
       end else begin
         fsm_M_Cnt_Column <= fsm_M_Cnt_Column;
       end
-      if(when_Conv_Stride_l189) begin
+      if(when_Conv_Stride_l198) begin
         if(fsm_M_En_Last_Row) begin
           fsm_M_Cnt_Row <= 64'h0;
         end else begin
-          if(when_Conv_Stride_l192) begin
+          if(when_Conv_Stride_l201) begin
             fsm_M_Cnt_Row <= (fsm_M_Cnt_Row + 64'h0000000000000001);
           end else begin
             fsm_M_Cnt_Row <= fsm_M_Cnt_Row;

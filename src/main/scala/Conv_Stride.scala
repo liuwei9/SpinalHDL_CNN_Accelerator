@@ -134,11 +134,20 @@ class Conv_Stride(
 
         val Valid_Out = Bool() setAsReg()
         when(isActive(Stride)) {
-            when(!Cnt_Col.asBits(0) && (!Cnt_Row.asBits(0)) && io.S_DATA.valid) {
-                Valid_Out := True
-            } otherwise {
-                Valid_Out := False
+            when(io.EN_Stride_REG){
+                when(!Cnt_Col.asBits(0) && (!Cnt_Row.asBits(0)) && io.S_DATA.valid) {
+                    Valid_Out := True
+                } otherwise {
+                    Valid_Out := False
+                }
+            } otherwise{
+                when(io.S_DATA.valid) {
+                    Valid_Out := True
+                } otherwise {
+                    Valid_Out := False
+                }
             }
+
         } otherwise {
             Valid_Out := False
         }

@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : Conv_quan
-// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
+// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
 
 
 module Conv_quan (
@@ -12,16 +12,17 @@ module Conv_quan (
   input      [255:0]  scale_data_in,
   input      [255:0]  shift_data_in,
   input      [7:0]    Zero_Point_REG3,
-  output     [7:0]    bias_addrb,
+  output     [8:0]    bias_addrb,
   output              M_DATA_valid,
   input               M_DATA_ready,
-  output     [63:0]   M_DATA_payload,
+  output reg [63:0]   M_DATA_payload,
   input      [11:0]   Row_Num_Out_REG,
   input      [9:0]    Channel_Out_Num_REG,
+  input               Leaky_REG,
   input               reset,
   input               clk
 );
-  wire       [7:0]    quan_ctrl_bias_addrb;
+  wire       [8:0]    quan_ctrl_bias_addrb;
   wire                quan_ctrl_EN_Rd_Fifo;
   wire                quan_ctrl_M_Valid;
   wire       [11:0]   quan_ctrl_S_Count_Fifo;
@@ -39,6 +40,7 @@ module Conv_quan (
   reg        [255:0]  shift_data_in_delay_3;
   reg        [255:0]  shift_data_in_delay_4;
   reg        [255:0]  shift_data_in_delay_5;
+  wire                when_Conv_quan_l69;
 
   Conv_quan_ctrl quan_ctrl (
     .Start                  (Strat                   ), //i
@@ -50,6 +52,7 @@ module Conv_quan (
     .Row_Num_Out_REG        (Row_Num_Out_REG         ), //i
     .Channel_Out_Num_REG    (Channel_Out_Num_REG     ), //i
     .S_Count_Fifo           (quan_ctrl_S_Count_Fifo  ), //o
+    .Leaky_REG              (Leaky_REG               ), //i
     .clk                    (clk                     ), //i
     .reset                  (reset                   )  //i
   );
@@ -95,7 +98,15 @@ module Conv_quan (
   assign bias_addrb = quan_ctrl_bias_addrb;
   assign M_DATA_valid = quan_ctrl_M_Valid;
   assign S_DATA_ready = bias_S_DATA_ready;
-  assign M_DATA_payload = leaky_data_out;
+  assign when_Conv_quan_l69 = (! Leaky_REG);
+  always @(*) begin
+    if(when_Conv_quan_l69) begin
+      M_DATA_payload = leaky_data_out;
+    end else begin
+      M_DATA_payload = zero_data_out;
+    end
+  end
+
   always @(posedge clk) begin
     scale_data_in_delay_1 <= scale_data_in;
     scale_data_in_delay_2 <= scale_data_in_delay_1;

@@ -1,14 +1,14 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : fifo_sync_2
-// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
+// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
 
 
 module fifo_sync_2 (
   output              full,
   input               wr_en,
-  input      [255:0]  din,
+  input      [63:0]   din,
   output              empty,
-  output     [255:0]  dout,
+  output     [63:0]   dout,
   input               rd_en,
   output     [12:0]   wr_data_count,
   output     [12:0]   rd_data_count,
@@ -22,7 +22,7 @@ module fifo_sync_2 (
   wire                temp_almost_full;
   wire                temp_data_valid;
   wire                temp_dbiterr;
-  wire       [255:0]  temp_dout;
+  wire       [63:0]   temp_dout;
   wire                temp_empty;
   wire                temp_full;
   wire                temp_overflow;
@@ -58,12 +58,12 @@ module fifo_sync_2 (
     .PROG_EMPTY_THRESH(5),
     .PROG_FULL_THRESH(4091),
     .RD_DATA_COUNT_WIDTH(13),
-    .READ_DATA_WIDTH(256),
+    .READ_DATA_WIDTH(64),
     .READ_MODE("fwft"),
     .SIM_ASSERT_CHK(0),
     .USE_ADV_FEATURES("1404"),
     .WAKEUP_TIME(0),
-    .WRITE_DATA_WIDTH(256),
+    .WRITE_DATA_WIDTH(64),
     .WR_DATA_COUNT_WIDTH(13) 
   ) temp (
     .almost_empty     (temp_almost_empty   ), //o

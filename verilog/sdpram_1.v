@@ -1,12 +1,12 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : sdpram_13
-// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
+// Component : sdpram_1
+// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
 
 
-module sdpram_13 (
+module sdpram_1 (
   output     [255:0]  doutb,
-  input      [6:0]    addra,
-  input      [4:0]    addrb,
+  input      [7:0]    addra,
+  input      [5:0]    addrb,
   input      [63:0]   dina,
   input               ena,
   input               enb,
@@ -25,8 +25,8 @@ module sdpram_13 (
   wire                sleep;
 
   xpm_memory_sdpram #(
-    .ADDR_WIDTH_A(7),
-    .ADDR_WIDTH_B(5),
+    .ADDR_WIDTH_A(8),
+    .ADDR_WIDTH_B(6),
     .AUTO_SLEEP_TIME(0),
     .BYTE_WRITE_WIDTH_A(64),
     .CASCADE_HEIGHT(0),
@@ -36,7 +36,7 @@ module sdpram_13 (
     .MEMORY_INIT_PARAM("0"),
     .MEMORY_OPTIMIZATION("true"),
     .MEMORY_PRIMITIVE("block"),
-    .MEMORY_SIZE(8192),
+    .MEMORY_SIZE(16384),
     .MESSAGE_CONTROL(0),
     .READ_DATA_WIDTH_B(256),
     .READ_LATENCY_B(1),

@@ -1,16 +1,16 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
-// Component : fifo_sync_3
-// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
+// Component : fifo_sync_1
+// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
 
 
-module fifo_sync_3 (
+module fifo_sync_1 (
   output              full,
   input               wr_en,
   input      [63:0]   din,
   output              empty,
-  output     [127:0]  dout,
+  output     [255:0]  dout,
   input               rd_en,
-  output     [11:0]   wr_data_count,
+  output     [12:0]   wr_data_count,
   output     [10:0]   rd_data_count,
   output              data_valid,
   output              rd_rst_busy,
@@ -22,7 +22,7 @@ module fifo_sync_3 (
   wire                temp_almost_full;
   wire                temp_data_valid;
   wire                temp_dbiterr;
-  wire       [127:0]  temp_dout;
+  wire       [255:0]  temp_dout;
   wire                temp_empty;
   wire                temp_full;
   wire                temp_overflow;
@@ -33,7 +33,7 @@ module fifo_sync_3 (
   wire                temp_sbiterr;
   wire                temp_underflow;
   wire                temp_wr_ack;
-  wire       [11:0]   temp_wr_data_count;
+  wire       [12:0]   temp_wr_data_count;
   wire                temp_wr_rst_busy;
   wire                almost_empty;
   wire                almost_full;
@@ -53,18 +53,18 @@ module fifo_sync_3 (
     .ECC_MODE("no_ecc"),
     .FIFO_MEMORY_TYPE("block"),
     .FIFO_READ_LATENCY(0),
-    .FIFO_WRITE_DEPTH(2048),
+    .FIFO_WRITE_DEPTH(4096),
     .FULL_RESET_VALUE(0),
     .PROG_EMPTY_THRESH(5),
-    .PROG_FULL_THRESH(2041),
+    .PROG_FULL_THRESH(4085),
     .RD_DATA_COUNT_WIDTH(11),
-    .READ_DATA_WIDTH(128),
+    .READ_DATA_WIDTH(256),
     .READ_MODE("fwft"),
     .SIM_ASSERT_CHK(0),
     .USE_ADV_FEATURES("1404"),
     .WAKEUP_TIME(0),
     .WRITE_DATA_WIDTH(64),
-    .WR_DATA_COUNT_WIDTH(12) 
+    .WR_DATA_COUNT_WIDTH(13) 
   ) temp (
     .almost_empty     (temp_almost_empty   ), //o
     .almost_full      (temp_almost_full    ), //o

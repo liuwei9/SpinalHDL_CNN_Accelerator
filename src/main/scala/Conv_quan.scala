@@ -25,6 +25,7 @@ class Conv_quan(
         val M_DATA = master Stream Bits(M_DATA_WIDTH bits)
         val Row_Num_Out_REG = in Bits (ROW_COL_DATA_COUNT_WIDTH bits)
         val Channel_Out_Num_REG = in Bits (CHANNEL_NUM_WIDTH bits)
+        val Leaky_REG = in Bool()
 
     }
     noIoPrefix()
@@ -36,6 +37,7 @@ class Conv_quan(
     quan_ctrl.io.M_Valid <> io.M_DATA.valid
     quan_ctrl.io.Row_Num_Out_REG <> io.Row_Num_Out_REG
     quan_ctrl.io.Channel_Out_Num_REG <> io.Channel_Out_Num_REG
+    quan_ctrl.io.Leaky_REG <> io.Leaky_REG
 
     val bias = new Conv_Bias(S_DATA_WIDTH, S_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, BIAS_DATA_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_OUT_NUM, BIAS_FIFO_DEPTH)
     bias.io.S_DATA <> io.S_DATA
@@ -60,13 +62,19 @@ class Conv_quan(
     zero.io.data_in <> shift.io.data_out
     zero.io.zero_data_in <> io.Zero_Point_REG3
 
-    val leaky = new Conv_leaky_relu(ZERO_M_DATA_WIDTH, M_DATA_WIDTH,ZERO_DATA_WIDTH,CHANNEL_OUT_NUM)
+    val leaky = new Conv_leaky_relu(ZERO_M_DATA_WIDTH, M_DATA_WIDTH, ZERO_DATA_WIDTH, CHANNEL_OUT_NUM)
     leaky.io.data_in <> zero.io.data_out
     leaky.io.zero_point <> io.Zero_Point_REG3
-    leaky.io.data_out <> io.M_DATA.payload
+
+    when(!io.Leaky_REG) {
+        leaky.io.data_out <> io.M_DATA.payload
+    } otherwise {
+        zero.io.data_out <> io.M_DATA.payload
+    }
+
 }
 
-object Conv_quan{
+object Conv_quan {
     def main(args: Array[String]): Unit = {
         SpinalConfig(
             defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
@@ -74,12 +82,12 @@ object Conv_quan{
             headerWithDate = true,
             targetDirectory = "verilog"
 
-        )generateVerilog(new Conv_quan(256,64,8,256,256,256,8,11,8,10,4096))
+        ) generateVerilog (new Conv_quan(256, 64, 8, 256, 256, 256, 8, 11, 8, 10, 4096))
         SpinalConfig(
             defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
             headerWithDate = true,
             targetDirectory = "verilog"
 
-        )generateVerilog(new leaky_relu(8,8,8))
+        ) generateVerilog (new leaky_relu(8, 8, 8))
     }
 }

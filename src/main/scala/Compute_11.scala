@@ -11,7 +11,7 @@ class Compute_11(
                     ROW_COL_DATA_COUNT_WIDTH: Int,
                     CHANNEL_NUM_WIDTH: Int,
                     ZERO_NUM_WIDTH: Int,
-                    ZERO_DATA_WIDTH: Int,
+                    ZERO_POINT_DATA_WIDTH: Int,
                     WEIGHT_ADDR_WIDTH: Int,
                     WEIGHT_NUM_WIDTH: Int,
                     BIAS_NUM_WIDTH: Int,
@@ -30,7 +30,7 @@ class Compute_11(
 
     val io = new Bundle {
         val Conv_Complete = out Bool()
-//        val Stride_Complete = out Bool()
+        val Stride_Complete = out Bool()
         val Write_Block_Complete = out Bool()
         val Sign = in Bits (3 bits)
         val Reg_4 = in Bits (REG_WIDTH bits)
@@ -42,7 +42,7 @@ class Compute_11(
         val M_DATA = master Stream Bits(M_DATA_WIDTH bits)
         val Start_Pa = in Bool()
         val Start_Cu = in Bool()
-//        val Last_33 = out Bool()
+        val Last_11 = out Bool()
     }
     noIoPrefix()
 
@@ -73,6 +73,7 @@ class Compute_11(
     val Padding_REG = Cu_Instruction(62)
     val Stride_REG = Cu_Instruction(61)
     val Zero_Num_REG = Cu_Instruction(60 downto 58)
+    val Leaky_REG = Cu_Instruction(57)      //True为不做Leaky
     val Row_Num_In_REG = Cu_Instruction(42 downto 32)
     val Channel_In_Num_REG = Cu_Instruction(31 downto 22)
     val Row_Num_Out_REG = Cu_Instruction(21 downto 11)
@@ -89,7 +90,6 @@ class Compute_11(
     conv_norm.io.S_DATA <> io.S_DATA.payload
     conv_norm.io.S_DATA_Valid <> io.S_DATA.valid.asBits
     conv_norm.io.S_DATA_Ready <> io.S_DATA.ready
-    conv_norm.io.M_DATA <> io.M_DATA
     conv_norm.io.Write_Block_Complete <> io.Write_Block_Complete
     conv_norm.io.Compute_Complete <> io.Conv_Complete
     conv_norm.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
@@ -97,7 +97,28 @@ class Compute_11(
     conv_norm.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
     conv_norm.io.Weight_Single_Num_REG <> Weight_Num_REG
     conv_norm.io.Bias_Num_REG <> Bias_Num_REG.resized
-    conv_norm.io.Bias_Addrb <> 0
+
+    val conv_quan = new Conv_quan(AFTER_CONV_NORM_WIDTH, M_DATA_WIDTH, BIAS_NUM_WIDTH, BIAS_DATA_WIDTH, SCALE_DATA_WIDTH, SHIFT_DATA_WIDTH, ZERO_POINT_DATA_WIDTH, ROW_COL_DATA_COUNT_WIDTH, CHANNEL_OUT_NUM, CHANNEL_NUM_WIDTH, QUAN_BIAS_FIFO_DEPTH)
+    conv_quan.io.S_DATA <> conv_norm.io.M_DATA
+    conv_quan.io.Strat <> io.Start_Cu
+    conv_quan.io.bias_data_in <> conv_norm.io.Data_Out_Bias
+    conv_quan.io.scale_data_in <> conv_norm.io.Data_Out_Scale
+    conv_quan.io.shift_data_in <> conv_norm.io.Data_Out_Shift
+    conv_quan.io.Zero_Point_REG3 <> Zero_Point_REG3
+    conv_quan.io.bias_addrb <> conv_norm.io.Bias_Addrb
+    conv_quan.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
+    conv_quan.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
+    conv_quan.io.Leaky_REG <> Leaky_REG
+
+    val conv_stride = new Conv_Stride(M_DATA_WIDTH, M_DATA_WIDTH, CHANNEL_NUM_WIDTH, CHANNEL_OUT_NUM, STRIDE_MEM_DEPTH)
+    conv_stride.io.Start <> io.Start_Cu
+    conv_stride.io.S_DATA <> conv_quan.io.M_DATA
+    conv_stride.io.EN_Stride_REG <> Stride_REG
+    conv_stride.io.M_DATA <> io.M_DATA
+    conv_stride.io.Row_Num_Out_REG <> Row_Num_Out_REG.resized
+    conv_stride.io.Channel_Out_Num_REG <> Channel_Out_Num_REG
+    conv_stride.io.Last <> io.Last_11
+    conv_stride.io.Stride_Complete <> io.Stride_Complete
 }
 
 object Compute_11{
@@ -109,12 +130,12 @@ object Compute_11{
             //            headerWithDate = true,
             targetDirectory = "verilog"
 
-        ) generateVerilog (new Compute_11(1, 32, 64, 64, 256, 8, 12, 10, 3, 8, 15, 16, 9, 256, 256, 256, 32, 8, 12, 4096, 32768, 256, 4096, 2048))
-//        SpinalConfig(
-//            defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
-//            headerWithDate = true,
-//            targetDirectory = "verilog"
-//
-//        ) generateVerilog (new leaky_relu(8, 8, 8))
+        ) generateVerilog (new Compute_11(1, 32, 64, 64, 64, 8, 12, 10, 3, 8, 15, 16, 9, 256, 256, 256, 32, 8, 12, 4096, 32768, 256, 4096, 4096))
+        SpinalConfig(
+            defaultConfigForClockDomains = ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
+            headerWithDate = true,
+            targetDirectory = "verilog"
+
+        ) generateVerilog (new leaky_relu(8, 8, 8))
     }
 }

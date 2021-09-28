@@ -1,12 +1,12 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : sdpram
-// Git hash  : fbf001df014e844f818dd31ebd5c3686888b43b3
+// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
 
 
 module sdpram (
-  output     [1023:0] doutb,
-  input      [12:0]   addra,
-  input      [8:0]    addrb,
+  output     [2047:0] doutb,
+  input      [14:0]   addra,
+  input      [9:0]    addrb,
   input      [63:0]   dina,
   input               ena,
   input               enb,
@@ -14,7 +14,7 @@ module sdpram (
   input               clk
 );
   wire                temp_dbiterrb;
-  wire       [1023:0] temp_doutb;
+  wire       [2047:0] temp_doutb;
   wire                temp_sbiterrb;
   wire                dbiterrb;
   wire                sbiterrb;
@@ -25,8 +25,8 @@ module sdpram (
   wire                sleep;
 
   xpm_memory_sdpram #(
-    .ADDR_WIDTH_A(13),
-    .ADDR_WIDTH_B(9),
+    .ADDR_WIDTH_A(15),
+    .ADDR_WIDTH_B(10),
     .AUTO_SLEEP_TIME(0),
     .BYTE_WRITE_WIDTH_A(64),
     .CASCADE_HEIGHT(0),
@@ -36,9 +36,9 @@ module sdpram (
     .MEMORY_INIT_PARAM("0"),
     .MEMORY_OPTIMIZATION("true"),
     .MEMORY_PRIMITIVE("block"),
-    .MEMORY_SIZE(524288),
+    .MEMORY_SIZE(2097152),
     .MESSAGE_CONTROL(0),
-    .READ_DATA_WIDTH_B(1024),
+    .READ_DATA_WIDTH_B(2048),
     .READ_LATENCY_B(1),
     .READ_RESET_VALUE_B("0"),
     .RST_MODE_A("SYNC"),

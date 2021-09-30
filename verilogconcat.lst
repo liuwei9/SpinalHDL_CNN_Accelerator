@@ -1,0 +1,14 @@
+verilog/enumdefine.v
+verilog/add.v
+verilog/fifo_sync.v
+verilog/add_simd.v
+verilog/fifo_sync_2.v
+verilog/mul.v
+verilog/general_fifo_sync.v
+verilog/concat_zero.v
+verilog/concat_scale.v
+verilog/connect_32to8.v
+verilog/general_fifo_sync_2.v
+verilog/reshape_instruction.v
+verilog/concat_final.v
+verilog/concat.v

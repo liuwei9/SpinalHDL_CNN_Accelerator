@@ -55,9 +55,13 @@ class concat(
     concat_final.io.Concat2_Scale <> reshape_instruction.io.Concat2_Scale
     concat_final.io.Last_Concat <> io.Last_Concat
 }
-//object concat{
-//    def main(args: Array[String]): Unit = {
-//        SpinalVerilog(new concat())
-//    }
-//}
+object concat{
+    def main(args: Array[String]): Unit = {
+        SpinalConfig(
+            defaultConfigForClockDomains =  ClockDomainConfig(clockEdge = RISING, resetKind = SYNC),
+            targetDirectory = "verilog",
+            oneFilePerComponent = true
+        ).generateVerilog(new concat(11,10,15,32,32,32,64,64,8,2048,2048,1024))
+    }
+}
 

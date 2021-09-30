@@ -1,33 +1,13 @@
 
-`define fsm_enumDefinition_binary_sequential_type [2:0]
-`define fsm_enumDefinition_binary_sequential_fsm_BOOT 3'b000
-`define fsm_enumDefinition_binary_sequential_fsm_IDLE 3'b001
-`define fsm_enumDefinition_binary_sequential_fsm_Wait 3'b010
-`define fsm_enumDefinition_binary_sequential_fsm_Judge_Before_Fifo 3'b011
-`define fsm_enumDefinition_binary_sequential_fsm_Judge_After_Fifo 3'b100
-`define fsm_enumDefinition_binary_sequential_fsm_Compute 3'b101
-`define fsm_enumDefinition_binary_sequential_fsm_Judge_Row 3'b110
-
-`define fsm_enumDefinition_1_binary_sequential_type [2:0]
-`define fsm_enumDefinition_1_binary_sequential_fsm_BOOT 3'b000
-`define fsm_enumDefinition_1_binary_sequential_fsm_IDLE 3'b001
-`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Weight 3'b010
-`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Bias 3'b011
-`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Scale 3'b100
-`define fsm_enumDefinition_1_binary_sequential_fsm_Copy_Shift 3'b101
-
-`define fsm_enumDefinition_2_binary_sequential_type [2:0]
-`define fsm_enumDefinition_2_binary_sequential_fsm_BOOT 3'b000
-`define fsm_enumDefinition_2_binary_sequential_fsm_IDLE 3'b001
-`define fsm_enumDefinition_2_binary_sequential_fsm_WAIT 3'b010
-`define fsm_enumDefinition_2_binary_sequential_fsm_Judge_Before_FIFO 3'b011
-`define fsm_enumDefinition_2_binary_sequential_fsm_Judge_After_FIFO 3'b100
-`define fsm_enumDefinition_2_binary_sequential_fsm_Compute 3'b101
-`define fsm_enumDefinition_2_binary_sequential_fsm_Judge 3'b110
-
-`define fsm_enumDefinition_3_binary_sequential_type [1:0]
-`define fsm_enumDefinition_3_binary_sequential_fsm_BOOT 2'b00
-`define fsm_enumDefinition_3_binary_sequential_fsm_IDLE 2'b01
-`define fsm_enumDefinition_3_binary_sequential_fsm_WAIT 2'b10
-`define fsm_enumDefinition_3_binary_sequential_fsm_Stride 2'b11
+`define fsm_enumDefinition_binary_sequential_type [3:0]
+`define fsm_enumDefinition_binary_sequential_fsm_BOOT 4'b0000
+`define fsm_enumDefinition_binary_sequential_fsm_IDLE 4'b0001
+`define fsm_enumDefinition_binary_sequential_fsm_WAIT 4'b0010
+`define fsm_enumDefinition_binary_sequential_fsm_Judge_Before_Fifo 4'b0011
+`define fsm_enumDefinition_binary_sequential_fsm_Judge_After_Fifo 4'b0100
+`define fsm_enumDefinition_binary_sequential_fsm_READ_S_DATA_1 4'b0101
+`define fsm_enumDefinition_binary_sequential_fsm_WAIT_S_DATA_1 4'b0110
+`define fsm_enumDefinition_binary_sequential_fsm_Direct_Data 4'b0111
+`define fsm_enumDefinition_binary_sequential_fsm_Judge_Col 4'b1000
+`define fsm_enumDefinition_binary_sequential_fsm_Judge_Row 4'b1001
 

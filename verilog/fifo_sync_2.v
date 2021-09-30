@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : fifo_sync_2
-// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
+// Git hash  : 0e6a3ebbe013921c1c094a4a70c6b764aaf2f29f
 
 
 module fifo_sync_2 (
@@ -10,8 +10,8 @@ module fifo_sync_2 (
   output              empty,
   output     [63:0]   dout,
   input               rd_en,
-  output     [12:0]   wr_data_count,
-  output     [12:0]   rd_data_count,
+  output     [10:0]   wr_data_count,
+  output     [10:0]   rd_data_count,
   output              data_valid,
   output              rd_rst_busy,
   output              wr_rst_busy,
@@ -28,12 +28,12 @@ module fifo_sync_2 (
   wire                temp_overflow;
   wire                temp_prog_empty;
   wire                temp_prog_full;
-  wire       [12:0]   temp_rd_data_count;
+  wire       [10:0]   temp_rd_data_count;
   wire                temp_rd_rst_busy;
   wire                temp_sbiterr;
   wire                temp_underflow;
   wire                temp_wr_ack;
-  wire       [12:0]   temp_wr_data_count;
+  wire       [10:0]   temp_wr_data_count;
   wire                temp_wr_rst_busy;
   wire                almost_empty;
   wire                almost_full;
@@ -53,18 +53,18 @@ module fifo_sync_2 (
     .ECC_MODE("no_ecc"),
     .FIFO_MEMORY_TYPE("block"),
     .FIFO_READ_LATENCY(0),
-    .FIFO_WRITE_DEPTH(4096),
+    .FIFO_WRITE_DEPTH(1024),
     .FULL_RESET_VALUE(0),
     .PROG_EMPTY_THRESH(5),
-    .PROG_FULL_THRESH(4091),
-    .RD_DATA_COUNT_WIDTH(13),
+    .PROG_FULL_THRESH(1019),
+    .RD_DATA_COUNT_WIDTH(11),
     .READ_DATA_WIDTH(64),
     .READ_MODE("fwft"),
     .SIM_ASSERT_CHK(0),
     .USE_ADV_FEATURES("1404"),
     .WAKEUP_TIME(0),
     .WRITE_DATA_WIDTH(64),
-    .WR_DATA_COUNT_WIDTH(13) 
+    .WR_DATA_COUNT_WIDTH(11) 
   ) temp (
     .almost_empty     (temp_almost_empty   ), //o
     .almost_full      (temp_almost_full    ), //o

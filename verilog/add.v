@@ -1,6 +1,6 @@
 // Generator : SpinalHDL v1.6.0    git head : 73c8d8e2b86b45646e9d0b2e729291f2b65e6be3
 // Component : add
-// Git hash  : 46de7a2643940073d87fffa27badc891275ca23e
+// Git hash  : 0e6a3ebbe013921c1c094a4a70c6b764aaf2f29f
 
 
 module add (

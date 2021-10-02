@@ -3,18 +3,12 @@ import spinal.lib._
 import xmemory._
 
 class A() extends Component {
-    val t = new general_fifo_sync(64,64,1024,12,false)
-    t.io.rd_en := False
-    t.io.wr_en := False
-    t.io.m_data_count := 0
-    t.io.s_data_count := 0
-    t.io.data_in := 0
-    val m = new general_fifo_sync(64,64,2048,12,false)
-    m.io.rd_en := False
-    m.io.wr_en := False
-    m.io.m_data_count := 0
-    m.io.s_data_count := 0
-    m.io.data_in := 0
+    val rd_en = Vec(Bool(),2)
+    val rd_en1 = Vec(Bool(),2)
+    rd_en(0):=RegNext(True)
+    rd_en(1):=RegNext(True)
+    rd_en1(0):= ~rd_en(0)
+    rd_en1(1):= ~rd_en(1)
 }
 
 object A {

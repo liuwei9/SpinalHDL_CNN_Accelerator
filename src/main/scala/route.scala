@@ -18,7 +18,7 @@ class route(
         val Row_Num_Out_REG = in Bits (WIDTH_FEATURE_SIZE bits)
         val Channel_Out_Num_REG = in Bits (WIDTH_CHANNEL_NUM_REG bits)
         val M_DATA = master Stream Bits(M_DATA_WIDTH bits)
-        val Route_Complete = out Bool()
+        val Route_Complete = out Bool() setAsReg()
         val Last_Route = out Bool()
     }
     noIoPrefix()
@@ -35,9 +35,14 @@ class route(
     Route_Read_fifo.io.m_data_count <> count_mult.io.P.asUInt
     Route_Read_fifo.io.data_in_ready <> io.S_DATA.ready
 
-
+    val data_count = RegNext(io.Row_Num_Out_REG.asUInt * Channel_Times_Out.asUInt)
     val Route_Write_fifo = new general_fifo_sync(S_DATA_WIDTH, M_DATA_WIDTH, ROUTE_M_FIFO_DEPTH, WIDTH_FEATURE_SIZE, true)
-
+    Route_Write_fifo.io.m_data_count <> data_count
+    Route_Write_fifo.io.s_data_count <> data_count
+    Route_Write_fifo.io.rd_en <> (io.M_DATA.ready && io.M_DATA.valid)
+    Route_Write_fifo.io.data_out <> io.M_DATA.payload
+    Route_Write_fifo.io.data_valid <> io.M_DATA.ready
+    Route_Write_fifo.io.data_in := RegNext(Route_Read_fifo.io.data_out)
 
     val fsm = new StateMachine {
         val IDLE = new State() with EntryPoint
@@ -109,6 +114,91 @@ class route(
             Cnt_Row := Cnt_Row
         }
 
+
+        val rd_en_fifo = Bool() setAsReg()
+        when(isActive(Write_Fifo)) {
+            rd_en_fifo := True
+        } otherwise {
+            rd_en_fifo := False
+        }
+        Route_Read_fifo.io.rd_en <> rd_en_fifo
+
+        val Valid_Out = Bool() setAsReg()
+        when(isActive(Write_Fifo)) {
+            when(Cnt_Cin >= Channel_Times_Out.asUInt) {
+                Valid_Out := True
+            } otherwise {
+                Valid_Out := False
+            }
+        } otherwise {
+            Valid_Out := False
+        }
+        Route_Write_fifo.io.wr_en <> Valid_Out
+
+
+        val M_Cnt_Cout = UInt(WIDTH_CHANNEL_NUM_REG bits) setAsReg() init (0)
+        val M_En_Last_Cout = Bool()
+        when(M_Cnt_Cout === Channel_Times_Out.asUInt - 1) {
+            M_En_Last_Cout := True
+        } otherwise {
+            M_En_Last_Cout := False
+        }
+        when(io.M_DATA.valid && io.M_DATA.ready) {
+            when(M_En_Last_Cout) {
+                M_Cnt_Cout := 0
+            } otherwise {
+                M_Cnt_Cout := M_Cnt_Cout + 1
+            }
+        } otherwise {
+            M_Cnt_Cout := M_Cnt_Cout
+        }
+
+        val M_Cnt_Column = UInt(WIDTH_FEATURE_SIZE bits) setAsReg() init (0)
+        val M_En_Last_Col = Bool()
+        when(M_Cnt_Column === io.Row_Num_Out_REG.asUInt - 1) {
+            M_En_Last_Col := True
+        } otherwise {
+            M_En_Last_Col := False
+        }
+        when(io.M_DATA.valid && io.M_DATA.ready && M_En_Last_Cout) {
+            when(M_En_Last_Col) {
+                M_Cnt_Column := 0
+            } otherwise {
+                M_Cnt_Column := M_Cnt_Column + 1
+            }
+        } otherwise {
+            M_Cnt_Column := M_Cnt_Column
+        }
+
+        val M_Cnt_Row = UInt(WIDTH_FEATURE_SIZE bits) setAsReg() init (0)
+        val M_En_Last_Row = Bool()
+        when(M_Cnt_Row === io.Row_Num_Out_REG.asUInt - 1) {
+            M_En_Last_Row := True
+        } otherwise {
+            M_En_Last_Row := False
+        }
+        when(io.M_DATA.valid && io.M_DATA.ready) {
+            when(M_En_Last_Row) {
+                M_Cnt_Row := 0
+            } elsewhen (M_En_Last_Col && M_En_Last_Cout) {
+                M_Cnt_Row := M_Cnt_Row + 1
+            } otherwise {
+                M_Cnt_Row := M_Cnt_Row
+            }
+        } otherwise {
+            M_Cnt_Row := M_Cnt_Row
+        }
+
+        when(M_En_Last_Row && M_En_Last_Col && M_En_Last_Cout) {
+            io.Last_Route := True
+        } otherwise {
+            io.Last_Route := False
+        }
+        when(io.Last_Route) {
+            io.Route_Complete := True
+        } otherwise {
+            io.Route_Complete := False
+        }
 
         IDLE
             .whenIsActive {

@@ -37,11 +37,11 @@ class route(
 
     val data_count = RegNext(io.Row_Num_Out_REG.asUInt * Channel_Times_Out.asUInt)
     val Route_Write_fifo = new general_fifo_sync(S_DATA_WIDTH, M_DATA_WIDTH, ROUTE_M_FIFO_DEPTH, WIDTH_FEATURE_SIZE, true)
-    Route_Write_fifo.io.m_data_count <> data_count
-    Route_Write_fifo.io.s_data_count <> data_count
+    Route_Write_fifo.io.m_data_count <> data_count.resized
+    Route_Write_fifo.io.s_data_count <> data_count.resized
     Route_Write_fifo.io.rd_en <> (io.M_DATA.ready && io.M_DATA.valid)
     Route_Write_fifo.io.data_out <> io.M_DATA.payload
-    Route_Write_fifo.io.data_valid <> io.M_DATA.ready
+    Route_Write_fifo.io.data_valid <> io.M_DATA.valid
     Route_Write_fifo.io.data_in := RegNext(Route_Read_fifo.io.data_out)
 
     val fsm = new StateMachine {

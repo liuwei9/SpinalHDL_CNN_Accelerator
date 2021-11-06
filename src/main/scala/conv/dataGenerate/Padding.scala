@@ -1,16 +1,17 @@
-import spinal.core.{Area, Bits, Bool, Bundle, ClockDomainConfig, Component, False, HIGH, IntToBuilder, Reg, RegInit, SYNC, SpinalConfig, SpinalEnum, True, UInt, binaryOneHot, in, is, log2Up, out, switch, when}
-import spinal.lib.{master, slave}
+import spinal.core.{Area, Bits, Bool, Bundle, ClockDomainConfig, Component, False, HIGH, IntToBuilder, Reg, RegInit, RegNext, SYNC, SpinalConfig, SpinalEnum, True, UInt, binaryOneHot, in, is, log2Up, out, switch, when}
+import spinal.lib.{Counter, master, slave}
+import wa.{WaCounter, WaStreamFifo}
 
-case class PaddingConfig(DATA_WIDTH: Int, PICTURE_NUM: Int, CHANNEL_WIDTH: Int, COMPUTE_CHANNEL_NUM: Int, FEATURE_WIDTH: Int) {
+case class PaddingConfig(DATA_WIDTH: Int, CHANNEL_WIDTH: Int, COMPUTE_CHANNEL_NUM: Int, FEATURE_WIDTH: Int, ZERO_NUM: Int) {
+    val PICTURE_NUM = 1
     val STREAM_DATA_WIDTH = DATA_WIDTH * PICTURE_NUM * COMPUTE_CHANNEL_NUM
-    val ZERO_NUM = 1 //默认支持padding=1
+    //    val ZERO_NUM = 5 //默认支持padding=1
     val ZERO_NUM_WIDTH = ZERO_NUM.toBinaryString.length
 }
 
 object PaddingEnum extends SpinalEnum(defaultEncoding = binaryOneHot) {
     val IDLE, INIT, UPDOWN, LEFT, CENTER, RIGHT, END = newElement
 }
-
 
 
 case class PaddingFsm(start: Bool) extends Area {
@@ -104,17 +105,31 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
         val start = in Bool()
         val rowNumIn = in UInt (paddingConfig.FEATURE_WIDTH bits)
         val rowNumOut = out UInt (paddingConfig.FEATURE_WIDTH bits)
+        val colNumIn = in UInt (paddingConfig.FEATURE_WIDTH bits)
+        val colNumOut = out UInt (paddingConfig.FEATURE_WIDTH bits)
         val zeroDara = in Bits (paddingConfig.DATA_WIDTH bits)
         val zeroNum = in UInt (paddingConfig.ZERO_NUM_WIDTH bits)
+        val last = out Bool()
     }
     noIoPrefix()
     when(io.enPadding) {
         io.rowNumOut := (io.zeroNum << 1) + io.rowNumIn
+        io.colNumOut := (io.zeroNum << 1) + io.colNumIn
     } otherwise {
         io.rowNumOut := io.rowNumIn
+        io.colNumOut := io.colNumIn
     }
+
+    val channelTimes: UInt = RegNext(io.channelIn >> log2Up(paddingConfig.COMPUTE_CHANNEL_NUM), 0)
+
+
+    val fifo = WaStreamFifo(Bits(paddingConfig.STREAM_DATA_WIDTH bits), 4)
+    fifo.io.pop <> io.mData
+
+
     val fsm = PaddingFsm(io.start)
     fsm.enPadding := io.enPadding
+    io.sData.ready <> (fifo.io.push.ready && fsm.currentState === PaddingEnum.CENTER)
 
     private def assign(dst: Bits, src: Bits, dataWidth: Int): Unit = {
         if (dst.getWidth == dataWidth) dst := src
@@ -123,8 +138,6 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
             assign(dst(dst.getWidth - 1 downto dataWidth), src, dataWidth)
         }
     }
-
-
 
     private def selfClear(in: Bool, en: Bool): Unit = {
         when(en) {
@@ -135,68 +148,46 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
     }
 
     val initEn = RegInit(False) setWhen (fsm.currentState === PaddingEnum.INIT) clearWhen (fsm.nextState =/= PaddingEnum.INIT)
-    val initCount = counter(initEn, 5, 8)
+    val initCount = WaCounter(initEn, 5, 8)
     when(fsm.currentState === PaddingEnum.IDLE) {
         initCount.clear
     }
     fsm.initEnd := initCount.valid
 
-    val stateValid = fsm.currentState =/= PaddingEnum.IDLE && fsm.currentState =/= PaddingEnum.INIT && fsm.currentState =/= PaddingEnum.END
-    val channelTimes = io.channelIn >> log2Up(paddingConfig.COMPUTE_CHANNEL_NUM)
-    val channelEn = Bool()
-    selfClear(channelEn, stateValid && io.mData.valid && io.mData.ready)
-    val channelCnt = counter(channelEn, paddingConfig.CHANNEL_WIDTH, channelTimes)
+
+    //    val zeroDada = Bits(paddingConfig.STREAM_DATA_WIDTH bits)
+    val zeroValid = Bool()
+    //    val zeroReady = !fifo.almost_full
+    //    val zeroFire = zeroValid & zeroReady
+
+    when(fsm.currentState === PaddingEnum.CENTER) {
+        fifo.io.push.valid := io.sData.valid
+        fifo.io.push.payload := io.sData.payload
+    } otherwise {
+        fifo.io.push.valid := zeroValid
+        assign(fifo.io.push.payload, io.zeroDara, paddingConfig.DATA_WIDTH)
+    }
+
+    val channelCnt = WaCounter(fifo.io.push.fire, paddingConfig.CHANNEL_WIDTH, channelTimes - 1)
     when(fsm.currentState === PaddingEnum.IDLE) {
         channelCnt.clear
     }
-
-    val columnEn = Bool()
-    selfClear(columnEn, stateValid && channelCnt.valid && io.mData.valid && io.mData.ready)
-    val columnCnt = counter(columnEn, paddingConfig.FEATURE_WIDTH, io.rowNumOut)
+    val colCnt = WaCounter(channelCnt.valid && (fifo.io.push.fire), paddingConfig.FEATURE_WIDTH, io.colNumOut - 1)
     when(fsm.currentState === PaddingEnum.IDLE) {
-        columnCnt.clear
+        colCnt.clear
     }
-    selfClear(fsm.leftEnd, columnCnt.count === 0 && channelCnt.valid)
-    selfClear(fsm.upDownEnd, columnCnt.count === io.rowNumOut - 2 && channelCnt.valid)
-    selfClear(fsm.rightEnd, columnCnt.count === io.rowNumOut - 1 && channelCnt.valid)
-    when(io.enPadding) {
-        selfClear(fsm.centerEnd, columnCnt.count === io.rowNumOut - 2 && channelCnt.valid)
-    } otherwise {
-        selfClear(fsm.centerEnd, columnCnt.count === io.rowNumOut - 1 && channelCnt.valid)
-    }
-
-    val rowEn = Bool()
-    selfClear(rowEn, fsm.currentState === PaddingEnum.END)
-    val rowCnt = counter(rowEn, paddingConfig.FEATURE_WIDTH, io.rowNumOut)
+    val rowCnt = WaCounter(fsm.nextState === PaddingEnum.END, paddingConfig.FEATURE_WIDTH, io.rowNumOut - 1)
     when(fsm.currentState === PaddingEnum.IDLE) {
         rowCnt.clear
     }
-    selfClear(fsm.enUpDown, rowCnt.count === 0 || rowCnt.count === io.rowNumOut - 1)
-    selfClear(fsm.endEnd, rowCnt.valid && columnCnt.valid && channelCnt.valid)
-
-    def >> (featureGenerate: FeatureGenerate): Unit ={
-        featureGenerate.io.sData <> io.mData
-        featureGenerate.io.rowNumIn := io.rowNumOut
-        featureGenerate.io.start := io.start
-        featureGenerate.io.channelIn := io.channelIn
-    }
-    val data_temp = Bits(paddingConfig.STREAM_DATA_WIDTH bits)
-    val data_width = paddingConfig.DATA_WIDTH
-    when(fsm.currentState =/= PaddingEnum.CENTER) {
-        assign(data_temp, io.zeroDara, data_width)
-    } otherwise {
-        data_temp := io.sData.payload
-    }
-    val featureDataReady = (fsm.currentState === PaddingEnum.CENTER) && io.mData.ready
-    val zeroDataValid = (fsm.currentState === PaddingEnum.LEFT || fsm.currentState === PaddingEnum.UPDOWN || fsm.currentState === PaddingEnum.RIGHT)
-    io.sData.ready := featureDataReady
-    when(fsm.currentState =/= PaddingEnum.CENTER) {
-        io.mData.valid := zeroDataValid
-    } otherwise {
-        io.mData.valid := io.sData.valid
-    }
-    io.mData.payload := data_temp
-
+    selfClear(zeroValid, fsm.currentState === PaddingEnum.LEFT || fsm.currentState === PaddingEnum.RIGHT || fsm.currentState === PaddingEnum.UPDOWN)
+    selfClear(fsm.leftEnd, colCnt.count === io.zeroNum - 1 && channelCnt.valid && fifo.io.push.fire)
+    selfClear(fsm.rightEnd, colCnt.count === io.colNumOut - 1 && channelCnt.valid && fifo.io.push.fire)
+    selfClear(fsm.endEnd, rowCnt.count === io.rowNumOut - 1)
+    selfClear(fsm.upDownEnd, colCnt.count === io.colNumOut - io.zeroNum - 1 && channelCnt.valid && fifo.io.push.fire)
+    selfClear(fsm.centerEnd, colCnt.count === io.colNumOut - io.zeroNum - 1 && channelCnt.valid && fifo.io.push.fire)
+    selfClear(fsm.enUpDown, rowCnt.count < io.zeroNum || rowCnt.count > io.rowNumOut - io.zeroNum - 1)
+    selfClear(io.last, fsm.currentState === PaddingEnum.END && fsm.nextState === PaddingEnum.IDLE)
 }
 
 object Padding {
@@ -204,6 +195,6 @@ object Padding {
         SpinalConfig(
             genVhdlPkg = false,
             defaultConfigForClockDomains = ClockDomainConfig(resetActiveLevel = HIGH, resetKind = SYNC)
-        ).generateVhdl(new Padding(PaddingConfig(8, 1, 12, 1, 12))).printPruned()
+        ).generateVerilog(new Padding(PaddingConfig(8, 1, 12, 8, 12))).printPruned()
     }
 }

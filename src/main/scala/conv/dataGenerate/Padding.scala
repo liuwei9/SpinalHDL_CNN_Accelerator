@@ -1,11 +1,13 @@
+import com.google.gson.JsonParser
 import spinal.core.{Area, Bits, Bool, Bundle, ClockDomainConfig, Component, False, HIGH, IntToBuilder, Reg, RegInit, RegNext, SYNC, SpinalConfig, SpinalEnum, True, UInt, binaryOneHot, in, is, log2Up, out, switch, when}
 import spinal.lib.{Counter, master, slave}
 import wa.{WaCounter, WaStreamFifo}
+import spinal.core.sim._
+import scala.io.Source
 
 case class PaddingConfig(DATA_WIDTH: Int, CHANNEL_WIDTH: Int, COMPUTE_CHANNEL_NUM: Int, FEATURE_WIDTH: Int, ZERO_NUM: Int) {
     val PICTURE_NUM = 1
     val STREAM_DATA_WIDTH = DATA_WIDTH * PICTURE_NUM * COMPUTE_CHANNEL_NUM
-    //    val ZERO_NUM = 5 //默认支持padding=1
     val ZERO_NUM_WIDTH = ZERO_NUM.toBinaryString.length
 }
 
@@ -99,7 +101,7 @@ case class PaddingFsm(start: Bool) extends Area {
 class Padding(paddingConfig: PaddingConfig) extends Component {
     val io = new Bundle {
         val sData = slave Stream (Bits(paddingConfig.STREAM_DATA_WIDTH bits))
-        val mData = master Stream (Bits(paddingConfig.STREAM_DATA_WIDTH bits))
+        val mData = master Stream (Bits(paddingConfig.STREAM_DATA_WIDTH bits))  simPublic()
         val enPadding = in Bool()
         val channelIn = in UInt (paddingConfig.CHANNEL_WIDTH bits)
         val start = in Bool()
@@ -121,11 +123,8 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
     }
 
     val channelTimes: UInt = RegNext(io.channelIn >> log2Up(paddingConfig.COMPUTE_CHANNEL_NUM), 0)
-
-
-    val fifo = WaStreamFifo(Bits(paddingConfig.STREAM_DATA_WIDTH bits), 4)
+    val fifo = WaStreamFifo(Bits(paddingConfig.STREAM_DATA_WIDTH bits), 5)
     fifo.io.pop <> io.mData
-
 
     val fsm = PaddingFsm(io.start)
     fsm.enPadding := io.enPadding
@@ -155,11 +154,7 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
     fsm.initEnd := initCount.valid
 
 
-    //    val zeroDada = Bits(paddingConfig.STREAM_DATA_WIDTH bits)
     val zeroValid = Bool()
-    //    val zeroReady = !fifo.almost_full
-    //    val zeroFire = zeroValid & zeroReady
-
     when(fsm.currentState === PaddingEnum.CENTER) {
         fifo.io.push.valid := io.sData.valid
         fifo.io.push.payload := io.sData.payload
@@ -188,13 +183,43 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
     selfClear(fsm.centerEnd, colCnt.count === io.colNumOut - io.zeroNum - 1 && channelCnt.valid && fifo.io.push.fire)
     selfClear(fsm.enUpDown, rowCnt.count < io.zeroNum || rowCnt.count > io.rowNumOut - io.zeroNum - 1)
     selfClear(io.last, fsm.currentState === PaddingEnum.END && fsm.nextState === PaddingEnum.IDLE)
+
+    def >>(featureGenerate: FeatureGenerate): Unit = {
+        io.rowNumOut <> featureGenerate.io.rowNumIn
+        io.colNumOut <> featureGenerate.io.colNumIn
+        featureGenerate.io.channelIn := io.channelIn
+        io.mData <> featureGenerate.io.sData
+        featureGenerate.io.start := io.start
+    }
 }
 
 object Padding {
     def main(args: Array[String]): Unit = {
+
+
+        val json = Source.fromFile("G:/SpinalStudy/simData/config.json").mkString
+        val jsonP = new JsonParser().parse(json)
+        //        val enPadding = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("enPadding").getAsBoolean
+        //        val channelIn = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("channelIn").getAsInt
+        //        val zeroDara = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("zeroDara").getAsInt
+        val zeroNum = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("zeroNum").getAsInt
+        val COMPUTE_CHANNEL_NUM = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("COMPUTE_CHANNEL_NUM").getAsInt
+        val DATA_WIDTH = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("DATA_WIDTH").getAsInt
+        // val PICTURE_NUM = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("PICTURE_NUM").getAsInt
+        //        val PICTURE_NUM = 1
+        val CHANNEL_WIDTH = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("CHANNEL_WIDTH").getAsInt
+        val FEATURE_WIDTH = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("FEATURE_WIDTH").getAsInt
+        //        val src_py = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("src_py").getAsString
+        //        val dst_scala = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("dst_scala").getAsString
+        //        val dst = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("dst_py").getAsString
+        //        val rowNumIn = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("rowNumIn").getAsInt
+        //        val colNumIn = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("colNumIn").getAsInt
+
+
+        val paddingConfig = PaddingConfig(DATA_WIDTH, CHANNEL_WIDTH, COMPUTE_CHANNEL_NUM, FEATURE_WIDTH, zeroNum)
         SpinalConfig(
             genVhdlPkg = false,
             defaultConfigForClockDomains = ClockDomainConfig(resetActiveLevel = HIGH, resetKind = SYNC)
-        ).generateVerilog(new Padding(PaddingConfig(8, 1, 12, 8, 12))).printPruned()
+        ).generateVerilog(new Padding(paddingConfig)).printPruned()
     }
 }

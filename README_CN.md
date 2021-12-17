@@ -1,10 +1,6 @@
-# About Spinal_CNN_Accelerator
+# 基于Spinal HDL的CNN加速器
 
 ![GitHub](https://img.shields.io/github/license/liuwei9/spinal_yolo)
-
-
-
-[中文说明](./README_CN.md)
 
 
 

@@ -197,29 +197,19 @@ object Padding {
     def main(args: Array[String]): Unit = {
 
 
-        val json = Source.fromFile("G:/SpinalStudy/simData/config.json").mkString
+        val json = Source.fromFile("G:/SpinalCNN/simData/config.json").mkString
         val jsonP = new JsonParser().parse(json)
-        //        val enPadding = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("enPadding").getAsBoolean
-        //        val channelIn = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("channelIn").getAsInt
-        //        val zeroDara = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("zeroDara").getAsInt
-        val zeroNum = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("zeroNum").getAsInt
-        val COMPUTE_CHANNEL_NUM = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("COMPUTE_CHANNEL_NUM").getAsInt
-        val DATA_WIDTH = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("DATA_WIDTH").getAsInt
-        // val PICTURE_NUM = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("PICTURE_NUM").getAsInt
-        //        val PICTURE_NUM = 1
-        val CHANNEL_WIDTH = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("CHANNEL_WIDTH").getAsInt
-        val FEATURE_WIDTH = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("FEATURE_WIDTH").getAsInt
-        //        val src_py = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("src_py").getAsString
-        //        val dst_scala = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("dst_scala").getAsString
-        //        val dst = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("dst_py").getAsString
-        //        val rowNumIn = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("rowNumIn").getAsInt
-        //        val colNumIn = jsonP.getAsJsonObject.get("padding").getAsJsonObject.get("colNumIn").getAsInt
-
+        val zeroNum = jsonP.getAsJsonObject.get("paddingSim").getAsJsonObject.get("zeroNum").getAsInt
+        val COMPUTE_CHANNEL_NUM = jsonP.getAsJsonObject.get("total").getAsJsonObject.get("COMPUTE_CHANNEL_NUM").getAsInt
+        val DATA_WIDTH = jsonP.getAsJsonObject.get("total").getAsJsonObject.get("DATA_WIDTH").getAsInt
+        val CHANNEL_WIDTH = jsonP.getAsJsonObject.get("total").getAsJsonObject.get("CHANNEL_WIDTH").getAsInt
+        val FEATURE_WIDTH = jsonP.getAsJsonObject.get("total").getAsJsonObject.get("FEATURE_WIDTH").getAsInt
 
         val paddingConfig = PaddingConfig(DATA_WIDTH, CHANNEL_WIDTH, COMPUTE_CHANNEL_NUM, FEATURE_WIDTH, zeroNum)
         SpinalConfig(
             genVhdlPkg = false,
+            enumPrefixEnable = false,
             defaultConfigForClockDomains = ClockDomainConfig(resetActiveLevel = HIGH, resetKind = SYNC)
-        ).generateVerilog(new Padding(paddingConfig)).printPruned()
+        ).withoutEnumString().generateVerilog(new Padding(paddingConfig)).printPruned()
     }
 }

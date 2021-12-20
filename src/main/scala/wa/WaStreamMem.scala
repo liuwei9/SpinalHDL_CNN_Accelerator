@@ -8,16 +8,9 @@ object WaStreamMem {
 }
 
 class WaStreamMem[T <: Data](dataType: HardType[T], depth: Int) extends Component {
-    val readPort = new Bundle {
-        val data = master Stream dataType
-        val addr = slave Stream UInt(depth.toBinaryString.length bits)
-    }
-    val writePort = new Bundle {
-        val addr = in UInt (depth.toBinaryString.length bits)
-        val en = in Bool()
-        val data = in(cloneOf(dataType))
-    }
-    val readAddr = Stream(UInt(depth.toBinaryString.length bits))
+    val readPort = WaStreamMemReadPort(dataType, depth)
+    val writePort = WaStreamMemWritePort(dataType, depth)
+    val readAddr = Stream(UInt(log2Up(depth) bits))
     readAddr.valid := readPort.addr.valid
     readPort.addr.ready := readAddr.ready
     val k = Mem(dataType, wordCount = depth)
@@ -29,18 +22,30 @@ class WaStreamMem[T <: Data](dataType: HardType[T], depth: Int) extends Componen
 
 }
 
+case class WaStreamMemReadPort[T <: Data](dataType: HardType[T], depth: Int) extends Bundle {
+    val data = master Stream dataType
+    val addr = slave Stream UInt(log2Up(depth) bits)
+}
+
+case class WaStreamMemWritePort[T <: Data](dataType: HardType[T], depth: Int) extends Bundle {
+    val addr = in UInt (log2Up(depth) bits)
+    val en = in Bool()
+    val data = in(cloneOf(dataType))
+}
+
+case class WaStreamMemPort[T <: Data](dataType: HardType[T], depth: Int) extends Bundle {
+    val read = WaStreamMemReadPort(dataType, depth)
+    val write = WaStreamMemWritePort(dataType, depth)
+}
+
 class WaPingPongStreamMem[T <: Data](dataType: T, depth: Int, pingPongCount: Int) extends Component {
-    val read = new Bundle {
-        val data = master Stream dataType
-        val addr = slave Stream UInt(depth.toBinaryString.length bits)
-    }
-    val write = new Bundle {
-        val addr = in UInt (depth.toBinaryString.length bits)
-        val en = in Bool()
-        val data = in(cloneOf(dataType))
-    }
+    require(pingPongCount > 0,"pingPongCount应该大于0")
+    val s_w = if(pingPongCount == 1) 1 else (pingPongCount-1).toBinaryString.length
+
+    val read = WaStreamMemReadPort(dataType, depth)
+    val write = WaStreamMemWritePort(dataType, depth)
     val mem = List.fill(pingPongCount)(WaStreamMem(dataType, depth))
-    val selectMemIndex = in Bits (pingPongCount.toBinaryString.length bits)
+    val selectMemIndex = in Bits (s_w bits)
     switch(selectMemIndex) {
         (0 until pingPongCount).foreach { i =>
             is(i) {
@@ -58,13 +63,15 @@ class WaPingPongStreamMem[T <: Data](dataType: T, depth: Int, pingPongCount: Int
             }
 
         }
-        default {
-            mem.indices.foreach { j =>
-                setDefault(mem(j))
+        if(scala.math.pow(2,log2Up(pingPongCount)).toInt!=pingPongCount || pingPongCount == 1){
+            default {
+                mem.indices.foreach { j =>
+                    setDefault(mem(j))
+                }
+                read.data.valid := False
+                read.data.payload.assignFromBits(B(0, dataType.getBitsWidth bits))
+                read.addr.ready := False
             }
-            read.data.valid := False
-            read.data.payload.assignFromBits(B(0, dataType.getBitsWidth bits))
-            read.addr.ready := False
         }
     }
 

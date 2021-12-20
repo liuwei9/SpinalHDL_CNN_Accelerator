@@ -1,6 +1,7 @@
 import com.google.gson.JsonParser
-import spinal.core.{ClockDomainConfig, FixedFrequency, HIGH, IntToBuilder, SYNC, SpinalConfig, True}
+import conv.dataGenerate.{DataGenerate, DataGenerateConfig, PaddingConfig}
 import spinal.core.sim._
+import spinal.core.{ClockDomainConfig, FixedFrequency, HIGH, IntToBuilder, SYNC, SpinalConfig}
 
 import java.io.{File, PrintWriter}
 import scala.io.Source

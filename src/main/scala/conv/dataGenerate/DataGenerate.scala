@@ -1,3 +1,4 @@
+package conv.dataGenerate
 import spinal.core._
 import spinal.lib.{master, slave}
 

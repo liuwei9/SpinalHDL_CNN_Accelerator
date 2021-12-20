@@ -1,8 +1,9 @@
 import com.google.gson._
+import conv.dataGenerate.{Padding, PaddingConfig}
 import spinal.core._
 import spinal.core.sim._
 
-import java.io.{File, FileReader, PrintWriter}
+import java.io.{File, PrintWriter}
 import scala.io.Source
 
 

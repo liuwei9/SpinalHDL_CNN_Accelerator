@@ -1,3 +1,4 @@
+package conv.dataGenerate
 import com.google.gson.JsonParser
 import spinal.core.{Area, Bits, Bool, Bundle, ClockDomainConfig, Component, False, HIGH, IntToBuilder, Reg, RegInit, RegNext, SYNC, SpinalConfig, SpinalEnum, True, UInt, binaryOneHot, in, is, log2Up, out, switch, when}
 import spinal.lib.{Counter, master, slave}
@@ -197,7 +198,7 @@ object Padding {
     def main(args: Array[String]): Unit = {
 
 
-        val json = Source.fromFile("G:/SpinalCNN/simData/config.json").mkString
+        val json = Source.fromFile("G:/spinal_cnn_accelerator/simData/config.json").mkString
         val jsonP = new JsonParser().parse(json)
         val zeroNum = jsonP.getAsJsonObject.get("paddingSim").getAsJsonObject.get("zeroNum").getAsInt
         val COMPUTE_CHANNEL_NUM = jsonP.getAsJsonObject.get("total").getAsJsonObject.get("COMPUTE_CHANNEL_NUM").getAsInt

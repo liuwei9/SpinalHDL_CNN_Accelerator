@@ -1,3 +1,4 @@
+package conv.dataGenerate
 import spinal.core.{Area, Bits, Bool, Bundle, Component, Device, False, IntToBuilder, Mem, Reg, RegInit, RegNext, SpinalEnum, SpinalVerilog, True, UInt, Vec, binaryOneHot, default, in, is, log2Up, out, switch, when}
 import spinal.lib.{Flow, IMasterSlave, StreamFifo, flowBitsPimped, master, slave}
 import wa.{WaCounter, WaStreamFifo}

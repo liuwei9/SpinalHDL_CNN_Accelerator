@@ -207,8 +207,8 @@ class sdpram(
     noIoPrefix()
 }
 
-object sdpram {
-    def main(args: Array[String]): Unit = {
-        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sdpram(64,409600,64,409600,"distributed",0,"common_clock",new ClockDomain(new Bool()),new ClockDomain(new Bool)))
-    }
-}
+//object sdpram {
+//    def main(args: Array[String]): Unit = {
+//        SpinalConfig(targetDirectory = "verilog").generateVerilog(new sdpram(64,409600,64,409600,"distributed",0,"common_clock",new ClockDomain(new Bool()),new ClockDomain(new Bool)))
+//    }
+//}

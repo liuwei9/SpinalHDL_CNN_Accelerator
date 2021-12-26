@@ -1,4 +1,4 @@
-# About Spinal_CNN_Accelerator
+# About SpinalHDL_CNN_Accelerator
 
 ![GitHub](https://img.shields.io/github/license/liuwei9/spinal_yolo)
 

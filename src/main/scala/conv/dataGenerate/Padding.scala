@@ -4,6 +4,7 @@ import spinal.core.{Area, Bits, Bool, Bundle, ClockDomainConfig, Component, Fals
 import spinal.lib.{Counter, master, slave}
 import wa.{WaCounter, WaStreamFifo}
 import spinal.core.sim._
+
 import scala.io.Source
 
 case class PaddingConfig(DATA_WIDTH: Int, CHANNEL_WIDTH: Int, COMPUTE_CHANNEL_NUM: Int, FEATURE_WIDTH: Int, ZERO_NUM: Int) {
@@ -101,8 +102,8 @@ case class PaddingFsm(start: Bool) extends Area {
 
 class Padding(paddingConfig: PaddingConfig) extends Component {
     val io = new Bundle {
-        val sData = slave Stream (Bits(paddingConfig.STREAM_DATA_WIDTH bits))
-        val mData = master Stream (Bits(paddingConfig.STREAM_DATA_WIDTH bits))  simPublic()
+        val sData = slave Stream (UInt(paddingConfig.STREAM_DATA_WIDTH bits))
+        val mData = master Stream (UInt(paddingConfig.STREAM_DATA_WIDTH bits))  simPublic()
         val enPadding = in Bool()
         val channelIn = in UInt (paddingConfig.CHANNEL_WIDTH bits)
         val start = in Bool()
@@ -124,14 +125,14 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
     }
 
     val channelTimes: UInt = RegNext(io.channelIn >> log2Up(paddingConfig.COMPUTE_CHANNEL_NUM), 0)
-    val fifo = WaStreamFifo(Bits(paddingConfig.STREAM_DATA_WIDTH bits), 5)
+    val fifo = WaStreamFifo(UInt(paddingConfig.STREAM_DATA_WIDTH bits), 5)
     fifo.io.pop <> io.mData
 
     val fsm = PaddingFsm(io.start)
     fsm.enPadding := io.enPadding
     io.sData.ready <> (fifo.io.push.ready && fsm.currentState === PaddingEnum.CENTER)
 
-    private def assign(dst: Bits, src: Bits, dataWidth: Int): Unit = {
+    private def assign(dst: UInt, src: UInt, dataWidth: Int): Unit = {
         if (dst.getWidth == dataWidth) dst := src
         else {
             assign(dst(dataWidth - 1 downto 0), src, dataWidth)
@@ -161,7 +162,7 @@ class Padding(paddingConfig: PaddingConfig) extends Component {
         fifo.io.push.payload := io.sData.payload
     } otherwise {
         fifo.io.push.valid := zeroValid
-        assign(fifo.io.push.payload, io.zeroDara, paddingConfig.DATA_WIDTH)
+        assign(fifo.io.push.payload, io.zeroDara.asUInt, paddingConfig.DATA_WIDTH)
     }
 
     val channelCnt = WaCounter(fifo.io.push.fire, paddingConfig.CHANNEL_WIDTH, channelTimes - 1)

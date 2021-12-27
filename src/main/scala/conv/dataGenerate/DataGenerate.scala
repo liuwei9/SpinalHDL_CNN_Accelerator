@@ -12,7 +12,7 @@ case class DataGenerateConfig(DATA_WIDTH: Int,  CHANNEL_WIDTH: Int, COMPUTE_CHAN
 
 class DataGenerate(dataGenerateConfig: DataGenerateConfig) extends Component {
     val io = new Bundle {
-        val sData = slave Stream (Bits(dataGenerateConfig.STREAM_DATA_WIDTH bits))
+        val sData = slave Stream (UInt(dataGenerateConfig.STREAM_DATA_WIDTH bits))
         val start = in Bool()
         val enPadding = in Bool()
         val channelIn = in UInt (dataGenerateConfig.CHANNEL_WIDTH bits)
@@ -21,7 +21,7 @@ class DataGenerate(dataGenerateConfig: DataGenerateConfig) extends Component {
         val zeroDara = in Bits (dataGenerateConfig.DATA_WIDTH bits)
         val zeroNum = in UInt (dataGenerateConfig.paddingConfig.ZERO_NUM_WIDTH bits)
         //        val mData = master(FeaturePort(dataGenerateConfig.STREAM_DATA_WIDTH, dataGenerateConfig.KERNEL_NUM))
-        val mData = Vec(master Stream Bits(dataGenerateConfig.STREAM_DATA_WIDTH bits), dataGenerateConfig.KERNEL_NUM)
+        val mData = Vec(master Stream UInt(dataGenerateConfig.STREAM_DATA_WIDTH bits), dataGenerateConfig.KERNEL_NUM)
         val last = out Bool()
     }
     noIoPrefix()

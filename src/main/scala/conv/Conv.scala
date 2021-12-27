@@ -1,6 +1,7 @@
 package conv
 
-import conv.ConvCtrlEnum.{IDLE, newElement}
+import conv.ConvComputeCtrlEnum.{IDLE, newElement}
+import conv.dataGenerate._
 import spinal.core._
 import spinal.lib._
 import spinal.lib.fsm._
@@ -22,7 +23,7 @@ object ConvType {
  * @param CONV_TYPE               卷积类型
  *
  */
-case class ConvConfig(DATA_WIDTH: Int, COMPUTE_CHANNEL_IN_NUM: Int, COMPUTE_CHANNEL_OUT_NUM: Int, CHANNEL_WIDTH: Int, WEIGHT_DEPTH: Int, QUAN_DEPTH: Int, FEATURE: Int, FEATURE_RAM_DEPTH: Int, CONV_TYPE: String = ConvType.conv33) {
+case class ConvConfig(DATA_WIDTH: Int, COMPUTE_CHANNEL_IN_NUM: Int, COMPUTE_CHANNEL_OUT_NUM: Int, CHANNEL_WIDTH: Int, WEIGHT_DEPTH: Int, QUAN_DEPTH: Int, FEATURE: Int, FEATURE_RAM_DEPTH: Int, ZERO_NUM: Int, CONV_TYPE: String = ConvType.conv33) {
     require(CONV_TYPE == ConvType.conv33 || CONV_TYPE == ConvType.conv11, "CONV_TYPE只支持conv33和conv11类型")
     val KERNEL_NUM = CONV_TYPE match {
         case ConvType.conv33 => 9
@@ -44,52 +45,54 @@ case class ConvConfig(DATA_WIDTH: Int, COMPUTE_CHANNEL_IN_NUM: Int, COMPUTE_CHAN
     val QUAN_M_DATA_DEPTH = QUAN_S_DATA_WIDTH * QUAN_S_DATA_DEPTH / QUAN_M_DATA_WIDTH
 
 
+    val dataGenerateConfig = DataGenerateConfig(DATA_WIDTH, CHANNEL_WIDTH, COMPUTE_CHANNEL_IN_NUM, FEATURE_WIDTH, KERNEL_NUM, FEATURE_RAM_DEPTH, ZERO_NUM)
+
 }
 
-object ConvCtrlEnum extends SpinalEnum(defaultEncoding = binaryOneHot) {
+object ConvComputeCtrlEnum extends SpinalEnum(defaultEncoding = binaryOneHot) {
     val IDLE, INIT, DATA_READY, FIFO_READY, COMPUTE, END = newElement
 }
 
-case class ConvCtrlFsm() extends Area {
+case class ConvComputeCtrlFsm() extends Area {
     val start = Bool()
     val dataReady = Bool()
     val fifoReady = Bool()
     val initEnd = Bool()
 
 
-    val currentState = Reg(ConvCtrlEnum()) init ConvCtrlEnum.IDLE
-    val nextState = ConvCtrlEnum()
+    val currentState = Reg(ConvComputeCtrlEnum()) init ConvComputeCtrlEnum.IDLE
+    val nextState = ConvComputeCtrlEnum()
     currentState := nextState
     switch(currentState) {
-        is(ConvCtrlEnum.IDLE) {
+        is(ConvComputeCtrlEnum.IDLE) {
             when(start) {
-                nextState := ConvCtrlEnum.INIT
+                nextState := ConvComputeCtrlEnum.INIT
             } otherwise {
-                nextState := ConvCtrlEnum.IDLE
+                nextState := ConvComputeCtrlEnum.IDLE
             }
         }
-        is(ConvCtrlEnum.INIT) {
+        is(ConvComputeCtrlEnum.INIT) {
             when(initEnd) {
-                nextState := ConvCtrlEnum.DATA_READY
+                nextState := ConvComputeCtrlEnum.DATA_READY
             } otherwise {
-                nextState := ConvCtrlEnum.INIT
+                nextState := ConvComputeCtrlEnum.INIT
             }
         }
-        is(ConvCtrlEnum.DATA_READY) {
+        is(ConvComputeCtrlEnum.DATA_READY) {
             when(dataReady) {
-                nextState := ConvCtrlEnum.FIFO_READY
+                nextState := ConvComputeCtrlEnum.FIFO_READY
             } otherwise {
-                nextState := ConvCtrlEnum.DATA_READY
+                nextState := ConvComputeCtrlEnum.DATA_READY
             }
         }
-        is(ConvCtrlEnum.FIFO_READY) {
+        is(ConvComputeCtrlEnum.FIFO_READY) {
             when(fifoReady) {
-                nextState := ConvCtrlEnum.COMPUTE
+                nextState := ConvComputeCtrlEnum.COMPUTE
             } otherwise {
-                nextState := ConvCtrlEnum.FIFO_READY
+                nextState := ConvComputeCtrlEnum.FIFO_READY
             }
         }
-        is(ConvCtrlEnum.COMPUTE) {
+        is(ConvComputeCtrlEnum.COMPUTE) {
 
         }
     }
@@ -97,7 +100,7 @@ case class ConvCtrlFsm() extends Area {
 }
 
 
-case class ConvCtrl(convConfig: ConvConfig) extends Component {
+case class ConvComputeCtrl(convConfig: ConvConfig) extends Component {
 
     val io = new Bundle {
         val start = in Bool()
@@ -123,19 +126,53 @@ case class ConvCtrl(convConfig: ConvConfig) extends Component {
 
 }
 
+class ConvCompute(convConfig: ConvConfig) extends Component {
+
+    val io = new Bundle {
+        val startPa = in Bool()
+        val startCu = in Bool()
+        val sParaData = slave Stream UInt(convConfig.WEIGHT_S_DATA_WIDTH bits)
+        val sFeatureData = slave Stream UInt(convConfig.FEATURE_S_DATA_WIDTH bits)
+        val mFeatureData = master Stream UInt(convConfig.FEATURE_M_DATA_WIDTH bits)
+
+        val rowNumIn = in UInt (convConfig.FEATURE_WIDTH bits)
+        val colNumIn = in UInt (convConfig.FEATURE_WIDTH bits)
+        val channelIn = in UInt (convConfig.CHANNEL_WIDTH bits)
+        val channelOut = in UInt (convConfig.CHANNEL_WIDTH bits)
+        val enPadding = in Bool()
+        val zeroDara = in Bits (convConfig.dataGenerateConfig.DATA_WIDTH bits)
+        val zeroNum = in UInt (convConfig.dataGenerateConfig.paddingConfig.ZERO_NUM_WIDTH bits)
+    }
+    noIoPrefix()
+
+    val dataGenerate = new DataGenerate(convConfig.dataGenerateConfig)
+    dataGenerate.io.sData <> io.sFeatureData
+    dataGenerate.io.start <> io.startCu
+    dataGenerate.io.rowNumIn <> io.rowNumIn
+    dataGenerate.io.colNumIn <> io.colNumIn
+    dataGenerate.io.channelIn <> io.channelIn
+    dataGenerate.io.zeroDara <> io.zeroDara
+    dataGenerate.io.zeroNum <> io.zeroNum
+
+    val loadWeight = LoadWeight(convConfig)
+    loadWeight.io.sData <> io.sParaData
+
+    val computeCtrl = ConvComputeCtrl(convConfig)
+
+}
+
+
 class Conv(convConfig: ConvConfig) extends Component {
     val io = new Bundle {
         val sData = Vec(slave Stream UInt(convConfig.FEATURE_S_DATA_WIDTH bits), convConfig.KERNEL_NUM)
         val mData = master Stream UInt(convConfig.FEATURE_M_DATA_WIDTH bits)
-        val startCu = in Bool()
-        val startPa = in Bool()
+        val start = in Bool()
 
 
     }
     noIoPrefix()
 
     val convState = ConvState(convConfig)
-    val loadWeight = LoadWeight(convConfig)
 
 
 }
@@ -386,9 +423,9 @@ case class ConvState(convConfig: ConvConfig) extends Component {
         is(ConvStateEnum.PARA_IRQ) {
             io.state := CONV_STATE.IRQ_STATE
         }
-//        default {
-//            io.state := CONV_STATE.IDLE_STATE
-//        }
+        //        default {
+        //            io.state := CONV_STATE.IDLE_STATE
+        //        }
     }
 
     when(fsm.currentState === ConvStateEnum.IDLE && fsm.nextState === ConvStateEnum.PARA) {
@@ -408,8 +445,8 @@ case class ConvState(convConfig: ConvConfig) extends Component {
 
 }
 
-object Conv {
-    def main(args: Array[String]): Unit = {
-        SpinalVerilog(ConvState(ConvConfig(8, 16, 8, 12, 2048, 512, 640, 2048, ConvType.conv33)))
-    }
-}
+//object Conv {
+//    def main(args: Array[String]): Unit = {
+//        SpinalVerilog(ConvState(ConvConfig(8, 16, 8, 12, 2048, 512, 640, 2048, ConvType.conv33)))
+//    }
+//}

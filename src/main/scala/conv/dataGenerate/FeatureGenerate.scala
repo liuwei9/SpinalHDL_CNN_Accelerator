@@ -80,8 +80,8 @@ case class FeatureGenerateFsm(start: Bool) extends Area {
 
 class FeatureGenerate(featureGenerateConfig: FeatureGenerateConfig) extends Component {
     val io = new Bundle {
-        val sData = slave Stream Bits(featureGenerateConfig.STREAM_DATA_WIDTH bits)
-        val mData = Vec(master Stream Bits(featureGenerateConfig.STREAM_DATA_WIDTH bits), featureGenerateConfig.KERNEL_NUM)
+        val sData = slave Stream UInt(featureGenerateConfig.STREAM_DATA_WIDTH bits)
+        val mData = Vec(master Stream UInt(featureGenerateConfig.STREAM_DATA_WIDTH bits), featureGenerateConfig.KERNEL_NUM)
         val rowNumIn = in UInt (featureGenerateConfig.FEATURE_WIDTH bits)
         val colNumIn = in UInt (featureGenerateConfig.FEATURE_WIDTH bits)
         val start = in Bool()
@@ -105,13 +105,13 @@ class FeatureGenerate(featureGenerateConfig: FeatureGenerateConfig) extends Comp
 
     val wrEn = Vec(Bool(), 4)
     val wrAddr = Reg(UInt(featureGenerateConfig.FEATURE_RAM_ADDR_WIDTH bits)) init 0
-    val wrData = Bits(featureGenerateConfig.STREAM_DATA_WIDTH bits)
-    val rdData = Vec(Bits(featureGenerateConfig.STREAM_DATA_WIDTH bits), 4)
+    val wrData = UInt(featureGenerateConfig.STREAM_DATA_WIDTH bits)
+    val rdData = Vec(UInt(featureGenerateConfig.STREAM_DATA_WIDTH bits), 4)
     val rdAddr = Vec(Reg(UInt(featureGenerateConfig.FEATURE_RAM_ADDR_WIDTH bits)) init 0, 4)
     wrData := io.sData.payload
     val mem = Array.tabulate(4)(i => {
-        def gen(): Mem[Bits] = {
-            val mem = Mem(Bits(featureGenerateConfig.STREAM_DATA_WIDTH bits), wordCount = scala.math.pow(2, featureGenerateConfig.FEATURE_RAM_ADDR_WIDTH).toInt)
+        def gen(): Mem[UInt] = {
+            val mem = Mem(UInt(featureGenerateConfig.STREAM_DATA_WIDTH bits), wordCount = scala.math.pow(2, featureGenerateConfig.FEATURE_RAM_ADDR_WIDTH).toInt)
             mem.write(wrAddr, wrData, wrEn(i))
             rdData(i) := mem.readSync(rdAddr(i))
             mem
@@ -155,7 +155,7 @@ class FeatureGenerate(featureGenerateConfig: FeatureGenerateConfig) extends Comp
     }
 
     case class stream(count: Int, al: Boolean) extends Area {
-        val Data = Vec(Bits(featureGenerateConfig.STREAM_DATA_WIDTH bits), count)
+        val Data = Vec(UInt(featureGenerateConfig.STREAM_DATA_WIDTH bits), count)
         val Valid = Vec(Bool(), count)
         val Ready = Vec(Bool(), count)
         val Fire = Vec(Bool(), count)
@@ -169,8 +169,8 @@ class FeatureGenerate(featureGenerateConfig: FeatureGenerateConfig) extends Comp
     val pop = stream(3, false)
 
     val fifo = Array.tabulate(3)(i => {
-        def gen(): WaStreamFifo[Bits] = {
-            val fifo = WaStreamFifo(Bits(featureGenerateConfig.STREAM_DATA_WIDTH bits), 5)
+        def gen(): WaStreamFifo[UInt] = {
+            val fifo = WaStreamFifo(UInt(featureGenerateConfig.STREAM_DATA_WIDTH bits), 5)
             fifo.io.push.ready <> push.Ready(i)
             fifo.io.push.valid <> push.Valid(i)
             fifo.io.push.payload <> push.Data(i)
@@ -282,9 +282,9 @@ class FeatureGenerate(featureGenerateConfig: FeatureGenerateConfig) extends Comp
 
 }
 
-object FeatureGenerateConfig {
-    def main(args: Array[String]): Unit = {
-        SpinalVerilog(new FeatureGenerate(FeatureGenerateConfig(8, 10, 8, 8, 9, 10)))
-    }
-}
+//object FeatureGenerateConfig {
+//    def main(args: Array[String]): Unit = {
+//        SpinalVerilog(new FeatureGenerate(FeatureGenerateConfig(8, 10, 8, 8, 9, 10)))
+//    }
+//}
 
